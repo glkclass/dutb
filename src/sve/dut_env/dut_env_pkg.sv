@@ -1,5 +1,6 @@
-package dut_env_pkg; import uvm_pkg::*;
+package dut_env_pkg; 
     `include "uvm_macros.svh"
+    import uvm_pkg::*;
 
     import dut_sequence_pkg::*;
     import dut_agent_pkg::*;

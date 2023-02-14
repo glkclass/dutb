@@ -21,7 +21,6 @@ function void dutb_agent_base::build_phase(uvm_phase phase);
     if (!uvm_config_db #(dutb_agent_base_cfg)::get(this, "", "cfg_h", cfg_h))
         `uvm_fatal("CFG_DB_ERROR", "Unable to get \"cfg_h\" from config db")
 
-    uvm_config_db #(virtual dutb_if)::set(this, "*", "dutb_vif", cfg_h.dutb_vif);
     uvm_config_db #(dutb_if_proxy_base)::set(this, "*", "dutb_if_h", cfg_h.dutb_if_h);
 
     monitor_aport = new ("monitor_aport", this);

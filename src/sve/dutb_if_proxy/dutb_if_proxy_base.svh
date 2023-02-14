@@ -1,11 +1,11 @@
 // - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class dutb_if_proxy_base extends uvm_component;
-    `uvm_component_param_utils (dutb_if_proxy_base)
+    `uvm_component_utils (dutb_if_proxy_base)
 
     virtual dutb_if         dutb_vif;
 
-    extern function new(string name = "dutb_if_proxy_base", uvm_component parent=null);
-    extern function void build_phase(uvm_phase phase);
+    extern function         new(string name = "dutb_if_proxy_base", uvm_component parent=null);
+    extern function void    build_phase(uvm_phase phase);
 endclass
 // - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

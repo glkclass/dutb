@@ -34,7 +34,7 @@ function void dut_predictor_base::build_phase(uvm_phase phase);
 endfunction
 
 
-// Should be overidden in a child classes to provide access to gold references 
+// Should be overridden in a child classes to provide access to gold references 
 function void dut_predictor_base::write(T_DIN_TXN t);
     T_DIN_TXN       din_txn;    // input DUT txn
     T_DOUT_TXN      dout_txn;   // output 'gold' txn to be sent to checker

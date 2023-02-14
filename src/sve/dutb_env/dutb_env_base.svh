@@ -7,11 +7,11 @@ extends uvm_env;
 
     dutb_env_base_cfg cfg_h;
 
-    dutb_agent_base #(T_DIN_TXN)                                 din_agent_h;    // dut in
-    dutb_agent_base #(T_DOUT_TXN)                                dout_agent_h;   // dut out
-    dutb_agent_base #(T_POUT_TXN)                                pout_agent_h;   // probe out
+    dutb_agent_base #(T_DIN_TXN)                                din_agent_h;    // dut in
+    dutb_agent_base #(T_DOUT_TXN)                               dout_agent_h;   // dut out
+    dutb_agent_base #(T_POUT_TXN)                               pout_agent_h;   // probe out
 
-    dutb_v_sqncr #(T_DIN_TXN)                                    v_sqncr_h;      // virtual sequencer
+    dutb_v_sqncr #(T_DIN_TXN)                                   v_sqncr_h;      // virtual sequencer
 
     dut_scb_base #(  T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)         scb_h;
 
@@ -43,31 +43,23 @@ function void dutb_env_base::build_phase(uvm_phase phase);
 
     din_agent_h                         = dutb_agent_base #(T_DIN_TXN)::type_id::create("din_agent_h", this);
     cfg_h.din_agent_cfg_h               = dutb_agent_base_cfg::type_id::create("cfg_h.din_agent_cfg_h", this);
-    cfg_h.din_agent_cfg_h.dutb_vif      = cfg_h.dutb_vif;
     cfg_h.din_agent_cfg_h.dutb_if_h     = cfg_h.dutb_if_h;
     // pass config to agent 
     uvm_config_db #(dutb_agent_base_cfg)::set(this, "din_agent_h", "cfg_h", cfg_h.din_agent_cfg_h);
-    // din_agent_h.cfg_h                   = cfg_h.din_agent_cfg_h;
     // dutb_driver_base #(T_DIN_TXN)::type_id::set_type_override(dut_xds_in_frame_driver #(T_DIN_TXN)::get_type());
     // dutb_monitor_base #(T_DIN_TXN)::type_id::set_type_override(dut_xds_in_frame_monitor #(T_DIN_TXN)::get_type());
 
     dout_agent_h                        = dutb_agent_base #(T_DOUT_TXN)::type_id::create("dout_agent_h", this);
     cfg_h.dout_agent_cfg_h              = dutb_agent_base_cfg::type_id::create("cfg_h.dout_agent_cfg_h", this);
-    cfg_h.dout_agent_cfg_h.dutb_vif     = cfg_h.dutb_vif;
     cfg_h.dout_agent_cfg_h.dutb_if_h    = cfg_h.dutb_if_h;
-    // pass config to agent 
     uvm_config_db #(dutb_agent_base_cfg)::set(this, "dout_agent_h", "cfg_h", cfg_h.dout_agent_cfg_h);
-    // dout_agent_h.cfg_h                  = cfg_h.dout_agent_cfg_h;
     // dutb_driver_base #(T_DOUT_TXN)::type_id::set_type_override(dut_xds_out_driver #(T_DOUT_TXN)::get_type());
 
     pout_agent_h                        = dutb_agent_base #(T_POUT_TXN)::type_id::create("pout_agent_h", this);
     cfg_h.pout_agent_cfg_h              = dutb_agent_base_cfg::type_id::create("cfg_h.pout_agent_cfg_h", this);
-    cfg_h.pout_agent_cfg_h.dutb_vif     = cfg_h.dutb_vif;
     cfg_h.pout_agent_cfg_h.dutb_if_h    = cfg_h.dutb_if_h;
     cfg_h.pout_agent_cfg_h.is_active    = UVM_PASSIVE;
-    // pass config to agent 
     uvm_config_db #(dutb_agent_base_cfg)::set(this, "pout_agent_h", "cfg_h", cfg_h.pout_agent_cfg_h);
-    // pout_agent_h.cfg_h                  = cfg_h.pout_agent_cfg_h;
 
     // create scoreboard and save synchro barrier to be used by its components
     scb_h                               = dut_scb_base #(  T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)::type_id::create("scb_h", this);

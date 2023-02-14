@@ -26,6 +26,8 @@ function void dutb_test_base::start_of_simulation();
 endfunction
 
 function void dutb_test_base::build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    
     //create util stack
     dutb_handler_h          = new ("dutb_handler_h", this);
     uvm_config_db #(dutb_handler)::set(this, "*", "dutb_handler", dutb_handler_h);
@@ -35,11 +37,8 @@ function void dutb_test_base::build_phase(uvm_phase phase);
     if (!uvm_config_db #(virtual dutb_if)::get(this, "", "dutb_vif", dutb_vif))
         `uvm_fatal("CFG_DB_ERROR", "Unable to get \"dutb_vif\" from config db")
     else
-        begin
-            // pass dutb_vif to dutb_if_proxy
-            uvm_config_db #(virtual dutb_if)::set(this, "dutb_if_h", "dutb_vif", dutb_vif);
-            env_cfg_h.dutb_vif = dutb_vif;  // pass dutb_vif to env config
-        end
+        // pass dutb_vif to dutb_if_proxy
+        uvm_config_db #(virtual dutb_if)::set(this, "dutb_if_h", "dutb_vif", dutb_vif);
 
     // create dut_if_proxy and pass it to env config
     dutb_if_h               = dutb_if_proxy_base::type_id::create("dutb_if_h", this);

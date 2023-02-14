@@ -2,8 +2,7 @@ class dutb_monitor_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_monitor;
     `uvm_component_param_utils (dutb_monitor_base #(T_DUT_TXN))
 
     uvm_analysis_port #(T_DUT_TXN)  aport;
-    virtual dutb_if                 dutb_vif;
-    dutb_if_proxy_base                    dutb_if_h;
+    dutb_if_proxy_base              dutb_if_h;
 
     extern function                 new(string name = "dutb_monitor_base", uvm_component parent=null);
     extern function void            build_phase(uvm_phase phase);
@@ -19,17 +18,14 @@ endfunction
 function void dutb_monitor_base::build_phase(uvm_phase phase);
     aport = new("aport", this);
 
-    // connect to dutb 'generic' interface
-    if (!uvm_config_db #(virtual dutb_if)::get(this, "", "dutb_vif", dutb_vif))
-        `uvm_fatal("dutb_monitor_base", "Unable to get 'dutb_vif' from config db}")
-
+    // get dutb_if_proxy
     if (!uvm_config_db #(dutb_if_proxy_base)::get(this, "", "dutb_if_h", dutb_if_h))
         `uvm_fatal("dutb_monitor_base", "Unable to get 'dutb_if_proxy_base' from config db}")
 endfunction
 
 
 task dutb_monitor_base::run_phase(uvm_phase phase);
-    @(posedge dutb_vif.rstn)
+    @(posedge dutb_if_h.dutb_vif.rstn)
     forever
         begin
             T_DUT_TXN txn;
@@ -37,7 +33,7 @@ task dutb_monitor_base::run_phase(uvm_phase phase);
             // wait until data is valid, read it and send 
             do
                 begin
-                    @(posedge dutb_vif.clk)
+                    @(posedge dutb_if_h.dutb_vif.clk)
                     txn.read(dutb_if_h);
                 end
             while (1'b1 != txn.content_valid);

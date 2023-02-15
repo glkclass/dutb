@@ -25,19 +25,23 @@ endfunction
 
 
 task dutb_monitor_base::run_phase(uvm_phase phase);
+    // `uvm_debug ("TXNTPE", T_DUT_TXN::type_id::get_type_name())
     @(posedge dutb_if_h.dutb_vif.rstn)
     forever
         begin
             T_DUT_TXN txn;
             txn = T_DUT_TXN::type_id::create("txn");
-            // wait until data is valid, read it and send 
-            do
+            if ("dutb_txn_base" != txn.get_type_name())
                 begin
-                    @(posedge dutb_if_h.dutb_vif.clk)
+                    #1
                     txn.read(dutb_if_h);
+                    `uvm_debug("MNTR", {"Content:", txn.convert2string()})
+                    aport.write(txn);
                 end
-            while (1'b1 != txn.content_valid);
-            aport.write(txn);
-            `uvm_info("MONITOR: content", {"\n", txn.convert2string()}, UVM_HIGH)
+            else
+                begin
+                    `uvm_debug("MNTR", "Monitoring of 'dutb_txn_base' forbidden!")                    
+                    wait(0);
+                end
         end
 endtask

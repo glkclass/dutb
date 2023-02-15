@@ -1,6 +1,6 @@
 // - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-class dutb_txn_base #(type T_DUT_TXN = uvm_sequence_item) extends uvm_sequence_item;
-    `uvm_object_param_utils (dutb_txn_base #(T_DUT_TXN))
+class dutb_txn_base #() extends uvm_sequence_item;
+    `uvm_object_utils (dutb_txn_base)
 
     bit content_valid; // validates transaction content
     string str;
@@ -10,22 +10,23 @@ class dutb_txn_base #(type T_DUT_TXN = uvm_sequence_item) extends uvm_sequence_i
     string check_str;
     int check_idx;
 
-    extern function new (string name = "dutb_txn_base");
-    extern virtual function void        display_check(bit reset, bit eq);
-    extern virtual function void        do_copy (uvm_object rhs);                                   // make a deep copy
-    extern virtual function bit         do_compare (uvm_object rhs, uvm_comparer comparer);
-    extern virtual function void        do_print (uvm_printer printer);                             // print transaction content
-    extern virtual function string      convert2string ();                                          // represent 'txn content' as string
-    extern virtual function string      convert2string_pair (uvm_object txn);                       // represent 'txn pair content' as string
-    extern virtual function vector      pack2vector ();                                             // pack 'txn content' to 'vector of int'
-    extern virtual function void        unpack4vector (vector packed_txn);                          // unpack 'txn content' from 'vector of int'
-    extern virtual function bit         write (dutb_if_proxy_base dutb_if);                         // write 'txn content' to interface
-    extern virtual function bit         write_x (dutb_if_proxy_base dutb_if);                       // write 'x' values to interface
-    extern virtual function void        read (dutb_if_proxy_base dutb_if);                          // read 'txn content' from interface
-    extern virtual function void        push ();                                                    // store 'txn content' to the buffer
-    extern virtual function void        pop ();                                                     // extract 'txn content' from buffer (if 'fifo txn structure' used)
-    extern virtual function int         size ();                                                    // size of txn (in int-parrot). Actually size of txn packed to vector of int.
-endclass
+    extern          function            new (string name = "dutb_txn_base");
+    extern static   function string     get_class_name();
+    extern virtual  function void       display_check(bit reset, bit eq);
+    extern virtual  function void       do_copy (uvm_object rhs);                                   // make a deep copy
+    extern virtual  function bit        do_compare (uvm_object rhs, uvm_comparer comparer);
+    extern virtual  function void       do_print (uvm_printer printer);                             // print transaction content
+    extern virtual  function string     convert2string ();                                          // represent 'txn content' as string
+    extern virtual  function string     convert2string_pair (uvm_object txn);                       // represent 'txn pair content' as string
+    extern virtual  function vector     pack2vector ();                                             // pack 'txn content' to 'vector of int'
+    extern virtual  function void       unpack4vector (vector packed_txn);                          // unpack 'txn content' from 'vector of int'
+    extern virtual  task                write (input dutb_if_proxy_base dutb_if);                         // write 'txn content' to interface
+    extern virtual  task                write_x (input dutb_if_proxy_base dutb_if);                       // write 'x' values to interface
+    extern virtual  task                read (input dutb_if_proxy_base dutb_if);                          // read 'txn content' from interface
+    extern virtual  function void       push ();                                                    // store 'txn content' to the buffer
+    extern virtual  function void       pop ();                                                     // extract 'txn content' from buffer (if 'fifo txn structure' used)
+    extern virtual  function int        size ();                                                    // size of txn (in int-parrot). Actually size of txn packed to vector of int.
+endclass  
 // - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
@@ -34,8 +35,18 @@ function dutb_txn_base::new (string name = "dutb_txn_base");
     empty = 1'b0;
     check_str = ""; 
     check_idx = 0;
-
 endfunction
+
+function string dutb_txn_base::get_class_name();
+    return "dutb_txn_base";
+endfunction
+
+// function void dutb_txn_base::get_type(bit reset, bit eq);
+//     check_str = (reset) ? "" : check_str;
+//     check_idx = (reset) ? 0 : check_idx;
+//     check_str = {check_str, (eq) ? "____ " : "XXXX ", eol(check_idx)};
+//     check_idx++;
+// endfunction
 
 
 // base methods
@@ -48,7 +59,7 @@ function void dutb_txn_base::display_check(bit reset, bit eq);
 endfunction
 
 function void dutb_txn_base::do_copy (uvm_object rhs);
-    T_DUT_TXN _txn;
+    dutb_txn_base _txn;
 
     if(!$cast(_txn, rhs))
         begin
@@ -62,7 +73,7 @@ endfunction
 
 
 function bit dutb_txn_base::do_compare(uvm_object rhs, uvm_comparer comparer);
-    T_DUT_TXN _txn;
+    dutb_txn_base _txn;
     vector packed_txn[2];
     bit eq;
 
@@ -98,7 +109,7 @@ endfunction
 function void dutb_txn_base::do_print (uvm_printer printer);
     super.do_print (printer);
     str = "\n-------------------\n";
-    printer.m_string = {get_type_name(), " ",  get_name(), str, convert2string()};
+    printer.m_string = {get_type_name(), " ",  get_name(), str, convert2string(), "\n"};
 endfunction
 
 
@@ -108,7 +119,7 @@ endfunction
 
 
 function string dutb_txn_base::convert2string_pair (uvm_object txn);
-    T_DUT_TXN _txn;
+    dutb_txn_base _txn;
     if(!$cast(_txn, txn))
         begin
             `uvm_error("TXN_PRINT_PAIR", "Txn cast was failed")
@@ -132,28 +143,45 @@ endfunction
 
 //  next methods should be overrided
 function vector dutb_txn_base::pack2vector ();
-    `uvm_error("VFNOTOVRDN", "Override 'pack2vector ()' method")
+    if ("dutb_txn_base" != get_type_name())
+        `uvm_fatal("VFNOTOVRDN", "Override 'pack2vector ()' method")
+    else 
+        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
     return ({});
 endfunction
 
 
 function void dutb_txn_base::unpack4vector (vector packed_txn);
-    `uvm_error("VFNOTOVRDN", "Override 'unpack4vector (vector packed_txn)' method")
+    if ("dutb_txn_base" != get_type_name())
+        `uvm_fatal("VFNOTOVRDN", "Override 'unpack4vector (..)' method")
+    else 
+        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
+
 endfunction
 
 
-function bit dutb_txn_base::write (dutb_if_proxy_base dutb_if);
-    `uvm_error("VFNOTOVRDN", "Override 'write (virtual dutb_if dutb_vif)' method")
-endfunction
+task dutb_txn_base::write (input dutb_if_proxy_base dutb_if);
+    if ("dutb_txn_base" != get_type_name())
+        `uvm_fatal("VFNOTOVRDN", "Override 'write (..)' method")
+    else 
+        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
+endtask
 
 
-function bit dutb_txn_base::write_x (dutb_if_proxy_base dutb_if);
-endfunction
+task dutb_txn_base::write_x (input dutb_if_proxy_base dutb_if);
+    if ("dutb_txn_base" != get_type_name())
+        `uvm_fatal("VFNOTOVRDN", "Override 'write_x (..)' method")
+    else 
+        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
+endtask
 
 
-function void dutb_txn_base::read (dutb_if_proxy_base dutb_if);
-    `uvm_error("VFNOTOVRDN", "Override 'read (virtual dutb_if dutb_vif)' method")
-endfunction
+task dutb_txn_base::read (input dutb_if_proxy_base dutb_if);
+    if ("dutb_txn_base" != get_type_name())
+        `uvm_fatal("VFNOTOVRDN", "Override 'read (..)' method")
+    else 
+        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
+endtask
 
 
 function void dutb_txn_base::push ();

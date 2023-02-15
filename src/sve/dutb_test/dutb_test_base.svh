@@ -1,4 +1,4 @@
-class dutb_test_base     #(type  T_DIN_TXN   = dutb_txn_base,
+class dutb_test_base     #(type T_DIN_TXN   = dutb_txn_base,
                                 T_DOUT_TXN  = dutb_txn_base,
                                 T_POUT_TXN  = dutb_txn_base)
 extends uvm_test;
@@ -20,9 +20,10 @@ function dutb_test_base::new(string name = "dutb_test_base", uvm_component paren
 endfunction
 
 function void dutb_test_base::start_of_simulation();
-    super.start_of_simulation();
     // replace 'default report server' with customized version
     // dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
+    super.start_of_simulation();
+    
 endfunction
 
 function void dutb_test_base::build_phase(uvm_phase phase);

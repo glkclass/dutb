@@ -40,7 +40,7 @@ function void dut_predictor_base::write(T_DIN_TXN t);
     T_DOUT_TXN      dout_txn;   // output 'gold' txn to be sent to checker
 
     $cast(din_txn, t.clone());
-    `uvm_info("PREDICTOR", {"content\n", din_txn.convert2string()}, UVM_FULL)
+    `uvm_debug("PREDICTOR", {"Content:", din_txn.convert2string()})
 
     dout_txn = T_DOUT_TXN::type_id::create("dout_txn");
     // generate gold dout_txn smth here..

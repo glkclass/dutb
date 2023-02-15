@@ -1,8 +1,8 @@
 package dutb_param_pkg;
     parameter
     //tb params
-    p_clk_period  = 10, // single clk cycle duration
-    p_rstn_period  = 33, // rst signal duration
+    P_CLK_PERIOD        = 10, // single clk cycle duration
+    P_RSTN_LENGTH       = 33, // rst signal duration
     p_tco  = 1, // 'update gap' (to avoid race conditions)
     p_max_fail_num  = 16, // max number of failed transactions after which TB will be stopped
     p_xds_dist  = 100, // percentage of 'active' xds transactions

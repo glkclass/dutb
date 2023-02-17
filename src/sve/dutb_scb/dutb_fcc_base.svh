@@ -27,8 +27,8 @@ extends uvm_component;
     T_DOUT_TXN                              dout_txn;
     T_POUT_TXN                              pout_txn;
 
-    dutb_handler                             dutb_handler_h;
-    dutb_progress_bar                        progress_bar_h;
+    dutb_handler                            dutb_handler_h;
+    dutb_progress_bar                       progress_bar_h;
 
     map_flt                                 cov_result;
     map_int                                 cov_value;

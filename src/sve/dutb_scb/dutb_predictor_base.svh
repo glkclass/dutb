@@ -4,7 +4,7 @@
             Two output analisys exports to send gold 'output' and 'probe'(if required) txns
 */
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class dut_predictor_base    #(type  T_DIN_TXN   = dutb_txn_base,
                                     T_DOUT_TXN  = dutb_txn_base,
                                     T_POUT_TXN  = dutb_txn_base)
@@ -18,10 +18,10 @@ extends uvm_subscriber      #(T_DIN_TXN);
     extern function void build_phase(uvm_phase phase);
     extern virtual function void write(T_DIN_TXN t);
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function dut_predictor_base::new(string name = "dut_predictor_base", uvm_component parent=null);
     super.new(name, parent);
 endfunction
@@ -47,7 +47,7 @@ function void dut_predictor_base::write(T_DIN_TXN t);
     dout_gold_aport.write(dout_txn);
     `uvm_error("VFNOTOVRDN", "Override predictor 'write ()' method")
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 

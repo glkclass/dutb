@@ -1,3 +1,4 @@
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class dut_scb_base #(type   T_DIN_TXN   = dutb_txn_base,
                             T_DOUT_TXN  = dutb_txn_base,
                             T_POUT_TXN  = dutb_txn_base)
@@ -18,8 +19,10 @@ extends uvm_scoreboard;
     extern function void build_phase(uvm_phase phase);
     extern function void connect_phase(uvm_phase phase);
 endclass
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function dut_scb_base::new(string name = "dut_scb_base", uvm_component parent=null);
     super.new(name, parent);
 endfunction
@@ -56,4 +59,5 @@ function void dut_scb_base::connect_phase(uvm_phase phase);
     dutb_checker_base_h.dout_fcc_aport.connect(dut_fcc_h.dout_export);
     dutb_checker_base_h.pout_fcc_aport.connect(dut_fcc_h.pout_export);
 endfunction
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

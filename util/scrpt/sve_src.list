@@ -1,15 +1,5 @@
 # Global packages
 ../src/sve/dutb_typedef_pkg.sv
 ../src/sve/dutb_param_pkg.sv
-../src/sve/dutb_if.sv
-
-../src/sve/dutb_util/dutb_util_pkg.sv
-../src/sve/dutb_util/dutb_if_proxy_pkg.sv
-../src/sve/dutb_seq/dutb_sequence_pkg.sv
-../src/sve/dutb_agent/dutb_agent_pkg.sv
-../src/sve/dutb_scb/dutb_scb_pkg.sv
-../src/sve/dutb_env/dutb_env_pkg.sv
-../src/sve/dutb_test/dutb_test_pkg.sv
-
-
-
+../src/sve/dutb_macro_pkg.sv
+../src/sve/dutb_pkg.sv

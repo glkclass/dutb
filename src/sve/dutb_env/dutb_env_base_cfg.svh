@@ -1,3 +1,4 @@
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class dutb_env_base_cfg extends uvm_object;
     `uvm_object_utils(dutb_env_base_cfg)
 
@@ -10,8 +11,11 @@ class dutb_env_base_cfg extends uvm_object;
 
     extern function new(string name = "dut_env_cfg");
 endclass
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function dutb_env_base_cfg::new(string name = "dut_env_cfg");
     super.new(name);
 endfunction
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

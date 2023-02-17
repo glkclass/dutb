@@ -15,7 +15,6 @@ package dutb_pkg;
     
     `include "dutb_txn_base.svh"
     `include "dutb_v_sqncr.svh"
-    `include "dutb_v_seq.svh"
 
     `include "dutb_driver_base.svh"
     `include "dutb_monitor_base.svh"

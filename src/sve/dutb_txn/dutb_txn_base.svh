@@ -1,5 +1,5 @@
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-class dutb_txn_base #() extends uvm_sequence_item;
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+class dutb_txn_base extends uvm_sequence_item;
     `uvm_object_utils (dutb_txn_base)
 
     bit content_valid; // validates transaction content
@@ -27,9 +27,10 @@ class dutb_txn_base #() extends uvm_sequence_item;
     extern virtual  function void       pop ();                                                     // extract 'txn content' from buffer (if 'fifo txn structure' used)
     extern virtual  function int        size ();                                                    // size of txn (in int-parrot). Actually size of txn packed to vector of int.
 endclass  
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function dutb_txn_base::new (string name = "dutb_txn_base");
     super.new(name);
     empty = 1'b0;
@@ -122,7 +123,7 @@ function string dutb_txn_base::convert2string_pair (uvm_object txn);
     dutb_txn_base _txn;
     if(!$cast(_txn, txn))
         begin
-            `uvm_error("TXN_PRINT_PAIR", "Txn cast was failed")
+            `uvm_fatal("TXN_PRINT_PAIR", "Txn cast was failed")
             return "";
         end
     str = {convert2string(), "\n", _txn.convert2string(), "\n", check_str};
@@ -191,4 +192,4 @@ endfunction
 function void dutb_txn_base::pop ();
     empty = 1'b1;
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

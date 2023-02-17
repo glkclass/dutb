@@ -1,7 +1,10 @@
-// class to handle possible fails:
-    // store/load transactions to/from 'recorder_db' file.
-    // count fails/success
-    // stop test when given condition (max number of fails, coverage target achieved, ...) detected
+/*
+    class to handle possible fails:
+        store/load transactions to/from 'recorder_db' file.
+        count fails/success
+        stop test when given condition (max number of fails, coverage target achieved, ...) detected
+*/
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class dutb_handler extends uvm_component;
      // `uvm_component_utils(dutb_handler)
 
@@ -15,7 +18,6 @@ class dutb_handler extends uvm_component;
     uvm_event               stop_test_evnt_h;
     string                  stop_test_info;
 
-    // dut_utils util;
 
     extern function new(string name = "dutb_handler", uvm_component parent=null);
     extern task run_phase (uvm_phase phase);
@@ -35,7 +37,10 @@ class dutb_handler extends uvm_component;
 
     // extern function string util_sprint(vector vec);
 endclass
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // function string dutb_handler::util_sprint(vector vec);
 //     string s = "";
 
@@ -58,7 +63,6 @@ function dutb_handler::new(string name = "dutb_handler", uvm_component parent=nu
     recorder_db_fid = 0;
     recorder_db_mode = IDLE;
 
-    // util = new ();
 
 endfunction
 

@@ -1,3 +1,4 @@
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class dutb_agent_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_agent;
     `uvm_component_param_utils(dutb_agent_base #(T_DUT_TXN))
 
@@ -12,7 +13,10 @@ class dutb_agent_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_agent;
     extern function void build_phase(uvm_phase phase);
     extern function void connect_phase(uvm_phase phase);
 endclass
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function dutb_agent_base::new(string name = "dutb_agent_base", uvm_component parent = null);
     super.new(name, parent);
 endfunction
@@ -41,3 +45,4 @@ function void dutb_agent_base::connect_phase(uvm_phase phase);
             driver_h.seq_item_port.connect(sqncr_h.seq_item_export);
         end
 endfunction
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

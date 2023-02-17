@@ -1,33 +1,32 @@
 // Class to display 'progress bar'.
 // Can be instantiated in the any uvm_component and used to 'log information' about progress (num of txn, checks, statistics, ...)
-class dutb_progress_bar #(parameter uvm_verbosity p_uvm_verbosity = UVM_HIGH) extends uvm_component;
-    `uvm_component_param_utils(dutb_progress_bar #(p_uvm_verbosity))
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+class dutb_progress_bar #(parameter uvm_verbosity P_UVM_VERBOSITY = UVM_HIGH, int MILESTONE = 10) extends uvm_component;
+    `uvm_component_param_utils(dutb_progress_bar #(P_UVM_VERBOSITY, MILESTONE))
 
     int cnt;
-    uvm_verbosity verbosity;
-    extern function new(string name = "dutb_progress_bar", uvm_component parent=null);
-    extern function void display (string message = "");
+    extern function             new(string name = "dutb_progress_bar", uvm_component parent=null);
+    extern function void        display (string message = "");
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function dutb_progress_bar::new(string name = "dutb_progress_bar", uvm_component parent=null);
     super.new(name, parent);
-    verbosity = p_uvm_verbosity;
     cnt = 0;
 endfunction
 
 
-// display 'progress bar' information
+// display 'progress bar' information every `MILESTONE ticks
 function void dutb_progress_bar::display (string message="");
-    if (p_milestone_length > 0)
+    if (MILESTONE > 0)
         begin
             cnt++;
-            if (0 == cnt%p_milestone_length)
+            if (0 == cnt%MILESTONE)
                 begin
-                    `uvm_info("PROGRESS", {$sformatf("%0d... ", cnt), message}, verbosity)
+                    `uvm_info("PROGRESS", {$sformatf("%0d... ", cnt), message}, P_UVM_VERBOSITY)
                 end
         end
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

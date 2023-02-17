@@ -2,7 +2,7 @@
     Package:    dutb_util
     Content:    Utils used.
 */
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function string vec2str(vector vec, string prefix = "");
     string s;
     s = prefix;
@@ -48,18 +48,18 @@ endfunction
 
 
 // Terminate simulation after given time period (to resolve potential 'freeze' issue)
-task automatic timeout_sim(input time tme, step=0);
-    if (step == 0)
+task automatic timeout_sim(input time tme, milestone=0);
+    if (milestone == 0)
         begin
             #(tme);
         end
     else
         begin
-            int n_iter = tme/step;
+            int n_iter = tme/milestone;
             for (int i = 0; i < n_iter; i++)
-                #(step) `uvm_debug("UTIL", $sformatf("Sim checkpoint #%0d of %0d", i, n_iter))
+                #(milestone) `uvm_debug("UTIL", $sformatf("Sim milestone #%0d of %0d", i, n_iter))
         end
-    `uvm_warning("UTIL", "Time off. Simulation terminated!")
+    `uvm_warning("UTIL", "Time out. Simulation terminated!")
     $finish();
 endtask
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

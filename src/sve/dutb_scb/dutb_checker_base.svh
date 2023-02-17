@@ -1,3 +1,4 @@
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class   dutb_checker_base   #(type    T_DIN_TXN = dutb_txn_base,
                                 T_DOUT_TXN = dutb_txn_base,
                                 T_POUT_TXN = dutb_txn_base)
@@ -31,8 +32,10 @@ extends uvm_component;
     extern task                             run_phase (uvm_phase phase);
     extern task                             synch_seq();
 endclass
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 function dutb_checker_base::new(string name = "dutb_checker_base", uvm_component parent=null);
     super.new(name, parent);
 endfunction
@@ -139,4 +142,5 @@ task dutb_checker_base::synch_seq();
             synch_seq_br_h.wait_for();  // let the next sequence to proceed
         end
 endtask
+// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

@@ -1,5 +1,5 @@
 // - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-class dutb_env_base #(type   T_DIN_TXN   = dutb_txn_base,
+class dutb_env_base #(type  T_DIN_TXN   = dutb_txn_base,
                             T_DOUT_TXN  = dutb_txn_base,
                             T_POUT_TXN  = dutb_txn_base)
 extends uvm_env;
@@ -13,7 +13,7 @@ extends uvm_env;
 
     dutb_v_sqncr #(T_DIN_TXN)                                   v_sqncr_h;      // virtual sequencer
 
-    dut_scb_base #(  T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)         scb_h;
+    dut_scb_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)           scb_h;
 
     uvm_barrier                     synch_seq_br_h;
 
@@ -46,14 +46,11 @@ function void dutb_env_base::build_phase(uvm_phase phase);
     cfg_h.din_agent_cfg_h.dutb_if_h     = cfg_h.dutb_if_h;
     // pass config to agent 
     uvm_config_db #(dutb_agent_base_cfg)::set(this, "din_agent_h", "cfg_h", cfg_h.din_agent_cfg_h);
-    // dutb_driver_base #(T_DIN_TXN)::type_id::set_type_override(dut_xds_in_frame_driver #(T_DIN_TXN)::get_type());
-    // dutb_monitor_base #(T_DIN_TXN)::type_id::set_type_override(dut_xds_in_frame_monitor #(T_DIN_TXN)::get_type());
 
     dout_agent_h                        = dutb_agent_base #(T_DOUT_TXN)::type_id::create("dout_agent_h", this);
     cfg_h.dout_agent_cfg_h              = dutb_agent_base_cfg::type_id::create("cfg_h.dout_agent_cfg_h", this);
     cfg_h.dout_agent_cfg_h.dutb_if_h    = cfg_h.dutb_if_h;
     uvm_config_db #(dutb_agent_base_cfg)::set(this, "dout_agent_h", "cfg_h", cfg_h.dout_agent_cfg_h);
-    // dutb_driver_base #(T_DOUT_TXN)::type_id::set_type_override(dut_xds_out_driver #(T_DOUT_TXN)::get_type());
 
     pout_agent_h                        = dutb_agent_base #(T_POUT_TXN)::type_id::create("pout_agent_h", this);
     cfg_h.pout_agent_cfg_h              = dutb_agent_base_cfg::type_id::create("cfg_h.pout_agent_cfg_h", this);

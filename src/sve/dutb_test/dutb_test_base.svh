@@ -25,7 +25,7 @@ endfunction
 
 function void dutb_test_base::start_of_simulation();
     // replace 'default report server' with customized version
-    // dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
+    dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
     super.start_of_simulation();
     
 endfunction

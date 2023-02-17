@@ -3,6 +3,11 @@
     Content:    Utils used.
 */
 // - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function string int2str(int n);
+    return $sformatf("%0d", n);
+endfunction
+
+
 function string vec2str(vector vec, string prefix = "");
     string s;
     s = prefix;

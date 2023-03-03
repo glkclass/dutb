@@ -1,4 +1,4 @@
-`timescale 1ns/1ns
+`timescale 1ps/1ps
 
 package dutb_util_pkg;
     `include "uvm_macros.svh"
@@ -9,5 +9,5 @@ package dutb_util_pkg;
     import dutb_macro_pkg::*;
 
     `include "dutb_util.svh"
-endpackage
+endpackage 
 

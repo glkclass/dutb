@@ -1,4 +1,4 @@
-`timescale 1ns/1ns
+`timescale 1ps/1ps
 package dutb_pkg;
     `include "uvm_macros.svh"
     import uvm_pkg::*;

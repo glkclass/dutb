@@ -4,7 +4,7 @@
         count fails/success
         stop test when given condition (max number of fails, coverage target achieved, ...) detected
 */
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class dutb_handler extends uvm_component;
      // `uvm_component_utils(dutb_handler)
 
@@ -37,10 +37,10 @@ class dutb_handler extends uvm_component;
 
     // extern function string util_sprint(vector vec);
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 // function string dutb_handler::util_sprint(vector vec);
 //     string s = "";
 
@@ -72,7 +72,7 @@ task dutb_handler::run_phase(uvm_phase phase);
         begin
             stop_test_evnt_h.wait_trigger();  // wait for the 'stop current test' condition
             stop_test_evnt_h.reset();  // reset 'stop current test' flag
-            #p_tco
+            #P_TCO
 
             `uvm_info("STOP TEST", $sformatf("Test was stopped due to \'%s\'", stop_test_info), UVM_HIGH)
             stop_test_h.wait_for();  // stop current test
@@ -174,7 +174,7 @@ function void dutb_handler::fail(vector txn_packed);
             write2db (txn_packed);
         end
 
-    if (n_fails > p_max_fail_num)  // terminate current test due to 'max error number' exceed
+    if (n_fails > P_MAX_FAIL_NUM)  // terminate current test due to 'max error number' exceed
         begin
             stop_test("Max number of fails detected");
         end
@@ -189,9 +189,9 @@ endfunction
 function void dutb_handler::report_phase (uvm_phase phase);
     fclose();
 
-    if (n_fails > p_max_fail_num)  // terminate current test due to 'max error number' exceed
+    if (n_fails > P_MAX_FAIL_NUM)  // terminate current test due to 'max error number' exceed
         begin
-            `uvm_error("STOP_TEST", $sformatf("Max number (%0d) of fails was exceeded. Simulation was terminated!", p_max_fail_num))
+            `uvm_error("STOP_TEST", $sformatf("Max number (%0d) of fails was exceeded. Simulation was terminated!", P_MAX_FAIL_NUM))
         end
 
     if (n_fails > 0)

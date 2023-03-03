@@ -1,4 +1,4 @@
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class dutb_report_server extends uvm_default_report_server;
     `uvm_object_utils(dutb_report_server)
     string report_format_str[string];
@@ -15,10 +15,10 @@ class dutb_report_server extends uvm_default_report_server;
         string delimiter_list[],    // list of delimiter symbols: "/", "\\", ".", etc
         int nesting_level );        // '0' - return full path, 'n' - return path containing 'n' nesting items
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function dutb_report_server::new(string name = "dutb_report_server");
     super.new(name);
     uvm_default_report_server::set_server( this );//substitute default report server
@@ -63,11 +63,11 @@ function string dutb_report_server::compose_report_message(uvm_report_message re
 
     compose_report_message =
         {
-            $sformatf({"\%-", int2str(p_rpt_msg_severity_width), "s "}, report_message.get_severity().name()),
-            $sformatf({"\%-", int2str(p_rpt_msg_filename_width), "s "}, remove_hier_path(filename_line_str, '{"/", "\\"}, p_rpt_msg_filename_nesting_level)),
+            $sformatf({"\%-", int2str(P_RPT_MSG_SEVERITY_WIDTH), "s "}, report_message.get_severity().name()),
+            $sformatf({"\%-", int2str(P_RPT_MSG_FILENAME_WIDTH), "s "}, remove_hier_path(filename_line_str, '{"/", "\\"}, P_RPT_MSG_FILENAME_NESTING_LEVEL)),
             "@ ", $sformatf("\%0t  ", $time),
-            $sformatf({"\%-", int2str(p_rpt_msg_objectname_width), "s "}, remove_hier_path(report_object_name, '{"."}, p_rpt_msg_objectname_nesting_level)),
-            $sformatf({"[\%-", int2str(p_rpt_msg_id_width), "s] "}, report_message.get_id()),
+            $sformatf({"\%-", int2str(P_RPT_MSG_OBJECTNAME_WIDTH), "s "}, remove_hier_path(report_object_name, '{"."}, P_RPT_MSG_OBJECTNAME_NESTING_LEVEL)),
+            $sformatf({"[\%-", int2str(P_RPT_MSG_ID_WIDTH), "s] "}, report_message.get_id()),
             context_str,
             msg_body_str
         };
@@ -95,7 +95,7 @@ function string dutb_report_server::remove_hier_path(string s, string delimiter_
         end
     return( s.substr(slash_position+1, last_char_idx) );
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
 

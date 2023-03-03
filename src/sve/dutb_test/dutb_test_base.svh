@@ -1,10 +1,11 @@
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class dutb_test_base     #(type T_DIN_TXN   = dutb_txn_base,
                                 T_DOUT_TXN  = dutb_txn_base,
                                 T_POUT_TXN  = dutb_txn_base)
 extends uvm_test;
     `uvm_component_param_utils (dutb_test_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN))
 
+    int a;
     // virtual dutb_if                                         dutb_vif;
     dutb_if_proxy_base                                      dutb_if_h;
     dutb_env_base_cfg                                       env_cfg_h;
@@ -13,26 +14,21 @@ extends uvm_test;
 
     extern function                                         new(string name = "dutb_test_base", uvm_component parent = null);
     extern function void                                    build_phase(uvm_phase phase);
-    extern function void                                    start_of_simulation();
+    extern function void                                    start_of_simulation_phase(uvm_phase phase);
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function dutb_test_base::new(string name = "dutb_test_base", uvm_component parent = null);
     super.new(name, parent);
 endfunction
 
-function void dutb_test_base::start_of_simulation();
-    // replace 'default report server' with customized version
-    dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
-    super.start_of_simulation();
-    
-endfunction
 
 function void dutb_test_base::build_phase(uvm_phase phase);
-    super.build_phase(phase);
-    
+    // replace 'default report server' with customized version
+    dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
+
     //create util stack
     dutb_handler_h          = new ("dutb_handler_h", this);
     uvm_config_db #(dutb_handler)::set(this, "*", "dutb_handler", dutb_handler_h);
@@ -55,4 +51,11 @@ function void dutb_test_base::build_phase(uvm_phase phase);
     // create env
     env_h                   = dutb_env_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)::type_id::create("env_h", this);
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+// ****************************************************************************************************************************
+function void dutb_test_base::start_of_simulation_phase(uvm_phase phase);
+    uvm_top.print_topology();
+    super.start_of_simulation_phase(phase);
+endfunction
+// ****************************************************************************************************************************

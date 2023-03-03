@@ -1,4 +1,4 @@
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class dutb_txn_base extends uvm_sequence_item;
     `uvm_object_utils (dutb_txn_base)
 
@@ -20,17 +20,17 @@ class dutb_txn_base extends uvm_sequence_item;
     extern virtual  function string     convert2string_pair (uvm_object txn);                       // represent 'txn pair content' as string
     extern virtual  function vector     pack2vector ();                                             // pack 'txn content' to 'vector of int'
     extern virtual  function void       unpack4vector (vector packed_txn);                          // unpack 'txn content' from 'vector of int'
-    extern virtual  task                write (input dutb_if_proxy_base dutb_if);                         // write 'txn content' to interface
-    extern virtual  task                write_x (input dutb_if_proxy_base dutb_if);                       // write 'x' values to interface
-    extern virtual  task                read (input dutb_if_proxy_base dutb_if);                          // read 'txn content' from interface
+    extern virtual  task                drive (input dutb_if_proxy_base dutb_if);                   // drive 'txn content' to interface lines
+    extern virtual  task                drive_x (input dutb_if_proxy_base dutb_if);                 // drive 'x' values to interface lines
+    extern virtual  task                monitor (input dutb_if_proxy_base dutb_if);                 // monitor 'txn content' from interface lines
     extern virtual  function void       push ();                                                    // store 'txn content' to the buffer
     extern virtual  function void       pop ();                                                     // extract 'txn content' from buffer (if 'fifo txn structure' used)
     extern virtual  function int        size ();                                                    // size of txn (in int-parrot). Actually size of txn packed to vector of int.
 endclass  
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function dutb_txn_base::new (string name = "dutb_txn_base");
     super.new(name);
     empty = 1'b0;
@@ -161,25 +161,25 @@ function void dutb_txn_base::unpack4vector (vector packed_txn);
 endfunction
 
 
-task dutb_txn_base::write (input dutb_if_proxy_base dutb_if);
+task dutb_txn_base::drive (input dutb_if_proxy_base dutb_if);
     if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override 'write (..)' method")
+        `uvm_fatal("VFNOTOVRDN", "Override 'drive (..)' method")
     else 
         `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
 endtask
 
 
-task dutb_txn_base::write_x (input dutb_if_proxy_base dutb_if);
+task dutb_txn_base::drive_x (input dutb_if_proxy_base dutb_if);
     if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override 'write_x (..)' method")
+        `uvm_fatal("VFNOTOVRDN", "Override 'drive_x (..)' method")
     else 
         `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
 endtask
 
 
-task dutb_txn_base::read (input dutb_if_proxy_base dutb_if);
+task dutb_txn_base::monitor (input dutb_if_proxy_base dutb_if);
     if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override 'read (..)' method")
+        `uvm_fatal("VFNOTOVRDN", "Override 'monitor (..)' method")
     else 
         `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
 endtask
@@ -192,4 +192,4 @@ endfunction
 function void dutb_txn_base::pop ();
     empty = 1'b1;
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************

@@ -1,12 +1,14 @@
-/*
-    Class:      dut_fcc_base
-    Port:       Three input analisys ports to accept DUT 'input', 'output, 'probe' txn.
-    Task:       Collect functional coverage
+/******************************************************************************************************************************
+    Project         :   dutb
+    Author          :   glkclass@gmail.com
+    Creation Date   :   Dec 2015
+    Class           :   dut_fcc_base
+    Description     :   Interface   -   three 'analisys exports' to accept DUT 'input', 'output, 'probe' txn. 
+                        Task        -   collect functional coverage.
+*******************************************************************************************************************************/
 
-*/
 
-
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class   dut_fcc_base #(type     T_DIN_TXN   = dutb_txn_base,
                                 T_DOUT_TXN  = dutb_txn_base,
                                 T_POUT_TXN  = dutb_txn_base)
@@ -40,10 +42,10 @@ extends uvm_component;
     extern virtual  function void           sample_coverage();
     extern virtual  function void           check_coverage_results();
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function dut_fcc_base::new(string name = "dut_fcc_base", uvm_component parent=null);
     super.new(name, parent);
 endfunction
@@ -94,4 +96,4 @@ endfunction
 function void dut_fcc_base::check_coverage_results();
     `uvm_error("VFNOTOVRDN", "Method should be overridden...")
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************

@@ -1,6 +1,6 @@
 // Class to display 'progress bar'.
 // Can be instantiated in the any uvm_component and used to 'log information' about progress (num of txn, checks, statistics, ...)
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class dutb_progress_bar #(parameter uvm_verbosity P_UVM_VERBOSITY = UVM_HIGH, int MILESTONE = 10) extends uvm_component;
     `uvm_component_param_utils(dutb_progress_bar #(P_UVM_VERBOSITY, MILESTONE))
 
@@ -8,10 +8,10 @@ class dutb_progress_bar #(parameter uvm_verbosity P_UVM_VERBOSITY = UVM_HIGH, in
     extern function             new(string name = "dutb_progress_bar", uvm_component parent=null);
     extern function void        display (string message = "");
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function dutb_progress_bar::new(string name = "dutb_progress_bar", uvm_component parent=null);
     super.new(name, parent);
     cnt = 0;
@@ -29,4 +29,4 @@ function void dutb_progress_bar::display (string message="");
                 end
         end
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************

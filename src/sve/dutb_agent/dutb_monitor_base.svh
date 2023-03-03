@@ -1,4 +1,4 @@
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class dutb_monitor_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_monitor;
     `uvm_component_param_utils (dutb_monitor_base #(T_DUT_TXN))
 
@@ -9,10 +9,10 @@ class dutb_monitor_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_monitor;
     extern function void            build_phase(uvm_phase phase);
     extern task                     run_phase(uvm_phase phase);
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function dutb_monitor_base::new(string name = "dutb_monitor_base", uvm_component parent=null);
     super.new(name, parent);
 endfunction
@@ -35,8 +35,8 @@ task dutb_monitor_base::run_phase(uvm_phase phase);
             txn = T_DUT_TXN::type_id::create("txn");
             if ("dutb_txn_base" != txn.get_type_name())
                 begin
-                    // 'read' procedure is defined in txn class
-                    txn.read(dutb_if_h);
+                    // 'read txn' procedure is defined in txn class
+                    txn.monitor(dutb_if_h);
                     `uvm_debug("MNTR", {"Content:", txn.convert2string()})
                     aport.write(txn);
                 end
@@ -47,4 +47,4 @@ task dutb_monitor_base::run_phase(uvm_phase phase);
                 end
         end
 endtask
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************

@@ -1,4 +1,4 @@
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class dutb_env_base #(type  T_DIN_TXN   = dutb_txn_base,
                             T_DOUT_TXN  = dutb_txn_base,
                             T_POUT_TXN  = dutb_txn_base)
@@ -15,16 +15,16 @@ extends uvm_env;
 
     dut_scb_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)           scb_h;
 
-    uvm_barrier                     synch_seq_br_h;
+    uvm_barrier                                                 synch_seq_br_h;
 
-    extern function new(string name = "dutb_env_base", uvm_component parent = null);
-    extern function void build_phase(uvm_phase phase);
-    extern function void connect_phase(uvm_phase phase);
+    extern function                                             new(string name = "dutb_env_base", uvm_component parent = null);
+    extern function void                                        build_phase(uvm_phase phase);
+    extern function void                                        connect_phase(uvm_phase phase);
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function dutb_env_base::new(string name = "dutb_env_base", uvm_component parent = null);
     super.new(name, parent);
     synch_seq_br_h = new ("synch_seq_br_h", 2);
@@ -75,4 +75,4 @@ function void dutb_env_base::connect_phase(uvm_phase phase);
     dout_agent_h.monitor_aport.connect(scb_h.dout_export);
     pout_agent_h.monitor_aport.connect(scb_h.pout_export);
 endfunction
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************

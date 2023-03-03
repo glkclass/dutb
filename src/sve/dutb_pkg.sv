@@ -5,8 +5,8 @@ package dutb_pkg;
 
     import dutb_typedef_pkg::*;
     import dutb_param_pkg::*;
+    import dutb_util_pkg::*;
 
-    `include "dutb_util.svh"
     `include "dutb_handler.svh"
     `include "dutb_report_server.svh"
     `include "dutb_progress_bar.svh"

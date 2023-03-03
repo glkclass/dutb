@@ -2,7 +2,7 @@
     Package:    dutb_util
     Content:    Utils used.
 */
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function string int2str(int n);
     return $sformatf("%0d", n);
 endfunction
@@ -48,7 +48,7 @@ endfunction
 
 
 function string eol(int i);
-    return ( ( (0 != p_display_line_size) && ( (p_display_line_size-1) == (i % p_display_line_size) ) ) ? "\n" : "" );
+    return ( ( (0 != P_DISPLAY_LINE_SIZE) && ( (P_DISPLAY_LINE_SIZE-1) == (i % P_DISPLAY_LINE_SIZE) ) ) ? "\n" : "" );
 endfunction
 
 
@@ -67,4 +67,4 @@ task automatic timeout_sim(input time tme, milestone=0);
     `uvm_warning("UTIL", "Time out. Simulation terminated!")
     $finish();
 endtask
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************

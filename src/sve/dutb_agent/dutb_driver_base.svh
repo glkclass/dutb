@@ -1,4 +1,4 @@
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 class dutb_driver_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_driver #(T_DUT_TXN);
     `uvm_component_param_utils (dutb_driver_base #(T_DUT_TXN))
 
@@ -10,10 +10,10 @@ class dutb_driver_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_driver #(T_
     extern task                     run_phase(uvm_phase phase);
 
 endclass
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 
 
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************
 function dutb_driver_base::new(string name = "dutb_driver_base", uvm_component parent=null);
     super.new(name, parent);
 endfunction
@@ -36,9 +36,9 @@ task dutb_driver_base::run_phase(uvm_phase phase);
             if (null != txn)
                 begin
                     // 'write' procedure is defined in txn class
-                    txn.write(dutb_if_h);
+                    txn.drive(dutb_if_h);
                     seq_item_port.item_done();
                 end
         end
 endtask
-// - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// ****************************************************************************************************************************

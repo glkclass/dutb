@@ -1,11 +1,11 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Author          :   glkclass@gmail.com
     Creation Date   :   Dec 2015
-    Class           :   dut_predictor_base. To be inherited and extended with gold reference generation tools.
-    Interface       :   Single 'analisys export' to accept DUT 'input' txn.
-                        Two output analisys exports to send gold 'output' and 'probe'(if required) txns.
-    Desc            :   Accept 'input' txn and generate gold reference for it. The same for 'probe' txn if required.
+    Class           :   dut_predictor_base.
+    Description     :   Interface   -   Single 'analisys export' to accept DUT 'input' txn.
+                                        Two output analisys exports to send gold 'output' and 'probe'(if required) txns.
+                        Task        -   Accept 'input' txn and generate gold reference for it. The same for 'probe' txn if required.
+                                        To be inherited and extended with gold reference generation tools.
 *******************************************************************************************************************************/
 
 

@@ -1,9 +1,14 @@
-/*
-    class to handle possible fails:
-        store/load transactions to/from 'recorder_db' file.
-        count fails/success
-        stop test when given condition (max number of fails, coverage target achieved, ...) detected
-*/
+/******************************************************************************************************************************
+    Project         :   dutb
+    Creation Date   :   Dec 2015
+    Class           :   dutb_v_sqncr
+    Description     :   Interface   -   
+                        Task        -   handle possible fails: store/load transactions to/from 'recorder_db' file.
+                                        count fails/success
+                                        stop test when given condition (max number of fails, coverage target achieved, ...) detected 
+******************************************************************************************************************************/
+
+
 // ****************************************************************************************************************************
 class dutb_handler extends uvm_component;
      // `uvm_component_utils(dutb_handler)

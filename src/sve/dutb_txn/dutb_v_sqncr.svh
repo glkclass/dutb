@@ -1,3 +1,12 @@
+/******************************************************************************************************************************
+    Project         :   dutb
+    Creation Date   :   Dec 2015
+    Class           :   dutb_v_sqncr
+    Description     :   Interface   -   
+                        Task        -   
+******************************************************************************************************************************/
+
+
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 class dutb_v_sqncr #(type T_DIN_TXN = dutb_txn_base) extends uvm_virtual_sequencer;
     `uvm_component_param_utils(dutb_v_sqncr #(T_DIN_TXN))

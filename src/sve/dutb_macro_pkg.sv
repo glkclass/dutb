@@ -1,3 +1,12 @@
+/******************************************************************************************************************************
+    Project         :   dutb
+    Creation Date   :   Dec 2015
+    Package         :   dutb_macro_pkg
+    Description     :   Contain macros used.
+******************************************************************************************************************************/
+
+
+// ****************************************************************************************************************************
 package dutb_macro_pkg;
     // briefer form of assert
     `define ASSERT(val, msg="") \
@@ -47,44 +56,6 @@ package dutb_macro_pkg;
                     assign prefix``probe[ii] = unit``.probe[ii];\
                 end\
         endgenerate
-
-
-    // Print Debug msg to stdout
-    function void log_debug(string foo="", logic en = 1'b1);
-        if (en)
-            $display("%s\t\tat %0t", $sformatf("[LOG] %s", foo), $realtime);
-    endfunction : log_debug
-
-
-    // CRC calculation
-    // polynomial: x^12 + x^10 + x^7 + x^4 + x^3 + x^2 + x^1 + 1
-    // data width: 1
-    // convention: the first serial bit is D[0]
-    function [11:0] nextCRC12_D1;
-        input Data;
-        input [11:0] crc;
-        reg [0:0] d;
-        reg [11:0] c;
-        reg [11:0] newcrc;
-        begin
-            d[0] = Data;
-            c = crc;
-
-            newcrc[0] = d[0] ^ c[11];
-            newcrc[1] = d[0] ^ c[0] ^ c[11];
-            newcrc[2] = d[0] ^ c[1] ^ c[11];
-            newcrc[3] = d[0] ^ c[2] ^ c[11];
-            newcrc[4] = d[0] ^ c[3] ^ c[11];
-            newcrc[5] = c[4];
-            newcrc[6] = c[5];
-            newcrc[7] = d[0] ^ c[6] ^ c[11];
-            newcrc[8] = c[7];
-            newcrc[9] = c[8];
-            newcrc[10] = d[0] ^ c[9] ^ c[11];
-            newcrc[11] = c[10];
-            nextCRC12_D1 = newcrc;
-        end
-    endfunction
-
 endpackage
+// ****************************************************************************************************************************
 

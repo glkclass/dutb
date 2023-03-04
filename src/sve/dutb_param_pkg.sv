@@ -1,3 +1,12 @@
+/******************************************************************************************************************************
+    Project         :   dutb
+    Creation Date   :   Dec 2015
+    Package         :   dutb_param_pkg
+    Description     :   Contain params used.
+******************************************************************************************************************************/
+
+
+// ****************************************************************************************************************************
 package dutb_param_pkg;
     parameter
     
@@ -21,4 +30,5 @@ package dutb_param_pkg;
     P_RPT_MSG_FILENAME_NESTING_LEVEL    =   0,    // define 'filename max nesting level'. '0' - 'display full hierarchial name'
     P_RPT_MSG_OBJECTNAME_NESTING_LEVEL  =   2;    // define 'objectname max nesting level'. '0' - 'display full hierarchial path'
 endpackage  
+// ****************************************************************************************************************************
     

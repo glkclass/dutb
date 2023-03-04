@@ -1,8 +1,17 @@
+/******************************************************************************************************************************
+    Project         :   dutb
+    Creation Date   :   Dec 2015
+    Class           :   dutb_checker_base
+    Description     :   Interface   -   
+                        Task        -   
+******************************************************************************************************************************/
+
+
 // ****************************************************************************************************************************
 class   dutb_checker_base   #(type    T_DIN_TXN = dutb_txn_base,
                                 T_DOUT_TXN = dutb_txn_base,
                                 T_POUT_TXN = dutb_txn_base)
-extends uvm_component;
+    extends uvm_component;
 
     `uvm_component_param_utils(dutb_checker_base#(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN))
 

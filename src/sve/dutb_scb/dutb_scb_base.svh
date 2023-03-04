@@ -1,11 +1,10 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Author          :   glkclass@gmail.com
     Creation Date   :   Dec 2015
     Class           :   dut_scb_base.
-    Interface       :   Three 'analisys exports' to accept DUT 'input', 'output, 'probe' txn.
-    Desc            :   The room for three units: predictor, checker, coverage collector.
-                        Provide connection between them.
+    Description     :   Interface   -   Three 'analisys exports' to accept DUT 'input', 'output, 'probe' txn.
+                        Task        -   Provide room for three units: predictor, checker, coverage collector.
+                                        Provide connection between them.
 ******************************************************************************************************************************/
 
 

@@ -1,6 +1,5 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Author          :   glkclass@gmail.com
     Creation Date   :   Dec 2015
     Class           :   dut_fcc_base
     Description     :   Interface   -   three 'analisys exports' to accept DUT 'input', 'output, 'probe' txn. 

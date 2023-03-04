@@ -1,8 +1,16 @@
-package dutb_typedef_pkg;
+/******************************************************************************************************************************
+    Project         :   dutb
+    Creation Date   :   Dec 2015
+    Package         :   dutb_pkg
+    Description     :   Contain user defined types
+******************************************************************************************************************************/
 
+
+// ****************************************************************************************************************************
+package dutb_typedef_pkg;
     import uvm_pkg::*;
+    
     typedef     uvm_sequence #(uvm_sequence_item)   uvm_virtual_sequence;
- 
     typedef     int                                 vector [];
     typedef     real                                map_flt [string];
     typedef     int                                 map_int [string];
@@ -13,4 +21,5 @@ package dutb_typedef_pkg;
                             WRITE = 2
                         }                           t_recorder_db_mode;
 endpackage
+// ****************************************************************************************************************************
 

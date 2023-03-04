@@ -44,7 +44,7 @@ task dutb_driver_base::run_phase(uvm_phase phase);
             seq_item_port.get_next_item(txn);  // check whether we have txn to transmitt
             if (null != txn)
                 begin
-                    // 'write' procedure is defined in txn class
+                    // 'drive txn' procedure should be defined in txn class
                     txn.drive(dutb_if_h);
                     seq_item_port.item_done();
                 end

@@ -44,14 +44,14 @@ task dutb_monitor_base::run_phase(uvm_phase phase);
             txn = T_DUT_TXN::type_id::create("txn");
             if ("dutb_txn_base" != txn.get_type_name())
                 begin
-                    // 'read txn' procedure is defined in txn class
+                    // 'monitor txn' procedure should be defined in txn class
                     txn.monitor(dutb_if_h);
                     `uvm_debug("MNTR", {"Content:", txn.convert2string()})
                     aport.write(txn);
                 end
             else
                 begin
-                    `uvm_debug("MNTR", "Monitoring of 'dutb_txn_base' forbidden!")                    
+                    `uvm_debug("MNTR", "Monitoring of 'abstarct' 'dutb_txn_base' doessn't make any sense!")                    
                     wait(0);
                 end
         end

@@ -9,20 +9,18 @@
 
 // ****************************************************************************************************************************
 class dutb_env_base #(type  T_DIN_TXN   = dutb_txn_base,
-                            T_DOUT_TXN  = dutb_txn_base,
-                            T_POUT_TXN  = dutb_txn_base)
+                            T_DOUT_TXN  = dutb_txn_base)
 extends uvm_env;
-    `uvm_component_param_utils(dutb_env_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN))
+    `uvm_component_param_utils(dutb_env_base #(T_DIN_TXN, T_DOUT_TXN))
 
     dutb_env_base_cfg cfg_h;
 
     dutb_agent_base #(T_DIN_TXN)                                din_agent_h;    // dut in
     dutb_agent_base #(T_DOUT_TXN)                               dout_agent_h;   // dut out
-    dutb_agent_base #(T_POUT_TXN)                               pout_agent_h;   // probe out
 
     dutb_v_sqncr #(T_DIN_TXN)                                   v_sqncr_h;      // virtual sequencer
 
-    dut_scb_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)           scb_h;
+    dut_scb_base #(T_DIN_TXN, T_DOUT_TXN)                       scb_h;
 
     uvm_barrier                                                 synch_seq_br_h;
 
@@ -61,14 +59,8 @@ function void dutb_env_base::build_phase(uvm_phase phase);
     cfg_h.dout_agent_cfg_h.dutb_if_h    = cfg_h.dutb_if_h;
     uvm_config_db #(dutb_agent_base_cfg)::set(this, "dout_agent_h", "cfg_h", cfg_h.dout_agent_cfg_h);
 
-    pout_agent_h                        = dutb_agent_base #(T_POUT_TXN)::type_id::create("pout_agent_h", this);
-    cfg_h.pout_agent_cfg_h              = dutb_agent_base_cfg::type_id::create("cfg_h.pout_agent_cfg_h", this);
-    cfg_h.pout_agent_cfg_h.dutb_if_h    = cfg_h.dutb_if_h;
-    cfg_h.pout_agent_cfg_h.is_active    = UVM_PASSIVE;
-    uvm_config_db #(dutb_agent_base_cfg)::set(this, "pout_agent_h", "cfg_h", cfg_h.pout_agent_cfg_h);
-
     // create scoreboard and save synchro barrier to be used by its components
-    scb_h                               = dut_scb_base #(  T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)::type_id::create("scb_h", this);
+    scb_h                               = dut_scb_base #(  T_DIN_TXN, T_DOUT_TXN)::type_id::create("scb_h", this);
 endfunction
 
 
@@ -82,6 +74,5 @@ function void dutb_env_base::connect_phase(uvm_phase phase);
     // connect ports
     din_agent_h.monitor_aport.connect(scb_h.din_export);
     dout_agent_h.monitor_aport.connect(scb_h.dout_export);
-    pout_agent_h.monitor_aport.connect(scb_h.pout_export);
 endfunction
 // ****************************************************************************************************************************

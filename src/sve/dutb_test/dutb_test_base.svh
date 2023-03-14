@@ -9,16 +9,13 @@
 
 // ****************************************************************************************************************************
 class dutb_test_base     #(type T_DIN_TXN   = dutb_txn_base,
-                                T_DOUT_TXN  = dutb_txn_base,
-                                T_POUT_TXN  = dutb_txn_base)
+                                T_DOUT_TXN  = dutb_txn_base)
 extends uvm_test;
-    `uvm_component_param_utils (dutb_test_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN))
+    `uvm_component_param_utils (dutb_test_base #(T_DIN_TXN, T_DOUT_TXN))
 
-    int a;
-    // virtual dutb_if                                         dutb_vif;
     dutb_if_proxy_base                                      dutb_if_h;
     dutb_env_base_cfg                                       env_cfg_h;
-    dutb_env_base #( T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)     env_h;
+    dutb_env_base #( T_DIN_TXN, T_DOUT_TXN)                 env_h;
     dutb_handler                                            dutb_handler_h;
 
     extern function                                         new(string name = "dutb_test_base", uvm_component parent = null);
@@ -58,7 +55,7 @@ function void dutb_test_base::build_phase(uvm_phase phase);
     uvm_config_db #(dutb_env_base_cfg)::set(this, "env_h", "cfg_h", env_cfg_h);
     
     // create env
-    env_h                   = dutb_env_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN)::type_id::create("env_h", this);
+    env_h                   = dutb_env_base #(T_DIN_TXN, T_DOUT_TXN)::type_id::create("env_h", this);
 endfunction
 
 

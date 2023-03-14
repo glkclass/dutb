@@ -124,7 +124,7 @@ endfunction
 
 
 function string dutb_txn_base::convert2string ();
-    return ( vec2str( pack2vector() ) );
+    return ( vec2str(pack2vector()) );
 endfunction
 
 

@@ -46,6 +46,7 @@ task dutb_driver_base::run_phase(uvm_phase phase);
                 begin
                     // 'drive txn' procedure should be defined in txn class
                     txn.drive(dutb_if_h);
+                    `uvm_debug({"Content drived:\n", txn.convert2string()})
                     seq_item_port.item_done();
                 end
         end

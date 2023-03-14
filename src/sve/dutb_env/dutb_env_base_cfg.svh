@@ -15,7 +15,6 @@ class dutb_env_base_cfg extends uvm_object;
 
     dutb_agent_base_cfg     din_agent_cfg_h;
     dutb_agent_base_cfg     dout_agent_cfg_h;
-    dutb_agent_base_cfg     pout_agent_cfg_h;
     dutb_scb_base_cfg       scb_cfg_h;
 
     extern function new(string name = "dut_env_cfg");

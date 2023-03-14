@@ -11,13 +11,11 @@
 
 // ****************************************************************************************************************************
 class dut_predictor_base    #(type  T_DIN_TXN   = dutb_txn_base,
-                                    T_DOUT_TXN  = dutb_txn_base,
-                                    T_POUT_TXN  = dutb_txn_base)
+                                    T_DOUT_TXN  = dutb_txn_base)
 extends uvm_subscriber      #(T_DIN_TXN);
-    `uvm_component_param_utils (dut_predictor_base #(T_DIN_TXN, T_DOUT_TXN, T_POUT_TXN))
+    `uvm_component_param_utils (dut_predictor_base #(T_DIN_TXN, T_DOUT_TXN))
 
     uvm_analysis_port   #(T_DOUT_TXN)       dout_gold_aport;
-    uvm_analysis_port   #(T_POUT_TXN)       pout_gold_aport;
 
     extern function                         new(string name = "dut_predictor_base", uvm_component parent=null);
     extern function void                    build_phase(uvm_phase phase);
@@ -34,7 +32,6 @@ endfunction
 
 function void dut_predictor_base::build_phase(uvm_phase phase);
     dout_gold_aport = new("dout_gold_aport", this);
-    pout_gold_aport = new("pout_gold_aport", this);
 endfunction
 
 
@@ -44,7 +41,7 @@ function void dut_predictor_base::write(T_DIN_TXN t);
     T_DOUT_TXN      dout_txn;   // output 'gold' txn to be sent to checker
 
     $cast(din_txn, t.clone());
-    `uvm_debug("PREDICTOR", {"Content:", din_txn.convert2string()})
+    `uvm_debug({"Content:\n", din_txn.convert2string()})
 
     dout_txn = T_DOUT_TXN::type_id::create("dout_txn");
     // generate gold dout_txn smth here..

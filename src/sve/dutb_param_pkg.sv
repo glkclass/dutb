@@ -20,7 +20,7 @@ package dutb_param_pkg;
     //tb params
     P_TCO                               =   1,    // 'update gap' (to avoid race conditions)
     P_MAX_FAIL_NUM                      =   16,   // max number of failed transactions after which TB will be stopped
-    P_DISPLAY_LINE_SIZE                 =   32,   // max size of line when vector is being displayed. '0' value - display as single line
+    P_DISPLAY_LINE_SIZE                 =   16,   // max size of line when vector is being displayed. '0' value - display as single line
 
     //'report server' message field widths
     P_RPT_MSG_SEVERITY_WIDTH            =   11,

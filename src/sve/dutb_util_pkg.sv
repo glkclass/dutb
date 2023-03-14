@@ -29,7 +29,7 @@ package dutb_util_pkg;
         s = prefix;
         foreach (vec[i])
             begin
-                s = {s, $sformatf("%4d ", vec[i]), eol(i)};
+                s = {s, $sformatf("0x%4H ", vec[i]), eol(i)};
             end
         return s;
     endfunction
@@ -78,7 +78,7 @@ package dutb_util_pkg;
             begin
                 int n_iter = tme/milestone;
                 for (int i = 0; i < n_iter; i++)
-                    #(milestone) `uvm_debug("UTIL", $sformatf("*-*-*-*-*-*-*milestone #%0d of %0d*-*-*-*-*-*-*", i, n_iter))
+                    #(milestone) `uvm_debug($sformatf("*-*-*-*-*-*-*milestone #%0d of %0d*-*-*-*-*-*-*", i, n_iter))
             end
         `uvm_warning("UTIL", "Time out. Simulation terminated!")
         $finish();

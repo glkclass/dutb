@@ -8,9 +8,14 @@
 
 // ****************************************************************************************************************************
 package dutb_macro_pkg;
+
+    `define ASSERT_TYPE_CAST(dst, src) \
+        if(!$cast(dst, src)) \
+            `uvm_fatal("TPYERR", "Type cast was failed")
+
     // briefer form of assert
     `define ASSERT(val, msg="") \
-        assert(val) else $fatal(0, msg)
+        assert(val) else `uvm_fatal("ASSRT", msg)
 
     // Wait for an input 'in' is True and assert False. Use to catch improper events in forks.
     `define ASSERT_WAIT(in, msg="")\
@@ -19,7 +24,7 @@ package dutb_macro_pkg;
                 else $fatal(0, msg)
 
     // briefer form of separate debug report macro
-    `define uvm_debug(a, b) `uvm_info(a, b, UVM_HIGH)
+    `define uvm_debug(a) `uvm_info("UVMDBG", a, UVM_HIGH)
 
     // store waves if `NO_WAVE underfined
     `define STORE_WAVE \

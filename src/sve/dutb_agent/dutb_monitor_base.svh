@@ -46,12 +46,12 @@ task dutb_monitor_base::run_phase(uvm_phase phase);
                 begin
                     // 'monitor txn' procedure should be defined in txn class
                     txn.monitor(dutb_if_h);
-                    `uvm_debug("MNTR", {"Content:", txn.convert2string()})
+                    `uvm_debug({"Content monitored:\n", txn.convert2string()})
                     aport.write(txn);
                 end
             else
                 begin
-                    `uvm_debug("MNTR", "Monitoring of 'abstarct' 'dutb_txn_base' doessn't make any sense!")                    
+                    `uvm_info("MNTR", "Monitoring of 'abstarct' 'dutb_txn_base' doesn't make any sense!", UVM_HIGH)                    
                     wait(0);
                 end
         end

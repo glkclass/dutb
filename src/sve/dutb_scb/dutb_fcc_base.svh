@@ -27,8 +27,6 @@ extends uvm_component;
     dutb_handler                            dutb_handler_h;
     dutb_progress_bar                       progress_bar_h;
 
-    map_flt                                 cov_result;
-    map_int                                 cov_value;
 
     extern          function                new(string name = "dut_fcc_base", uvm_component parent=null);
     extern          function void           build_phase(uvm_phase phase);
@@ -73,8 +71,12 @@ task dut_fcc_base::run_phase( uvm_phase phase );
         begin
             din_fifo.get(din_txn);
             dout_fifo.get(dout_txn);
-            sample_coverage();
-            check_coverage_results();
+            // input txn coverage
+            din_txn.sample_coverage();
+            din_txn.analyze_coverage_results();
+            // output txn coverage
+            // dout_txn.sample_coverage();
+            // dout_txn.check_coverage_results();
         end
 endtask
 

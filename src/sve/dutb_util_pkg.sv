@@ -19,22 +19,51 @@ package dutb_util_pkg;
     import dutb_macro_pkg::*;
 
 
-    function string int2str(int n);
-        return $sformatf("%0d", n);
+    // convert int to string
+    function string int2str(int n, format="%0d");
+        return $sformatf(format, n);
     endfunction
 
 
-    function string vec2str(vector vec, string prefix = "");
+    // convert vector of int to string using given format
+    function string vec2str(vector vec, string format = "0x%4H ", prefix = "");
         string s;
         s = prefix;
         foreach (vec[i])
             begin
-                s = {s, $sformatf("0x%4H ", vec[i]), eol(i)};
+                s = {s, $sformatf(format, vec[i]), eol(i)};
             end
         return s;
     endfunction
 
 
+    // convert list of map int values to string
+    function string map_int2str(map_int map);
+        int i, arr[];
+        arr = new[map.num()];
+        i = 0;
+        foreach (map[key])
+            begin
+                arr[i] = map[key];
+                i++;
+            end
+        return vec2str(arr, .format("%0d "));
+    endfunction
+
+
+    // convert list of map key/values pairs to string
+    function string map_int_display(map_int map);
+        string s;
+        s = "";
+        foreach (map[key])
+            begin
+                s = {s, $sformatf("%-32s : %0d\n", key, map[key])};
+            end
+        return s;
+    endfunction
+
+
+    // convert list of map float values to string
     function string map_flt2str(map_flt map);
         string s;
         int i;
@@ -49,20 +78,19 @@ package dutb_util_pkg;
     endfunction
 
 
-    function string map_int2str(map_int map);
+    // convert list of map key/values pairs to string
+    function string map_flt_display(map_flt map);
         string s;
-        int i;
         s = "";
-        i = 0;
         foreach (map[key])
             begin
-                s = {s, $sformatf("%4d ", map[key]), eol(i)};
-                i++;
+                s = {s, $sformatf("%-32s : %.2f\n", key, map[key])};
             end
         return s;
     endfunction
 
 
+    // return '\n' at the end of line '' otherwise 
     function string eol(int i);
         return ( ( (0 != P_DISPLAY_LINE_SIZE) && ( (P_DISPLAY_LINE_SIZE-1) == (i % P_DISPLAY_LINE_SIZE) ) ) ? "\n" : "" );
     endfunction

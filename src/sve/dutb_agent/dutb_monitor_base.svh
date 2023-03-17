@@ -41,7 +41,8 @@ task dutb_monitor_base::run_phase(uvm_phase phase);
     forever
         begin
             T_DUT_TXN txn;
-            txn = T_DUT_TXN::type_id::create("txn");
+            // txn = T_DUT_TXN::type_id::create("txn");
+            txn = new();
             if ("dutb_txn_base" != txn.get_type_name())
                 begin
                     // 'monitor txn' procedure should be defined in txn class

@@ -41,12 +41,6 @@ function void dutb_test_base::build_phase(uvm_phase phase);
 
     env_cfg_h               = dutb_env_base_cfg::type_id::create("env_cfg_h", this);
     
-    // if (!uvm_config_db #(virtual dutb_if)::get(this, "", "dutb_vif", dutb_vif))
-    //     `uvm_fatal("CFG_DB_ERROR", "Unable to get \"dutb_vif\" from config db")
-    // else
-    //     // pass dutb_vif to dutb_if_proxy
-    //     uvm_config_db #(virtual dutb_if)::set(this, "dutb_if_h", "dutb_vif", dutb_vif);
-
     // create dut_if_proxy and pass it to env config
     dutb_if_h               = dutb_if_proxy_base::type_id::create("dutb_if_h", this);
     env_cfg_h.dutb_if_h     = dutb_if_h;

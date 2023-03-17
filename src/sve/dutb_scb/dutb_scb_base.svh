@@ -2,9 +2,9 @@
     Project         :   dutb
     Creation Date   :   Dec 2015
     Class           :   dut_scb_base.
-    Description     :   Interface   -   Three 'analisys exports' to accept DUT 'input', 'output, 'probe' txn.
+    Description     :   Interface   -   Two 'analisys exports' to accept DUT 'input', 'output' txn.
                         Task        -   Provide room for three units: predictor, checker, coverage collector.
-                                        Provide connection between them.
+                                        Setup connections between them.
 ******************************************************************************************************************************/
 
 
@@ -38,7 +38,7 @@ endfunction
 
 function void dut_scb_base::build_phase(uvm_phase phase);
 
-    // ports to recieve dut input/output/probe txns
+    // ports to recieve DUT input & output txn
     din_export          = new("din_export", this);
     dout_export         = new("dout_export", this);
 
@@ -49,17 +49,17 @@ endfunction
 
 
 function void dut_scb_base::connect_phase(uvm_phase phase);
-    // from dut to predictor
+    // input txn: from DUT to predictor
     din_export.connect(dut_predictor_h.analysis_export);
     
-    // from predictor to checker
+    // gold output txn: from predictor to checker
     dut_predictor_h.dout_gold_aport.connect(dutb_checker_base_h.dout_gold_export);
     
-    // from dut to checker
+    // input & output txn: from DUT to checker
     din_export.connect(dutb_checker_base_h.din_dut_export);
     dout_export.connect(dutb_checker_base_h.dout_dut_export);
 
-    // from checker to func coverage collector
+    // input & output txn: from checker to func coverage collector
     dutb_checker_base_h.din_fcc_aport.connect(dut_fcc_h.din_export);
     dutb_checker_base_h.dout_fcc_aport.connect(dut_fcc_h.dout_export);
 endfunction

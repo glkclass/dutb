@@ -16,7 +16,7 @@ class   dutb_checker_base   #(type  T_DIN_TXN = dutb_txn_base,
 
     dutb_handler                             dutb_handler_h;
 
-    // from dut and predictor
+    // from DUT and predictor
     uvm_analysis_export #(T_DOUT_TXN)       dout_dut_export, dout_gold_export;
     uvm_analysis_export #(T_DIN_TXN)        din_dut_export;
 
@@ -24,7 +24,7 @@ class   dutb_checker_base   #(type  T_DIN_TXN = dutb_txn_base,
     uvm_analysis_port   #(T_DIN_TXN)        din_fcc_aport;
     uvm_analysis_port   #(T_DOUT_TXN)       dout_fcc_aport;
 
-    // dut and predictor data fifo
+    // DUT and predictor data fifo
     uvm_tlm_analysis_fifo #(T_DOUT_TXN)     dout_gold_fifo, dout_dut_fifo;
     uvm_tlm_analysis_fifo #(T_DIN_TXN)      din_dut_fifo;
 
@@ -87,16 +87,16 @@ task dutb_checker_base::run_phase( uvm_phase phase );
 
             dout_dut_fifo.get(dout_dut_txn_h);
             dout_gold_fifo.get(dout_gold_txn_h);
-            eq["dout"] = dout_dut_txn_h.compare(dout_gold_txn_h);  // compare dut output
+            eq["dout"] = dout_dut_txn_h.compare(dout_gold_txn_h);  // compare DUT output
 
             if (!eq["dout"])
                 begin
-                    `uvm_error("COMPARE", {"'dut' and 'gold' output don't match:\n", dout_dut_txn_h.convert2string_pair(dout_gold_txn_h)})
+                    `uvm_error("COMPARE", {"'DUT' and 'gold' output don't match:\n", dout_dut_txn_h.convert2string_pair(dout_gold_txn_h)})
                     dutb_handler_h.fail(dout_dut_txn_h.pack2vector());
                 end
 
 
-            if (1'b1 == eq["dout"])
+            if (eq["dout"])
                 begin
                     T_DIN_TXN  din_txn_h;
                     din_dut_fifo.get(din_txn_h);
@@ -110,6 +110,10 @@ task dutb_checker_base::run_phase( uvm_phase phase );
                 begin
                     T_DIN_TXN  din_txn_h;
                     din_dut_fifo.get(din_txn_h);                    
+                    // temporary send to fcc for debug
+                    din_fcc_aport.write(din_txn_h);  
+                    dout_fcc_aport.write(dout_dut_txn_h);
+
                 end
 
             synch_seq();// finish processing of all content of the previous sequence before let the next one to proceed...

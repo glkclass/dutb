@@ -43,10 +43,11 @@ function void dut_predictor_base::write(T_DIN_TXN t);
     $cast(din_txn, t.clone());
     `uvm_debug({"Content:\n", din_txn.convert2string()})
 
-    dout_txn = T_DOUT_TXN::type_id::create("dout_txn");
-    // generate gold dout_txn smth here..
+    // dout_txn = T_DOUT_TXN::type_id::create("dout_txn");
+    dout_txn = new();
+    // override input txn fold method to generate 'gold' output txn
+    din_txn.gold(dout_txn);
     dout_gold_aport.write(dout_txn);
-    `uvm_error("VFNOTOVRDN", "Override predictor 'write ()' method")
 endfunction
 // ****************************************************************************************************************************
 

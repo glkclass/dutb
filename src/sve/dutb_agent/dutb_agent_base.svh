@@ -36,20 +36,26 @@ function void dutb_agent_base::build_phase(uvm_phase phase);
 
     uvm_config_db #(dutb_if_proxy_base)::set(this, "*", "dutb_if_h", cfg_h.dutb_if_h);
 
-    monitor_aport = new ("monitor_aport", this);
-    monitor_h = dutb_monitor_base #(T_DUT_TXN)::type_id::create("monitor_h", this);
-
-    if (UVM_ACTIVE == cfg_h.is_active)
+    if (cfg_h.has_driver)
         begin
             driver_h = dutb_driver_base #(T_DUT_TXN)::type_id::create("driver_h", this);
             sqncr_h = uvm_sequencer #(T_DUT_TXN)::type_id::create("sqncr_h", this);
         end
+
+    if (cfg_h.has_monitor)
+        begin
+            monitor_aport = new ("monitor_aport", this);
+            monitor_h = dutb_monitor_base #(T_DUT_TXN)::type_id::create("monitor_h", this);
+        end
 endfunction
 
 function void dutb_agent_base::connect_phase(uvm_phase phase);
-    monitor_h.aport.connect(monitor_aport);
+    if (cfg_h.has_monitor)
+        begin
+            monitor_h.aport.connect(monitor_aport);
+        end
 
-    if (UVM_ACTIVE == cfg_h.is_active)
+    if (cfg_h.has_driver)
         begin
             driver_h.seq_item_port.connect(sqncr_h.seq_item_export);
         end

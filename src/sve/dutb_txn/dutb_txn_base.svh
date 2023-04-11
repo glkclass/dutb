@@ -19,25 +19,25 @@ class dutb_txn_base extends uvm_sequence_item;
     string check_str;
     int check_idx;
 
-    extern          function            new                     (string name = "dutb_txn_base");
-    // extern static   function string     get_class_name          ();
-    extern virtual  function void       display_check           (bit reset, bit eq);
-    extern virtual  function void       do_copy                 (uvm_object rhs);                               // make a deep copy
-    extern virtual  function bit        do_compare              (uvm_object rhs, uvm_comparer comparer);
-    extern virtual  function void       do_print                (uvm_printer printer);                          // print transaction content
-    extern virtual  function string     convert2string          ();                                             // represent 'txn content' as string
-    extern virtual  function string     convert2string_pair     (dutb_txn_base txn);                            // represent content of pair of txn as string
-    extern virtual  function vector     pack2vector             ();                                             // pack 'txn content' to 'vector of int'
-    extern virtual  function void       unpack4vector           (vector packed_txn);                            // unpack 'txn content' from 'vector of int'
-    extern virtual  function void       sample_coverage         ();                                             // sample covergroups
-    extern virtual  function void       analyze_coverage_results  ();                                             // store coverage data (to hashmap), report results
-    extern virtual  function void       gold                    (dutb_txn_base txn);                            // generate a gold output txn
-    extern virtual  task                drive                   (input dutb_if_proxy_base dutb_if);             // drive 'txn content' to interface lines
-    extern virtual  task                drive_x                 (input dutb_if_proxy_base dutb_if);             // drive 'x' values to interface lines
-    extern virtual  task                monitor                 (input dutb_if_proxy_base dutb_if);             // monitor 'txn content' from interface lines
-    extern virtual  function void       push                    ();                                             // store 'txn content' to the buffer
-    extern virtual  function void       pop                     ();                                             // extract 'txn content' from buffer (if 'fifo txn structure' used)
-    extern virtual  function int        size                    ();                                             // size of txn (in int-parrot). Actually size of txn packed to vector of int.
+    extern          function                new                         (string name = "dutb_txn_base");
+    // extern static   function string         get_class_name              ();
+    extern virtual  function void           display_check               (bit reset, bit eq);
+    extern virtual  function void           do_copy                     (uvm_object rhs);                           // make a deep copy
+    extern virtual  function bit            do_compare                  (uvm_object rhs, uvm_comparer comparer);
+    extern virtual  function void           do_print                    (uvm_printer printer);                      // print transaction content
+    extern virtual  function string         convert2string              ();                                         // represent 'txn content' as string
+    extern virtual  function string         convert2string_pair         (dutb_txn_base txn);                        // represent content of pair of txn as string
+    extern virtual  function vector         pack2vector                 ();                                         // pack 'txn content' to 'vector of int'
+    extern virtual  function void           unpack4vector               (vector packed_txn);                        // unpack 'txn content' from 'vector of int'
+    extern virtual  function void           sample_coverage             ();                                         // sample covergroups
+    extern virtual  function void           analyze_coverage_results    ();                                         // store coverage data (to hashmap), report results
+    extern virtual  function dutb_txn_base  gold                        ();                                         // generate and return 'gold' output txn
+    extern virtual  task                    drive                       (input dutb_if_proxy_base dutb_if);         // drive 'txn content' to interface lines
+    extern virtual  task                    drive_x                     (input dutb_if_proxy_base dutb_if);         // drive 'x' values to interface lines
+    extern virtual  task                    monitor                     (input dutb_if_proxy_base dutb_if);         // monitor 'txn content' from interface lines
+    extern virtual  function void           push                        ();                                         // store 'txn content' to the buffer
+    extern virtual  function void           pop                         ();                                         // extract 'txn content' from buffer (if 'fifo txn structure' used)
+    extern virtual  function int            size                        ();                                         // size of txn (in int-parrot). Actually size of txn packed to vector of int.
 endclass    
 // ****************************************************************************************************************************
 
@@ -59,7 +59,7 @@ endfunction
 function void dutb_txn_base::display_check(bit reset, bit eq);
     check_str = (reset) ? "" : check_str;
     check_idx = (reset) ? 0 : check_idx;
-    check_str = {check_str, (eq) ? "______ " : "XXXXXX ", eol(check_idx)};
+    check_str = {check_str, (eq) ? "__________ " : "XXXXXXXXXX ", eol(check_idx)};
     check_idx++;
 endfunction
 
@@ -119,7 +119,7 @@ endfunction
 
 
 function string dutb_txn_base::convert2string ();
-    return ( vec2str(pack2vector()) );
+    return ( vector2str(pack2vector()) );
 endfunction
 
 
@@ -169,7 +169,7 @@ function void dutb_txn_base::analyze_coverage_results();
 endfunction
 
 
-function void dutb_txn_base::gold (dutb_txn_base txn);
+function dutb_txn_base dutb_txn_base::gold ();
     if ("dutb_txn_base" != get_type_name())
         `uvm_fatal("VFNOTOVRDN", "Override method")
     else 

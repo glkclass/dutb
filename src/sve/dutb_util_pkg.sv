@@ -26,7 +26,7 @@ package dutb_util_pkg;
 
 
     // convert vector of int to string using given format
-    function string vec2str(vector vec, string format = "0x%4H ", prefix = "");
+    function string vector2str(vector vec, string format = "0x%8H ", prefix = "");
         string s;
         s = prefix;
         foreach (vec[i])
@@ -36,6 +36,16 @@ package dutb_util_pkg;
         return s;
     endfunction
 
+    // convert byte_vector to string using given format
+    function string byte_vector2str(byte_vector vec, string format = "0x%2H ", prefix = "");
+        string s;
+        s = prefix;
+        foreach (vec[i])
+            begin
+                s = {s, $sformatf(format, vec[i]), eol(i)};
+            end
+        return s;
+    endfunction
 
     // convert list of map int values to string
     function string map_int2str(map_int map);
@@ -47,7 +57,7 @@ package dutb_util_pkg;
                 arr[i] = map[key];
                 i++;
             end
-        return vec2str(arr, .format("%0d "));
+        return vector2str(arr, .format("%0d "));
     endfunction
 
 
@@ -149,6 +159,19 @@ package dutb_util_pkg;
             nextCRC12_D1 = newcrc;
         end
     endfunction
+
+
+    // calculate xor of byte array of arbitrary size
+    function byte byte_xor(byte check_sum, vec[]);
+        byte    bar;
+        bar = check_sum;
+        foreach (vec[i]) 
+            begin
+                bar = bar ^ vec[i];
+            end
+        return bar;
+    endfunction : byte_xor
+
 endpackage 
 // ****************************************************************************************************************************
 

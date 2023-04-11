@@ -12,6 +12,7 @@ package dutb_typedef_pkg;
     
     typedef     uvm_sequence #(uvm_sequence_item)   uvm_virtual_sequence;
     typedef     int                                 vector [];
+    typedef     byte                                byte_vector [];
     typedef     real                                map_flt [string];
     typedef     int                                 map_int [string];
 

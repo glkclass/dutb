@@ -35,18 +35,16 @@ function void dut_predictor_base::build_phase(uvm_phase phase);
 endfunction
 
 
-// Should be overridden in a child classes to provide access to gold references 
+// May be overridden in a child classes to provide access to gold references of left as is now.
 function void dut_predictor_base::write(T_DIN_TXN t);
     T_DIN_TXN       din_txn;    // input DUT txn
     T_DOUT_TXN      dout_txn;   // output 'gold' txn to be sent to checker
 
     $cast(din_txn, t.clone());
-    `uvm_debug({"Content:\n", din_txn.convert2string()})
+    // `uvm_debug({"Content:\n", din_txn.convert2string()})
 
-    // dout_txn = T_DOUT_TXN::type_id::create("dout_txn");
-    dout_txn = new();
-    // override input txn fold method to generate 'gold' output txn
-    din_txn.gold(dout_txn);
+    // override 'input txn'.gold() method to generate gold 'output txn'
+    `ASSERT_TYPE_CAST(dout_txn, din_txn.gold());
     dout_gold_aport.write(dout_txn);
 endfunction
 // ****************************************************************************************************************************

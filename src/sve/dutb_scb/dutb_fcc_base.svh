@@ -32,8 +32,7 @@ extends uvm_component;
     extern          function void           build_phase(uvm_phase phase);
     extern          function void           connect_phase (uvm_phase phase);
     extern          task                    run_phase( uvm_phase phase );
-    extern virtual  function void           sample_coverage();
-    extern virtual  function void           check_coverage_results();
+    extern virtual  task                    process_coverage();  // sample/analyze/report coverage
 endclass
 // ****************************************************************************************************************************
 
@@ -69,24 +68,23 @@ endfunction
 task dut_fcc_base::run_phase( uvm_phase phase );
     forever
         begin
-            din_fifo.get(din_txn);
-            dout_fifo.get(dout_txn);
-            // input txn coverage
-            din_txn.sample_coverage();
-            din_txn.analyze_coverage_results();
-            // output txn coverage
-            // dout_txn.sample_coverage();
-            // dout_txn.check_coverage_results();
+            process_coverage();
         end
 endtask
 
+// Use txn methods to handle coverage.
+// Maybe overridden in case of need.
+task dut_fcc_base::process_coverage();
+    // `uvm_debug(Method maybe be overridden...")
+    din_fifo.get(din_txn);
+    dout_fifo.get(dout_txn);
+    // input txn coverage
+    din_txn.sample_coverage();
+    din_txn.analyze_coverage_results();
+    // output txn coverage
+    // dout_txn.sample_coverage();
+    // dout_txn.analyze_coverage_results();    
+endtask
 
-function void dut_fcc_base::sample_coverage();
-    `uvm_error("VFNOTOVRDN", "Method should be overridden...")
-endfunction
 
-
-function void dut_fcc_base::check_coverage_results();
-    `uvm_error("VFNOTOVRDN", "Method should be overridden...")
-endfunction
 // ****************************************************************************************************************************

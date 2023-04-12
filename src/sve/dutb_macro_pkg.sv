@@ -9,6 +9,10 @@
 // ****************************************************************************************************************************
 package dutb_macro_pkg;
 
+    `define ASSERT_X(var) \
+        if($isunknown(var)) \
+            `uvm_error("XVALERR", "'X' value was detected")
+
     `define ASSERT_TYPE_CAST(dst, src) \
         if(!$cast(dst, src)) \
             `uvm_fatal("TPYERR", "Type cast was failed")

@@ -32,10 +32,6 @@ package dutb_pkg;
     `include "dutb_agent_base_cfg.svh"
     `include "dutb_agent_base.svh"
 
-    `include "dutb_predictor_base.svh"
-    `include "dutb_checker_base.svh"
-    `include "dutb_fcc_base.svh"
-    `include "dutb_scb_base_cfg.svh"
     `include "dutb_scb_base.svh"
 
     `include "dutb_env_base_cfg.svh"

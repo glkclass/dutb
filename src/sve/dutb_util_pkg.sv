@@ -20,29 +20,29 @@ package dutb_util_pkg;
 
 
     // convert int to string
-    function string int2str(int n, format="%0d");
-        return $sformatf(format, n);
+    function string int2str(int n, string frmt="%0d");
+        return $sformatf(frmt, n);
     endfunction
 
 
     // convert vector of int to string using given format
-    function string vector2str(vector vec, string format = "0x%8H ", prefix = "");
+    function string vector2str(vector vec, string frmt = "0x%8H ", prefix = "");
         string s;
         s = prefix;
         foreach (vec[i])
             begin
-                s = {s, $sformatf(format, vec[i]), eol(i)};
+                s = {s, $sformatf(frmt, vec[i]), eol(i)};
             end
         return s;
     endfunction
 
     // convert byte_vector to string using given format
-    function string byte_vector2str(byte_vector vec, string format = "0x%2H ", prefix = "");
+    function string byte_vector2str(byte_vector vec, string frmt = "0x%2H ", prefix = "");
         string s;
         s = prefix;
         foreach (vec[i])
             begin
-                s = {s, $sformatf(format, vec[i]), eol(i)};
+                s = {s, $sformatf(frmt, vec[i]), eol(i)};
             end
         return s;
     endfunction
@@ -57,7 +57,7 @@ package dutb_util_pkg;
                 arr[i] = map[key];
                 i++;
             end
-        return vector2str(arr, .format("%0d "));
+        return vector2str(arr, .frmt("%0d "));
     endfunction
 
 
@@ -116,7 +116,7 @@ package dutb_util_pkg;
             begin
                 int n_iter = tme/milestone;
                 for (int i = 0; i < n_iter; i++)
-                    #(milestone) `uvm_debug($sformatf("*-*-*-*-*-*-*milestone #%0d of %0d*-*-*-*-*-*-*", i, n_iter))
+                    #(milestone) `uvm_debug_m($sformatf("*-*-*-*-*-*-*milestone #%0d of %0d*-*-*-*-*-*-*", i, n_iter))
             end
         `uvm_warning("UTIL", "Time out. Simulation terminated!")
         $finish();
@@ -159,6 +159,25 @@ package dutb_util_pkg;
             nextCRC12_D1 = newcrc;
         end
     endfunction
+
+    // calculate 8-bit crc of byte array of arbitrary size using 12-bit crc algorithm. 
+    function byte byte_crc(byte crc_init, vec[]);
+        byte                foo;
+        logic   [11 : 0]    bar;
+        
+        bar = {4'h0, crc_init};
+        foreach (vec[i]) 
+            begin
+                foo = vec[i];
+                for (int j = 0; j < 8; j++) 
+                    begin
+                        bar = nextCRC12_D1(foo, bar);
+                        foo >>= 1;
+                    end
+            end
+        // `uvm_debug(int2str(bar[7:0]))
+        return bar [7:0];
+    endfunction : byte_crc
 
 
     // calculate xor of byte array of arbitrary size

@@ -1,6 +1,0 @@
-+incdir+../src/sve/dutb_util+../src/sve/dutb_if_proxy+../src/sve/dutb_seq+../src/sve/dutb_agent+../src/sve/dutb_env+../src/sve/dutb_scb+../src/sve/dutb_test
-
--uvmhome CDNS-1.2
--uvmnocdnsextra
-+UVM_VERBOSITY=UVM_HIGH
-#+UVM_CONFIG_DB_TRACE

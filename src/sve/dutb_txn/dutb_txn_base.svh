@@ -37,7 +37,7 @@ class dutb_txn_base extends uvm_sequence_item;
     extern virtual  task                    monitor                     (input dutb_if_proxy_base dutb_if);         // monitor 'txn content' from interface lines
     extern virtual  function void           push                        ();                                         // store 'txn content' to the buffer
     extern virtual  function void           pop                         ();                                         // extract 'txn content' from buffer (if 'fifo txn structure' used)
-    extern virtual  function int            size                        ();                                         // size of txn (in int-parrot). Actually size of txn packed to vector of int.
+    extern virtual  function int            size                        ();                                         // size of txn (in int-parrots). Actually size of txn packed to vector of int.
 endclass    
 // ****************************************************************************************************************************
 

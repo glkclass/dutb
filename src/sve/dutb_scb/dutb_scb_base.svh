@@ -74,7 +74,7 @@ task dut_scb_base::do_check();
     T_DOUT_TXN  dout_txn_h, dout_gold_txn_h;
 
     din_fifo.get(din_txn_h);
-    `ASSERT_TYPE_CAST(dout_gold_txn_h, din_txn_h.gold());
+    `assert_type_cast(dout_gold_txn_h, din_txn_h.gold());
     dout_fifo.get(dout_txn_h);
     eq["dout"] = dout_txn_h.compare(dout_gold_txn_h);  // compare DUT output txn
 

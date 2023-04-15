@@ -14,10 +14,12 @@ package dutb_pkg;
     `include "uvm_macros.svh"
     import uvm_pkg::*;
 
+    // `include "dutb_macros.svh"
     import dutb_typedef_pkg::*;
     import dutb_param_pkg::*;
     import dutb_util_pkg::*;
 
+    `include "dutb_db.svh"
     `include "dutb_handler.svh"
     `include "dutb_report_server.svh"
     `include "dutb_progress_bar.svh"

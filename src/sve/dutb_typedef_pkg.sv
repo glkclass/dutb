@@ -13,7 +13,6 @@ package dutb_typedef_pkg;
     typedef     uvm_sequence #(uvm_sequence_item)   uvm_virtual_sequence;
     
     typedef     logic   [7 : 0]                     byte_4st;
-    
     typedef     int                                 vector [];
     typedef     byte                                byte_vector [];
     typedef     real                                map_flt [string];
@@ -23,7 +22,7 @@ package dutb_typedef_pkg;
                             IDLE = 0,
                             READ = 1,
                             WRITE = 2
-                        }                           t_recorder_db_mode;
+                        }                           t_db_mode;
 endpackage
 // ****************************************************************************************************************************
 

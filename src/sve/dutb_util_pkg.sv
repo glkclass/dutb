@@ -14,9 +14,9 @@ package dutb_util_pkg;
     `include "uvm_macros.svh"
     import uvm_pkg::*;
 
+    `include "dutb_macros.svh"
     import dutb_param_pkg::*;
     import dutb_typedef_pkg::*;
-    import dutb_macro_pkg::*;
 
 
     // convert int to string

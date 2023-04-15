@@ -1,5 +1,0 @@
-# Global packages
-../src/sve/dutb_typedef_pkg.sv
-../src/sve/dutb_param_pkg.sv
-../src/sve/dutb_macro_pkg.sv
-../src/sve/dutb_pkg.sv

@@ -7,7 +7,7 @@
 
 
 // ****************************************************************************************************************************
-import dutb_macro_pkg::*;
+`include "dutb_macros.svh"
 
 module probe ();
     genvar          ii;
@@ -15,7 +15,7 @@ module probe ();
 
     `define UNIT foo.qux
     `define PREFIX bar
-    `ADD_PROBE_WIRE(`UNIT, `PREFIX, quxx)
+    `add_probe_wave(`UNIT, `PREFIX, quxx)
 endmodule
 // ****************************************************************************************************************************
 

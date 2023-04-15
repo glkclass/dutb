@@ -1,9 +1,9 @@
 /******************************************************************************************************************************
     Project         :   dutb
     Creation Date   :   Dec 2015
-    Class           :   dutb_v_sqncr
+    Class           :   dutb_handler
     Description     :   Interface   -   
-                        Task        -   handle possible fails: store/load transactions to/from 'recorder_db' file.
+                        Task        -   handle possible fails:
                                         count fails/success
                                         stop test when given condition (max number of fails, coverage target achieved, ...) detected 
 ******************************************************************************************************************************/
@@ -15,30 +15,20 @@ class dutb_handler extends uvm_component;
 
     int                     n_fails, n_success;
 
-    int                     recorder_db_fid;
-    t_recorder_db_mode      recorder_db_mode;
-    string                  recorder_db_fn;
-
     uvm_barrier             stop_test_h;
     uvm_event               stop_test_evnt_h;
     string                  stop_test_info;
+    dutb_db                 txn_db;
 
+    extern function         new(string name = "dutb_handler", uvm_component parent=null);
+    extern task             run_phase(uvm_phase phase);
+    extern function void    report_phase(uvm_phase phase);
 
-    extern function new(string name = "dutb_handler", uvm_component parent=null);
-    extern task run_phase (uvm_phase phase);
-    extern function void report_phase (uvm_phase phase);
+    extern function void    fail(vector txn_packed);
+    extern function void    success();
 
-    extern function void fopen();
-    extern function void fclose();
-
-    extern function void write2db (vector content);
-    extern function int read4db (ref vector content);
-
-    extern function void fail(vector txn_packed);
-    extern function void success();
-
-    extern task wait_for_stop_test();
-    extern function void stop_test(string message);
+    extern task             wait_for_stop_test();
+    extern function void    stop_test(string message);
 
     // extern function string util_sprint(vector vec);
 endclass
@@ -46,29 +36,23 @@ endclass
 
 
 // ****************************************************************************************************************************
-// function string dutb_handler::util_sprint(vector vec);
-//     string s = "";
-
-//     for (int i = 0; i < vec.size(); i++)
-//         begin
-//             s = {s, $sformatf("%0d ", vec[i])};
-//         end
-//     return s;
-// endfunction
-
 function dutb_handler::new(string name = "dutb_handler", uvm_component parent=null);
+    
+    string arg_value;
+    
     super.new(name, parent);
     stop_test_evnt_h = new ("stop_test_evnt_h");
     stop_test_h = new ("stop_test_h", 2);
+
+    $value$plusargs("DUTB_DB_MODE=%s", arg_value);
+    `uvm_debug(arg_value)
+    // xxx
+
+    txn_db = new(.name("dutb_db"), .db_name("txn_db.txt"), .db_mode(WRITE));
+
     n_fails = 0;
     n_success = 0;
     stop_test_info = "";
-
-    recorder_db_fn = "recorder_db.txt";
-    recorder_db_fid = 0;
-    recorder_db_mode = IDLE;
-
-
 endfunction
 
 
@@ -85,98 +69,12 @@ task dutb_handler::run_phase(uvm_phase phase);
 endtask
 
 
-function void dutb_handler::fopen();
-
-    if (WRITE == recorder_db_mode)  // write txn to 'recorder_db' file
-        begin
-            recorder_db_fid = $fopen( recorder_db_fn, "w" );
-            if (0 == recorder_db_fid)
-                begin
-                    `uvm_fatal("RECORDER_DB", $sformatf("Can't create 'recorder_db file'('%s')", recorder_db_fn))
-                end
-            else
-                begin
-                    `uvm_info("RECORDER_DB", "'Store to recorder_db file is enabled", UVM_HIGH)
-                end
-        end
-    else if (READ == recorder_db_mode) // read txn from 'recorder_db' file
-        begin
-            recorder_db_fid = $fopen( recorder_db_fn, "r" );
-            if (0 == recorder_db_fid)
-                begin
-                    `uvm_info("RECORDER_DB", $sformatf("'recorder_db file'('%s')is absent", recorder_db_fn), UVM_HIGH)
-                end
-            else
-                begin
-                    `uvm_info("RECORDER_DB", "'Read from recorder_db file is enabled", UVM_HIGH)
-                end
-        end
-endfunction
-
-
-function void dutb_handler::fclose();
-    if (0 != recorder_db_fid)//'recorder_db file' was opened
-        $fclose(recorder_db_fid);//close the file
-endfunction
-
-
-function void dutb_handler::write2db(vector content);
-    if (WRITE == recorder_db_mode)
-        begin
-            if (0 == recorder_db_fid)
-                begin
-                    fopen();  // open 'recorder_db' file
-                end
-
-            foreach (content[i])
-                begin
-                    $fwrite (recorder_db_fid, "%-d", content[i]);
-                end
-            $fwrite (recorder_db_fid, "\n");
-            $fflush (recorder_db_fid);
-        end
-endfunction
-
-
-function int dutb_handler::read4db(ref vector content);
-    int ans = 0;
-    if (READ == recorder_db_mode)  // 'recorder_db file' is opened for reading
-        begin
-            if (0 == recorder_db_fid)
-                begin
-                    fopen();  // open 'recorder_db' file
-                end
-
-            if (0 != recorder_db_fid)  // 'recorder_db' file is opened
-                begin
-                    foreach (content[i])
-                        begin
-                            ans = $fscanf (recorder_db_fid, "%d", content[i]);
-                            if (1 != ans)
-                                begin
-                                    return 0;  // error
-                                end
-                        end
-                    return 1;  // success
-                end
-            else
-                begin
-                    return 0;  // error
-                end
-        end
-    else  // wrong 'recorder_db_mode'
-        begin
-            return 0;  // error
-        end
-endfunction
-
-
 function void dutb_handler::fail(vector txn_packed);
     n_fails++;
 
-    if (WRITE == recorder_db_mode)  // write failed txn (packed) to 'recorder_db' file
+    if (WRITE == txn_db.db_mode)  // write failed txn (packed) to 'txn_db'
         begin
-            write2db (txn_packed);
+            txn_db.write (txn_packed);
         end
 
     if (n_fails > P_MAX_FAIL_NUM)  // terminate current test due to 'max error number' exceed
@@ -192,8 +90,6 @@ endfunction
 
 
 function void dutb_handler::report_phase (uvm_phase phase);
-    fclose();
-
     if (n_fails > P_MAX_FAIL_NUM)  // terminate current test due to 'max error number' exceed
         begin
             `uvm_error("STOP_TEST", $sformatf("Max number (%0d) of fails was exceeded. Simulation was terminated!", P_MAX_FAIL_NUM))

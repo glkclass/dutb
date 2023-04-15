@@ -17,10 +17,13 @@ extends uvm_test;
     dutb_env_base_cfg                                       env_cfg_h;
     dutb_env_base #( T_DIN_TXN, T_DOUT_TXN)                 env_h;
     dutb_handler                                            dutb_handler_h;
+    uvm_tr_database                                         dutb_db;
 
     extern function                                         new(string name = "dutb_test_base", uvm_component parent = null);
     extern function void                                    build_phase(uvm_phase phase);
+    extern function void                                    end_of_elaboration_phase(uvm_phase phase);
     extern function void                                    start_of_simulation_phase(uvm_phase phase);
+    extern function void                                    final_phase(uvm_phase phase);
 endclass
 // ****************************************************************************************************************************
 
@@ -34,6 +37,8 @@ endfunction
 function void dutb_test_base::build_phase(uvm_phase phase);
     // replace 'default report server' with customized version
     dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
+    
+
 
     //create util stack
     dutb_handler_h          = new ("dutb_handler_h", this);
@@ -53,9 +58,18 @@ function void dutb_test_base::build_phase(uvm_phase phase);
 endfunction
 
 
-// ****************************************************************************************************************************
+function void dutb_test_base::end_of_elaboration_phase(uvm_phase phase);
+    super.end_of_elaboration_phase(phase);
+endfunction
+
+
 function void dutb_test_base::start_of_simulation_phase(uvm_phase phase);
     uvm_top.print_topology();
     super.start_of_simulation_phase(phase);
+endfunction
+
+
+function void dutb_test_base::final_phase(uvm_phase phase);
+    super.final_phase(phase);
 endfunction
 // ****************************************************************************************************************************

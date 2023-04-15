@@ -1,28 +1,28 @@
 /******************************************************************************************************************************
     Project         :   dutb
     Creation Date   :   Dec 2015
-    Package         :   dutb_macro_pkg
-    Description     :   Contain macros used.
+    Description     :   Contain dutb macros used.
 ******************************************************************************************************************************/
 
 
 // ****************************************************************************************************************************
-package dutb_macro_pkg;
+`ifndef DUTB_MACROS_SVH
+`define DUTB_MACROS_SVH
 
-    `define ASSERT_X(var) \
+    `define assert_x(var) \
         if($isunknown(var)) \
             `uvm_error("XVALERR", "'X' value was detected")
 
-    `define ASSERT_TYPE_CAST(dst, src) \
+    `define assert_type_cast(dst, src) \
         if(!$cast(dst, src)) \
             `uvm_fatal("TPYERR", "Type cast was failed")
 
     // briefer form of assert
-    `define ASSERT(val, msg="") \
+    `define assert(val, msg="") \
         assert(val) else `uvm_fatal("ASSRT", msg)
 
     // Wait for an input 'in' is True and assert False. Use to catch improper events in forks.
-    `define ASSERT_WAIT(in, msg="")\
+    `define assert_wait(in, msg="")\
         wait(in)\
             assert(FALSE)\
                 else `uvm_fatal("ASSRT", msg)
@@ -34,7 +34,7 @@ package dutb_macro_pkg;
     `define uvm_debug_m(a) `uvm_info("UVMDBG", a, UVM_MEDIUM)
 
     // store waves if `NO_WAVE underfined
-    `define STORE_WAVE \
+    `define store_wave \
         begin \
             `ifndef NO_WAVE \
                 $shm_open("./sim"); \
@@ -43,15 +43,15 @@ package dutb_macro_pkg;
         end
 
     // Probes
-    `define ADD_PROBE_WIRE(unit, prefix, probe) \
+    `define add_probe_wave(unit, prefix, probe) \
         wire prefix``probe; \
         assign prefix``probe = unit``.probe;
 
-    `define ADD_PROBE_BUS(unit, prefix, probe, width) \
+    `define add_probe_bus(unit, prefix, probe, width) \
         wire [width-1:0] prefix``probe; \
         assign prefix``probe = unit``.probe;
 
-    `define ADD_PROBE_PCK_UNPCK_ARR(unit, prefix, probe, width, n)\
+    `define add_probe_pck_unpck_arr(unit, prefix, probe, width, n)\
         generate\
             wire [width-1:0] prefix``probe[n];\
             for (ii = 0; ii < n; ii++)\
@@ -60,7 +60,7 @@ package dutb_macro_pkg;
                 end\
         endgenerate
 
-    `define ADD_PROBE_UNPCK_ARR(unit, prefix, probe, width, n)\
+    `define add_probe_unpck_arr(unit, prefix, probe, width, n)\
         generate\
             wire [width-1:0] prefix``probe[n];\
             for (ii = 0; ii < n; ii++)\
@@ -68,6 +68,6 @@ package dutb_macro_pkg;
                     assign prefix``probe[ii] = unit``.probe[ii];\
                 end\
         endgenerate
-endpackage
+`endif
 // ****************************************************************************************************************************
 

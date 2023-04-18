@@ -35,9 +35,10 @@ class dutb_txn_base extends uvm_sequence_item;
     extern virtual  task                    drive                       (input dutb_if_proxy_base dutb_if);         // drive 'txn content' to interface lines
     extern virtual  task                    drive_x                     (input dutb_if_proxy_base dutb_if);         // drive 'x' values to interface lines
     extern virtual  task                    monitor                     (input dutb_if_proxy_base dutb_if);         // monitor 'txn content' from interface lines
-    extern virtual  function void           push                        ();                                         // store 'txn content' to the buffer
-    extern virtual  function void           pop                         ();                                         // extract 'txn content' from buffer (if 'fifo txn structure' used)
     extern virtual  function int            size                        ();                                         // size of txn (in int-parrots). Actually size of txn packed to vector of int.
+    extern          function void           load_txn_db                 (dutb_db txn_db);                           // load txn data from txn_db
+    // extern virtual  function void           push                        ();                                         // store 'txn content' to the buffer
+    // extern virtual  function void           pop                         ();                                         // extract 'txn content' from buffer (if 'fifo txn structure' used)
 endclass    
 // ****************************************************************************************************************************
 
@@ -202,11 +203,19 @@ task dutb_txn_base::monitor (input dutb_if_proxy_base dutb_if);
 endtask
 
 
-function void dutb_txn_base::push ();
+function void dutb_txn_base::load_txn_db (dutb_db txn_db);
+    vector foo;
+    if ("READ" == txn_db.mode)
+        begin
+            foo = pack2vector();
+            void'(txn_db.read(foo));
+            unpack4vector(foo);            
+        end
+    else 
+        begin
+            `uvm_error("FILEIO", {"Wrong txn_db mode: '", txn_db.mode, "' instead of 'READ'!!"})
+        end
 endfunction
 
 
-function void dutb_txn_base::pop ();
-    empty = 1'b1;
-endfunction
 // ****************************************************************************************************************************

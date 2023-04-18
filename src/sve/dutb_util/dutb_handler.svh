@@ -10,21 +10,26 @@
 
 
 // ****************************************************************************************************************************
+typedef dutb_txn_base;
 class dutb_handler extends uvm_component;
-     // `uvm_component_utils(dutb_handler)
+    `uvm_component_utils(dutb_handler)
+
+    string                  txn_db_mode;           // working mode of txn_db (WRITE, READ or IDLE)
+    dutb_db                 txn_db_h;
+
+    dutb_progress_bar       progress_bar_h;
 
     int                     n_fails, n_success;
 
     uvm_barrier             stop_test_h;
     uvm_event               stop_test_evnt_h;
     string                  stop_test_info;
-    dutb_db                 txn_db;
 
-    extern function         new(string name = "dutb_handler", uvm_component parent=null);
+    extern function         new(string name, uvm_component parent=null);
     extern task             run_phase(uvm_phase phase);
     extern function void    report_phase(uvm_phase phase);
 
-    extern function void    fail(vector txn_packed);
+    extern function void    fail(dutb_txn_base txn);
     extern function void    success();
 
     extern task             wait_for_stop_test();
@@ -36,20 +41,22 @@ endclass
 
 
 // ****************************************************************************************************************************
-function dutb_handler::new(string name = "dutb_handler", uvm_component parent=null);
-    
-    string arg_value;
-    
+function dutb_handler::new(string name, uvm_component parent=null);
     super.new(name, parent);
+    
+    // maybe it should be defined in sequence or somewhere else..
+    progress_bar_h = new ("progress_bar_h");
+    
     stop_test_evnt_h = new ("stop_test_evnt_h");
     stop_test_h = new ("stop_test_h", 2);
 
-    $value$plusargs("DUTB_DB_MODE=%s", arg_value);
-    `uvm_debug(arg_value)
-    // xxx
-
-    txn_db = new(.name("dutb_db"), .db_name("txn_db.txt"), .db_mode(WRITE));
-
+    // create dut_db, working mode is according to "+DUTB_DB_MODE" arg
+    if (!$value$plusargs("TXN_DB_MODE=%s", txn_db_mode))
+        begin
+            txn_db_mode = "IDLE";
+        end
+    txn_db_h = new(.name("dutb_db_h"), .db_name("txn_db.txt"), .db_mode(txn_db_mode));
+    
     n_fails = 0;
     n_success = 0;
     stop_test_info = "";
@@ -69,12 +76,12 @@ task dutb_handler::run_phase(uvm_phase phase);
 endtask
 
 
-function void dutb_handler::fail(vector txn_packed);
+function void dutb_handler::fail(dutb_txn_base txn);
     n_fails++;
 
-    if (WRITE == txn_db.db_mode)  // write failed txn (packed) to 'txn_db'
+    if ("WRITE" == txn_db_h.mode)  // write failed txn (packed) to 'txn_db'
         begin
-            txn_db.write (txn_packed);
+            txn_db_h.write (txn.pack2vector());
         end
 
     if (n_fails > P_MAX_FAIL_NUM)  // terminate current test due to 'max error number' exceed

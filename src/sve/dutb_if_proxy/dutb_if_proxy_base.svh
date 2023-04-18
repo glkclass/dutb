@@ -11,14 +11,14 @@
 class dutb_if_proxy_base extends uvm_component;
     `uvm_component_utils (dutb_if_proxy_base)
 
-    extern function         new(string name = "dutb_if_proxy_base", uvm_component parent=null);
+    extern function         new(string name, uvm_component parent=null);
     extern function void    build_phase(uvm_phase phase);
 endclass
 // ****************************************************************************************************************************
 
 
 // ****************************************************************************************************************************
-function dutb_if_proxy_base::new(string name = "dutb_if_proxy_base", uvm_component parent=null);
+function dutb_if_proxy_base::new(string name, uvm_component parent=null);
     super.new(name, parent);
 endfunction
 

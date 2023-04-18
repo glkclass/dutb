@@ -20,9 +20,9 @@ package dutb_pkg;
     import dutb_util_pkg::*;
 
     `include "dutb_db.svh"
+    `include "dutb_progress_bar.svh"
     `include "dutb_handler.svh"
     `include "dutb_report_server.svh"
-    `include "dutb_progress_bar.svh"
 
     `include "dutb_if_proxy_base.svh"
     

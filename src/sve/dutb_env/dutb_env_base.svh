@@ -24,7 +24,7 @@ extends uvm_env;
 
     uvm_barrier                                                 synch_seq_br_h;
 
-    extern function                                             new(string name = "dutb_env_base", uvm_component parent = null);
+    extern function                                             new(string name, uvm_component parent = null);
     extern function void                                        build_phase(uvm_phase phase);
     extern function void                                        connect_phase(uvm_phase phase);
 endclass
@@ -32,7 +32,7 @@ endclass
 
 
 // ****************************************************************************************************************************
-function dutb_env_base::new(string name = "dutb_env_base", uvm_component parent = null);
+function dutb_env_base::new(string name, uvm_component parent = null);
     super.new(name, parent);
     synch_seq_br_h = new ("synch_seq_br_h", 2);
 endfunction

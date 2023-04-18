@@ -18,7 +18,7 @@ class dutb_agent_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_agent;
     dutb_monitor_base #(T_DUT_TXN)      monitor_h;
     uvm_sequencer #(T_DUT_TXN)          sqncr_h;
 
-    extern function                     new(string name = "dutb_agent_base", uvm_component parent = null);
+    extern function                     new(string name, uvm_component parent = null);
     extern function void                build_phase(uvm_phase phase);
     extern function void                connect_phase(uvm_phase phase);
 endclass
@@ -26,7 +26,7 @@ endclass
 
 
 // ****************************************************************************************************************************
-function dutb_agent_base::new(string name = "dutb_agent_base", uvm_component parent = null);
+function dutb_agent_base::new(string name, uvm_component parent = null);
     super.new(name, parent);
 endfunction
 

@@ -33,13 +33,14 @@
     // briefer form of separate debug report macro
     `define uvm_debug_m(a) `uvm_info("UVMDBG", a, UVM_MEDIUM)
 
-    // store waves if `NO_WAVE underfined
+    // store waves if "+STORE_WAVE" arg defined
     `define store_wave \
         begin \
-            `ifndef NO_WAVE \
-                $shm_open("./sim"); \
-                $shm_probe ("ACTFM"); \
-            `endif \
+            if ($test$plusargs("STORE_WAVE")) \
+                begin \
+                    $shm_open("./sim"); \
+                    $shm_probe ("ACTFM"); \
+                end \
         end
 
     // Probes

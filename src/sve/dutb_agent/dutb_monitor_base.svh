@@ -14,7 +14,7 @@ class dutb_monitor_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_monitor;
     uvm_analysis_port #(T_DUT_TXN)  aport;
     dutb_if_proxy_base              dutb_if_h;
 
-    extern function                 new(string name = "dutb_monitor_base", uvm_component parent=null);
+    extern function                 new(string name, uvm_component parent=null);
     extern function void            build_phase(uvm_phase phase);
     extern task                     run_phase(uvm_phase phase);
 endclass
@@ -22,7 +22,7 @@ endclass
 
 
 // ****************************************************************************************************************************
-function dutb_monitor_base::new(string name = "dutb_monitor_base", uvm_component parent=null);
+function dutb_monitor_base::new(string name, uvm_component parent=null);
     super.new(name, parent);
 endfunction
 

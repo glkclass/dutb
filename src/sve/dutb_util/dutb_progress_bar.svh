@@ -10,19 +10,19 @@
 
 
 // ****************************************************************************************************************************
-class dutb_progress_bar #(parameter uvm_verbosity P_UVM_VERBOSITY = UVM_HIGH, int MILESTONE = 10) extends uvm_component;
-    `uvm_component_param_utils(dutb_progress_bar #(P_UVM_VERBOSITY, MILESTONE))
+class dutb_progress_bar #(parameter uvm_verbosity P_UVM_VERBOSITY = UVM_HIGH, int MILESTONE = 10) extends uvm_object;
+    `uvm_object_param_utils(dutb_progress_bar #(P_UVM_VERBOSITY, MILESTONE))
 
     int cnt;
-    extern function             new(string name = "dutb_progress_bar", uvm_component parent=null);
+    extern function             new(string name = "dutb_progress_bar");
     extern function void        display (string message = "");
 endclass
 // ****************************************************************************************************************************
 
 
 // ****************************************************************************************************************************
-function dutb_progress_bar::new(string name = "dutb_progress_bar", uvm_component parent=null);
-    super.new(name, parent);
+function dutb_progress_bar::new(string name = "dutb_progress_bar");
+    super.new(name);
     cnt = 0;
 endfunction
 

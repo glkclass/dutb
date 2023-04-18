@@ -19,7 +19,7 @@ extends uvm_test;
     dutb_handler                                            dutb_handler_h;
     uvm_tr_database                                         dutb_db;
 
-    extern function                                         new(string name = "dutb_test_base", uvm_component parent = null);
+    extern function                                         new(string name, uvm_component parent = null);
     extern function void                                    build_phase(uvm_phase phase);
     extern function void                                    end_of_elaboration_phase(uvm_phase phase);
     extern function void                                    start_of_simulation_phase(uvm_phase phase);
@@ -29,7 +29,7 @@ endclass
 
 
 // ****************************************************************************************************************************
-function dutb_test_base::new(string name = "dutb_test_base", uvm_component parent = null);
+function dutb_test_base::new(string name, uvm_component parent = null);
     super.new(name, parent);
 endfunction
 
@@ -40,9 +40,12 @@ function void dutb_test_base::build_phase(uvm_phase phase);
     
 
 
-    //create util stack
-    dutb_handler_h          = new ("dutb_handler_h", this);
-    uvm_config_db #(dutb_handler)::set(this, "*", "dutb_handler", dutb_handler_h);
+    //create utils stack
+    dutb_handler_h          = dutb_handler::type_id::create ("dutb_handler_h", this);
+    uvm_config_db #(dutb_handler)::set(this, "*", "dutb_handler_h", dutb_handler_h);
+    uvm_config_db #(dutb_db)::set(this, "*", "txn_db_h", dutb_handler_h.txn_db_h);
+
+
 
     env_cfg_h               = dutb_env_base_cfg::type_id::create("env_cfg_h", this);
     
@@ -55,6 +58,7 @@ function void dutb_test_base::build_phase(uvm_phase phase);
     
     // create env
     env_h                   = dutb_env_base #(T_DIN_TXN, T_DOUT_TXN)::type_id::create("env_h", this);
+    // uvm_config_db #(int)::dump();
 endfunction
 
 
@@ -64,7 +68,7 @@ endfunction
 
 
 function void dutb_test_base::start_of_simulation_phase(uvm_phase phase);
-    uvm_top.print_topology();
+    // uvm_top.print_topology();
     super.start_of_simulation_phase(phase);
 endfunction
 

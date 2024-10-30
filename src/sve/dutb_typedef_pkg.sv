@@ -5,12 +5,15 @@
     Description     :   Contain user defined types
 ******************************************************************************************************************************/
 
-
 // ****************************************************************************************************************************
 package dutb_typedef_pkg;
+`ifdef USE_UVM    
     import uvm_pkg::*;
+`endif
     
+`ifdef USE_UVM    
     typedef     uvm_sequence #(uvm_sequence_item)   uvm_virtual_sequence;
+`endif
     
     typedef     logic   [7 : 0]                     byte_4st;
     typedef     int                                 vector [];

@@ -80,7 +80,7 @@ endfunction
 
 function bit dutb_txn_base::do_compare(uvm_object rhs, uvm_comparer comparer);
     dutb_txn_base _txn;
-    vector packed_txn[2];
+    vector packed_txn_0, packed_txn_1;
     bit eq;
 
     // If the cast fails, comparison has also failed
@@ -97,13 +97,13 @@ function bit dutb_txn_base::do_compare(uvm_object rhs, uvm_comparer comparer);
             return (1'b0);
         end
 
-    packed_txn[0] = pack2vector();
-    packed_txn[1] = _txn.pack2vector();
+    packed_txn_0 = pack2vector();
+    packed_txn_1 = _txn.pack2vector();
 
     ans = super.do_compare (_txn, comparer);
-    foreach (packed_txn[0][i])
+    foreach (packed_txn_0[i])
         begin
-            eq = (packed_txn[0][i] == packed_txn[1][i]);
+            eq = (packed_txn_0[i] == packed_txn_1[i]);
             display_check((i == 0), eq);
             ans = ans & eq;
         end

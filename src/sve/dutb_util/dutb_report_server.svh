@@ -37,6 +37,8 @@ endfunction
 // UVM_INFO    ../../dutb/src/sve/dutb_agent/dutb_monitor_base.svh(45)      @ 0ns  pout_agent_h.monitor_h         [MNTR       ] Monitoring of 'dutb_txn_base' forbidden!
 
 function string dutb_report_server::compose_report_message(uvm_report_message report_message, string report_object_name = "");
+    string format_spec[string];
+
     string sev_string;
     // uvm_verbosity l_verbosity;
     string filename_line_str;
@@ -70,13 +72,24 @@ function string dutb_report_server::compose_report_message(uvm_report_message re
             report_object_name = l_report_handler.get_full_name();
         end
 
+    format_spec["severity"] = {"\%-", int2str(P_RPT_MSG_SEVERITY_WIDTH), "s "};
+    format_spec["filename"] = {"\%-", int2str(P_RPT_MSG_FILENAME_WIDTH), "s "};
+    format_spec["objectname"] = {"\%-", int2str(P_RPT_MSG_OBJECTNAME_WIDTH), "s "};
+    format_spec["message"] = {"[\%-", int2str(P_RPT_MSG_ID_WIDTH), "s] "};
+    
     compose_report_message =
-        {
-            $sformatf({"\%-", int2str(P_RPT_MSG_SEVERITY_WIDTH), "s "}, report_message.get_severity().name()),
-            $sformatf({"\%-", int2str(P_RPT_MSG_FILENAME_WIDTH), "s "}, remove_hier_path(filename_line_str, '{"/", "\\"}, P_RPT_MSG_FILENAME_NESTING_LEVEL)),
+        {            
+            // $sformatf({"\%-", int2str(P_RPT_MSG_SEVERITY_WIDTH), "s "}, report_message.get_severity().name()),
+            // $sformatf({"\%-", int2str(P_RPT_MSG_FILENAME_WIDTH), "s "}, remove_hier_path(filename_line_str, '{"/", "\\"}, P_RPT_MSG_FILENAME_NESTING_LEVEL)),
+            // "@ ", $sformatf("\%0t  ", $time),
+            // $sformatf({"\%-", int2str(P_RPT_MSG_OBJECTNAME_WIDTH), "s "}, remove_hier_path(report_object_name, '{"."}, P_RPT_MSG_OBJECTNAME_NESTING_LEVEL)),
+            // $sformatf({"[\%-", int2str(P_RPT_MSG_ID_WIDTH), "s] "}, report_message.get_id()),
+
+            $sformatf(format_spec["severity"], report_message.get_severity().name()),
+            $sformatf(format_spec["filename"], remove_hier_path(filename_line_str, '{"/", "\\"}, P_RPT_MSG_FILENAME_NESTING_LEVEL)),
             "@ ", $sformatf("\%0t  ", $time),
-            $sformatf({"\%-", int2str(P_RPT_MSG_OBJECTNAME_WIDTH), "s "}, remove_hier_path(report_object_name, '{"."}, P_RPT_MSG_OBJECTNAME_NESTING_LEVEL)),
-            $sformatf({"[\%-", int2str(P_RPT_MSG_ID_WIDTH), "s] "}, report_message.get_id()),
+            $sformatf(format_spec["objectname"], remove_hier_path(report_object_name, '{"."}, P_RPT_MSG_OBJECTNAME_NESTING_LEVEL)),
+            $sformatf(format_spec["message"], report_message.get_id()),
             context_str,
             msg_body_str
         };

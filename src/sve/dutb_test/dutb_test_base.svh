@@ -17,7 +17,7 @@ extends uvm_test;
     dutb_env_base_cfg                                       env_cfg_h;
     dutb_env_base #( T_DIN_TXN, T_DOUT_TXN)                 env_h;
     dutb_handler                                            dutb_handler_h;
-    uvm_tr_database                                         dutb_db;
+    // uvm_tr_database                                         dutb_db;
 
     extern function                                         new(string name, uvm_component parent = null);
     extern function void                                    build_phase(uvm_phase phase);

@@ -1,9 +1,0 @@
-# File and options list
-# Used to pre-build utility package in advance. To be used by any user
-
--sv
-
-#dutb stuff
-/home/anton.voloshchuk/design/dutb/src/sve/dutb_param_pkg.sv
-/home/anton.voloshchuk/design/dutb/src/sve/dutb_typedef_pkg.sv
-/home/anton.voloshchuk/design/dutb/src/sve/dutb_util_pkg.sv

@@ -1,3 +1,6 @@
+*.jou
+*.pb
+xsim.dir
 tmp
 *rdc_5*
 xrun.history

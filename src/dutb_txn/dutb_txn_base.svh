@@ -11,6 +11,8 @@
 class dutb_txn_base extends uvm_sequence_item;
     `uvm_object_utils (dutb_txn_base)
 
+    static dutb_covergroup_base  covergroup_wrapper;
+
     bit content_valid; // validates transaction content
     string str;
     int i;
@@ -91,6 +93,11 @@ function bit dutb_txn_base::do_compare(uvm_object rhs, uvm_comparer comparer);
             return 1'b0;
         end
 
+    `uvm_warning("DNG", "Compare using base method")
+    print();
+    _txn.print();
+
+
     if (size() != _txn.size())
         begin
             `uvm_error ( "TXN_DO_COMPARE", $sformatf ( "Txn size mismatch: %0d vs %0d", size(), _txn.size() ) )
@@ -161,19 +168,19 @@ endfunction
 
 
 function void dutb_txn_base::sample_coverage();
-    `uvm_fatal("VFNOTOVRDN", "Override method")
+    covergroup_wrapper.sample (this);
 endfunction
 
 
 function void dutb_txn_base::analyze_coverage_results();
-    `uvm_fatal("VFNOTOVRDN", "Override method")
+    covergroup_wrapper.analyze_coverage_results ();
 endfunction
 
 
 function dutb_txn_base dutb_txn_base::gold ();
     if ("dutb_txn_base" != get_type_name())
         `uvm_fatal("VFNOTOVRDN", "Override method")
-    else 
+    else
         `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
 
 endfunction
@@ -182,7 +189,7 @@ endfunction
 task dutb_txn_base::drive (input dutb_if_proxy_base dutb_if);
     if ("dutb_txn_base" != get_type_name())
         `uvm_fatal("VFNOTOVRDN", "Override method")
-    else 
+    else
         `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
 endtask
 
@@ -190,7 +197,7 @@ endtask
 task dutb_txn_base::drive_x (input dutb_if_proxy_base dutb_if);
     if ("dutb_txn_base" != get_type_name())
         `uvm_fatal("VFNOTOVRDN", "Override method")
-    else 
+    else
         `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
 endtask
 
@@ -198,7 +205,7 @@ endtask
 task dutb_txn_base::monitor (input dutb_if_proxy_base dutb_if);
     if ("dutb_txn_base" != get_type_name())
         `uvm_fatal("VFNOTOVRDN", "Override method")
-    else 
+    else
         `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
 endtask
 
@@ -209,9 +216,9 @@ function void dutb_txn_base::load_txn_db (dutb_db txn_db);
         begin
             foo = pack2vector();
             void'(txn_db.read(foo));
-            unpack4vector(foo);            
+            unpack4vector(foo);
         end
-    else 
+    else
         begin
             `uvm_error("FILEIO", {"Wrong txn_db mode: '", txn_db.mode, "' instead of 'READ'!!"})
         end

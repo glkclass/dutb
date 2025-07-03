@@ -2,8 +2,7 @@
     Project         :   dutb
     Creation Date   :   Dec 2015
     Class           :   dutb_if_proxy_base
-    Description     :   Interface   -   
-                        Task        -   
+    Description     :   Just a container for virtual interface which is shared by whole verification system
 ******************************************************************************************************************************/
 
 
@@ -24,7 +23,7 @@ endfunction
 
 
 function void dutb_if_proxy_base::build_phase(uvm_phase phase);
-    // connect to dutb interface    
+    // connect to dutb interface
     // if (!uvm_config_db #(virtual dut_if)::get(this, "", "dut_vif", dut_vif))
     //     `uvm_fatal("CFG_DB_ERROR", "Unable to get \"dut_if\" from config db")
 endfunction

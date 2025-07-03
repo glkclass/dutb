@@ -92,11 +92,11 @@ package dutb_util_pkg;
 
 
     // convert list of map float values to string
-    function string map_flt2str(map_flt map);
+    function string map_flt2str(real map[string]);
         string s;
         int i;
         s = "";
-        i = 0;    
+        i = 0;
         foreach (map[key])
             begin
                 s = {s, $sformatf("%.2f ", map[key]), eol(i)};
@@ -107,7 +107,7 @@ package dutb_util_pkg;
 
 
     // convert list of map key/values pairs to string
-    function string map_flt_display(map_flt map);
+    function string float_map_display(real map[string]);
         string s;
         s = "";
         foreach (map[key])
@@ -320,12 +320,12 @@ package dutb_util_pkg;
     function [7:0] byte_arr_crc([7:0] crc_init, byte_arr[]);
         logic       [7:0]       foo;
         logic       [11 : 0]    bar;
-        
+
         bar = {4'h0, crc_init};
-        foreach (byte_arr[i]) 
+        foreach (byte_arr[i])
             begin
                 foo = byte_arr[i];
-                for (int j = 0; j < 8; j++) 
+                for (int j = 0; j < 8; j++)
                     begin
                         bar = nextCRC12_D1(foo, bar);
                         foo >>= 1;
@@ -340,29 +340,35 @@ package dutb_util_pkg;
     function byte byte_xor(byte check_sum, vec[]);
         byte    bar;
         bar = check_sum;
-        foreach (vec[i]) 
+        foreach (vec[i])
             begin
                 bar = bar ^ vec[i];
             end
         return bar;
     endfunction : byte_xor
 
-endpackage 
+endpackage
 // ****************************************************************************************************************************
 
 
-// universal clock generator
-// ----------------------------------------------------------------------------------------------------------------------------
-module clk_gen
-    #(  parameter real      FREQ        =   50)      // apply Frequency according to your timescale: ns <-> GHz
-    (   output reg          clk         =   1'b0);
 
-localparam  realtime HALF_PERIOD = 1/(2*FREQ);
 
-always 
-    begin
-        #(HALF_PERIOD)    clk    =   1'b1;
-        #(HALF_PERIOD)    clk    =   1'b0;
-    end
+
+// ****************************************************************************************************************************
+// Module to provide 'clock' and 'rst' signals
+module clk_gen (output logic clk);
+    parameter time T_CLK_PERIOD = 10ns;
+    localparam time T_CLK_HALF_PERIOD = T_CLK_PERIOD / 2;
+    initial     clk = 1'b0;
+    always      #(T_CLK_HALF_PERIOD) clk = ~clk;
 endmodule
-// ----------------------------------------------------------------------------------------------------------------------------
+
+module rst_gen (output logic rst);
+    parameter time T_RST_LENGTH = 1ns;
+    initial
+        begin
+            rst = 1'b0;
+            #T_RST_LENGTH rst = 1'b1;
+        end
+endmodule
+// ****************************************************************************************************************************

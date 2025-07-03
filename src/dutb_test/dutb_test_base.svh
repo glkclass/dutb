@@ -36,9 +36,7 @@ endfunction
 
 function void dutb_test_base::build_phase(uvm_phase phase);
     // replace 'default report server' with customized version
-    dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
-    
-
+    // dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
 
     //create utils stack
     dutb_handler_h          = dutb_handler::type_id::create ("dutb_handler_h", this);
@@ -46,18 +44,17 @@ function void dutb_test_base::build_phase(uvm_phase phase);
     uvm_config_db #(dutb_db)::set(this, "*", "txn_db_h", dutb_handler_h.txn_db_h);
 
 
+    env_cfg_h = dutb_env_base_cfg::type_id::create("env_cfg_h", this);
 
-    env_cfg_h               = dutb_env_base_cfg::type_id::create("env_cfg_h", this);
-    
     // create dut_if_proxy and pass it to env config
-    dutb_if_h               = dutb_if_proxy_base::type_id::create("dutb_if_h", this);
-    env_cfg_h.dutb_if_h     = dutb_if_h;
+    dutb_if_h = dutb_if_proxy_base::type_id::create("dutb_if_h", this);
+    env_cfg_h.dutb_if_h = dutb_if_h;
 
     // pass env config to env
     uvm_config_db #(dutb_env_base_cfg)::set(this, "env_h", "cfg_h", env_cfg_h);
-    
+
     // create env
-    env_h                   = dutb_env_base #(T_DIN_TXN, T_DOUT_TXN)::type_id::create("env_h", this);
+    env_h = dutb_env_base #(T_DIN_TXN, T_DOUT_TXN)::type_id::create("env_h", this);
     // uvm_config_db #(int)::dump();
 endfunction
 

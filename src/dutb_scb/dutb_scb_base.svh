@@ -73,24 +73,26 @@ task dut_scb_base::run_phase(uvm_phase phase);
 endtask
 
 
-// Maybe overridden in a child class to perfrom a check or left as is now
+// Maybe overridden in a child class to perform better check
 task dut_scb_base::do_check();
     bit         eq[string];
     T_DIN_TXN   din_txn_h;
     T_DOUT_TXN  dout_txn_h, dout_gold_txn_h;
 
     din_fifo.get(din_txn_h);
-    `assert_type_cast(dout_gold_txn_h, din_txn_h.gold());
+    `ASSERT_TYPE_CAST(dout_gold_txn_h, din_txn_h.gold());
     dout_fifo.get(dout_txn_h);
     eq["dout"] = dout_txn_h.compare(dout_gold_txn_h);  // compare DUT output txn
+    `uvm_debug("Run check")
 
     if (eq["dout"])
-        begin            
+        begin
+            `uvm_debug("Ok check")
             do_coverage(din_txn_h, dout_txn_h);
             // `uvm_debug({"DUT in:\n", din_txn_h.convert2string()})
             // `uvm_debug({"'DUT' and 'gold' output txn don't match:\n", dout_txn_h.convert2string_pair(dout_gold_txn_h)})
         end
-    else 
+    else
         begin
             // `uvm_debug({"DUT in:\n", din_txn_h.convert2string()})
             `uvm_error("COMPARE", {"'DUT' and 'gold' output txn don't match:\n", dout_txn_h.convert2string_pair(dout_gold_txn_h)})
@@ -107,7 +109,7 @@ function void dut_scb_base::do_coverage(T_DIN_TXN din_txn_h, T_DOUT_TXN dout_txn
     din_txn_h.analyze_coverage_results();
     // output txn coverage
     // dout_txn_h.sample_coverage();
-    // dout_txn_h.analyze_coverage_results();    
+    // dout_txn_h.analyze_coverage_results();
 endfunction
 
 // ****************************************************************************************************************************

@@ -9,20 +9,20 @@
 `ifndef DUTB_MACROS_SVH
 `define DUTB_MACROS_SVH
 
-    `define assert_x(var) \
+    `define ASSERT_X(var) \
         if($isunknown(var)) \
             `uvm_error("XVALERR", "'X' value was detected")
 
-    `define assert_type_cast(dst, src) \
+    `define ASSERT_TYPE_CAST(dst, src) \
         if(!$cast(dst, src)) \
             `uvm_fatal("TPYERR", "Type cast was failed")
 
     // briefer form of assert
-    `define assert(val, msg="") \
+    `define ASSERT(val, msg="") \
         assert(val) else `uvm_fatal("ASSRT", msg)
 
     // Wait for an input 'in' is True and assert False. Use to catch improper events in forks.
-    `define assert_wait(in, msg="")\
+    `define ASSERT_WAIT(in, msg="")\
         wait(in)\
             assert(FALSE)\
                 else `uvm_fatal("ASSRT", msg)
@@ -34,7 +34,7 @@
     `define uvm_debug_m(a) `uvm_info("UVMDBG", a, UVM_MEDIUM)
 
     // store waves if "+STORE_WAVE" arg defined
-    `define store_wave \
+    `define STORE_WAVE \
         begin \
             if ($test$plusargs("STORE_WAVE")) \
                 begin \
@@ -44,15 +44,15 @@
         end
 
     // Probes
-    `define add_probe_wave(unit, prefix, probe) \
+    `define ADD_PROBE_WAVE(unit, prefix, probe) \
         wire prefix``probe; \
         assign prefix``probe = unit``.probe;
 
-    `define add_probe_bus(unit, prefix, probe, width) \
+    `define ADD_PROBE_BUS(unit, prefix, probe, width) \
         wire [width-1:0] prefix``probe; \
         assign prefix``probe = unit``.probe;
 
-    `define add_probe_pck_unpck_arr(unit, prefix, probe, width, n)\
+    `define ADD_PROBE_PCK_UNPCK_ARR(unit, prefix, probe, width, n)\
         generate\
             wire [width-1:0] prefix``probe[n];\
             for (ii = 0; ii < n; ii++)\
@@ -61,7 +61,7 @@
                 end\
         endgenerate
 
-    `define add_probe_unpck_arr(unit, prefix, probe, width, n)\
+    `define ADD_PROBE_UNPCK_ARR(unit, prefix, probe, width, n)\
         generate\
             wire [width-1:0] prefix``probe[n];\
             for (ii = 0; ii < n; ii++)\

@@ -13,6 +13,8 @@ class dutb_test_base     #(type T_DIN_TXN   = dutb_txn_base,
 extends uvm_test;
     `uvm_component_param_utils (dutb_test_base #(T_DIN_TXN, T_DOUT_TXN))
 
+    dutb_report_server dutb_report_server_h;
+
     dutb_if_proxy_base                                      dutb_if_h;
     dutb_env_base_cfg                                       env_cfg_h;
     dutb_env_base #( T_DIN_TXN, T_DOUT_TXN)                 env_h;
@@ -36,7 +38,8 @@ endfunction
 
 function void dutb_test_base::build_phase(uvm_phase phase);
     // replace 'default report server' with customized version
-    // dutb_report_server dutb_report_server_h = new ("dutb_report_server_h");
+    dutb_report_server_h = new ("dutb_report_server_h");
+    uvm_report_server::set_server( dutb_report_server_h );//substitute default report server
 
     //create utils stack
     dutb_handler_h          = dutb_handler::type_id::create ("dutb_handler_h", this);

@@ -22,9 +22,7 @@ package dutb_pkg;
     `include "dutb_util/dutb_db.svh"
     `include "dutb_util/dutb_progress_bar.svh"
     `include "dutb_util/dutb_handler.svh"
-`ifndef VIVADO_TOOLS
     `include "dutb_util/dutb_report_server.svh"
-`endif
     `include "dutb_if_proxy/dutb_if_proxy_base.svh"
 
     `include "dutb_covergroup/dutb_covergroup_base.svh"

@@ -28,10 +28,13 @@
                 else `uvm_fatal("ASSRT", msg)
 
     // briefer form of separate debug report macro
-    `define uvm_debug(a) `uvm_info("UVMDBG", a, UVM_HIGH)
+    `define uvm_debug(a) `uvm_info("DBG", a, UVM_HIGH)
 
     // briefer form of separate debug report macro
-    `define uvm_debug_m(a) `uvm_info("UVMDBG", a, UVM_MEDIUM)
+    `define uvm_debug_m(a) `uvm_info("DBG", a, UVM_MEDIUM)
+
+    `define uvm_info_2(a,b,c,d)     `uvm_info(a, b, d) \
+                                    $display(c);
 
     // store waves if "+STORE_WAVE" arg defined
     `define STORE_WAVE \

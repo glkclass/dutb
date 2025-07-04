@@ -35,7 +35,7 @@ endclass
 
 
     function void dutb_covergroup_base::analyze_coverage_results();
-        `uvm_info("COVERAGE", {"\n", float_map_display(coverage)}, UVM_HIGH)
+        `uvm_info_2("COV", "Coverage results", display_float_map(coverage), UVM_HIGH)
 
         // progress_bar_h.display();
         // if (34 == progress_bar_h.cnt)

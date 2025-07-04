@@ -93,10 +93,9 @@ function bit dutb_txn_base::do_compare(uvm_object rhs, uvm_comparer comparer);
             return 1'b0;
         end
 
-    `uvm_warning("DNG", "Compare using base method")
+    `uvm_warning("BSE", "Compare using base method")
     print();
     _txn.print();
-
 
     if (size() != _txn.size())
         begin

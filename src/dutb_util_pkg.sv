@@ -99,7 +99,7 @@ package dutb_util_pkg;
         i = 0;
         foreach (map[key])
             begin
-                s = {s, $sformatf("%.2f ", map[key]), eol(i)};
+                s = $sformatf("%s%.2f%s", s, map[key], eol(i));
                 i++;
             end
         return s;
@@ -107,12 +107,12 @@ package dutb_util_pkg;
 
 
     // convert list of map key/values pairs to string
-    function string float_map_display(real map[string]);
+    function string display_float_map(real map[string]);
         string s;
         s = "";
         foreach (map[key])
             begin
-                s = {s, $sformatf("%-32s : %.2f\n", key, map[key])};
+                s = $sformatf("%s%s : %.2f %%\n", s, key, map[key]);
             end
         return s;
     endfunction
@@ -120,7 +120,7 @@ package dutb_util_pkg;
 
     // return '\n' at the end of line '' otherwise 
     function string eol(int i);
-        return ( ( (0 != P_DISPLAY_LINE_SIZE) && ( (P_DISPLAY_LINE_SIZE-1) == (i % P_DISPLAY_LINE_SIZE) ) ) ? "\n" : "" );
+        return ( ( (0 != P_DISPLAY_LINE_SIZE) && ( (P_DISPLAY_LINE_SIZE-1) == (i % P_DISPLAY_LINE_SIZE) ) ) ? "\n" : " " );
     endfunction
 
     function string get_time();
@@ -141,7 +141,7 @@ package dutb_util_pkg;
     function void log_debug(string msg="", logic en = 1'b1);
         if (en)
             begin
-                $display("[LOG] %s\t\t at %0t", msg, $realtime);
+                $display("[LOG] %s\t\t @ %0t", msg, $realtime);
             end
     endfunction : log_debug
 
@@ -151,7 +151,7 @@ package dutb_util_pkg;
         if (en)
             begin
                 automatic string sys_time = (print_sys_time) ? get_time() : "";
-                $display("[INFO] %s\t\t at %0t\t\t%s", msg, $realtime, sys_time);
+                $display("[INFO] %s\t\t @ %0t\t\t%s", msg, $realtime, sys_time);
             end
     endfunction : log_info
 
@@ -160,7 +160,7 @@ package dutb_util_pkg;
     function void log_warning(string msg="", logic en = 1'b1);
         if (en)
             begin
-                $display("[WARNING] %s\t\t at %0t", msg, $realtime);
+                $display("[WARNING] %s\t\t @ %0t", msg, $realtime);
             end
     endfunction : log_warning
 
@@ -169,14 +169,14 @@ package dutb_util_pkg;
     function void log_error(string msg="", logic en = 1'b1, string location="");
         if (en)
             begin
-                $display("[ERROR] %s\t\t%s at %0t", msg, location, $realtime);
+                $display("[ERROR] %s\t\t%s @ %0t", msg, location, $realtime);
             end
     endfunction : log_error
 
 
     // Print Error msg to stdout and terminate
     function void log_fatal(string msg="", string location="");
-        $display("[FATAL] %s\t\t%s at %0t", msg, location, $realtime);
+        $display("[FATAL] %s\t\t%s @ %0t", msg, location, $realtime);
         $finish();        
     endfunction : log_fatal
 

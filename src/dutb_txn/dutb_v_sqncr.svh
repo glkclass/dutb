@@ -2,8 +2,7 @@
     Project         :   dutb
     Creation Date   :   Dec 2015
     Class           :   dutb_v_sqncr
-    Description     :   Interface   -   
-                        Task        -   
+    Description     :
 ******************************************************************************************************************************/
 
 

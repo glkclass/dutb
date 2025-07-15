@@ -363,12 +363,12 @@ module clk_gen (output logic clk);
     always      #(T_CLK_HALF_PERIOD) clk = ~clk;
 endmodule
 
-module rst_gen (output logic rst);
+module rst_gen (output logic rst_n);
     parameter time T_RST_LENGTH = 1ns;
     initial
         begin
-            rst = 1'b0;
-            #T_RST_LENGTH rst = 1'b1;
+            rst_n = 1'b0;
+            #T_RST_LENGTH rst_n = 1'b1;
         end
 endmodule
 // ****************************************************************************************************************************

@@ -28,6 +28,7 @@ package dutb_pkg;
     `include "dutb_covergroup/dutb_covergroup_base.svh"
 
     `include "dutb_txn/dutb_txn_base.svh"
+    `include "dutb_txn/dutb_txn_seq_base.svh"
     `include "dutb_txn/dutb_v_sqncr.svh"
 
     `include "dutb_agent/dutb_driver_base.svh"

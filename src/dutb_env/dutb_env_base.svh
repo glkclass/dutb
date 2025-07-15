@@ -67,7 +67,7 @@ function void dutb_env_base::build_phase(uvm_phase phase);
     uvm_config_db #(dutb_agent_base_cfg)::set(this, "dout_agent_h", "cfg_h", cfg_h.dout_agent_cfg_h);
 
     // create scoreboard and save synchro barrier to be used by its components
-    scb_h                               = dut_scb_base #(  T_DIN_TXN, T_DOUT_TXN)::type_id::create("scb_h", this);
+    scb_h                               = dut_scb_base #(T_DIN_TXN, T_DOUT_TXN)::type_id::create("scb_h", this);
 endfunction
 
 

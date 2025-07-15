@@ -2,8 +2,7 @@
     Project         :   dutb
     Creation Date   :   Dec 2015
     Class           :   dutb_txn_base
-    Description     :   Interface   -   
-                        Task        -   
+    Description     :
 ******************************************************************************************************************************/
 
 

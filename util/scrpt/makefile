@@ -20,7 +20,10 @@ DUTB_SRC_PATH=${PROJECT_ROOT_PATH}/src
 
 
 # rules
-all: clean
+all: clean dutb
+
+
+dutb:
 	@echo "$(TOOLS_USED)"
 	@echo "DUTB build.."
 ifdef VIVADO_PATH

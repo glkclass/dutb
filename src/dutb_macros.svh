@@ -37,13 +37,21 @@
                                     $display(c);
 
     // store waves if "+STORE_WAVE" arg defined
-    `define STORE_WAVE \
-        begin \
-            if ($test$plusargs("STORE_WAVE")) \
-                begin \
-                    $shm_open("./sim"); \
-                    $shm_probe ("ACTFM"); \
-                end \
+    `define STORE_WAVE(top, waveform_file)\
+        begin\
+            if ($test$plusargs("STORE_WAVE"))\
+                begin\
+                    if ($value$plusargs("TOOLS=%s", "VIVADO"))\
+                        begin\
+                           $dumpfile(waveform_file);\
+                           $dumpvars(0, top);\
+                        end\
+                    else if ($value$plusargs("TOOLS==%s", "CADENCE"))\
+                        begin\
+                            $shm_open("./sim");\
+                            $shm_probe ("ACTFM");\
+                        end\
+                end\
         end
 
     // Probes

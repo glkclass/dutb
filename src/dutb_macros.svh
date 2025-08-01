@@ -9,6 +9,30 @@
 `ifndef DUTB_MACROS_SVH
 `define DUTB_MACROS_SVH
 
+    `define GET_MASK(offs)                                      (1 << (offs))
+    `define GET_BIT(bus, offs)                                  ((bus >> offs) & 1)
+    `define GET_FIELD(bus, offs, width)                         ((bus >> offs) & width)
+    `define GET_FIELD_R(bus, offs, width)                       (((bus >> offs) + (get_bit(bus, (offs - 1))) & (width))
+    `define GET_BYTE(bus,idx)                                   ((bus >> 8*idx) & 0xFF)
+
+    `define SET_BIT(bus, offs)                                  (bus) |= (1 << (offs))
+    `define CLR_BIT(bus, offs)                                  (bus) &= ~(1 << (offs))
+
+    `define UPDATE_BIT(bus, offs, bit)                          if (bit) \
+                                                                    begin \
+                                                                        set_bit(bus, offs); \
+                                                                    end \
+                                                                else \
+                                                                    begin \
+                                                                        clr_bit(bus, offs); \
+                                                                    end
+
+    `define UPDATE_BIT_FIELD(bus, offs, width, bf_val)          for (integer ubf_i = 0; ubf_i < (width); ++ubf_i) \
+                                                                    begin \
+                                                                        update_bit(bus, offs + ubf_i, ((bf_val) >> ubf_i) & 1); \
+                                                                    end
+
+
     `define ASSERT_X(var) \
         if($isunknown(var)) \
             `uvm_error("XVALERR", "'X' value was detected")

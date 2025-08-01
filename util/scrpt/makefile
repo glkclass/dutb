@@ -11,9 +11,14 @@ else
 	TOOLS_USED="$(TOOLS)"
 endif
 
-ifndef DUTB_PATH
-    DUTB_PATH=../..
+ifndef DUTB_RUN_DIR
+    DUTB_RUN_DIR=.
 endif
+
+ifndef DUTB_PATH
+    DUTB_PATH=$(DUTB_RUN_DIR)/../..
+endif
+
 
 PROJECT_ROOT_PATH=$(DUTB_PATH)
 DUTB_SRC_PATH=${PROJECT_ROOT_PATH}/src
@@ -30,11 +35,11 @@ ifdef VIVADO_PATH
 	@source $(VIVADO_PATH)/settings64.sh
 endif
 	@xvlog \
+	-incr \
+	-d DUTB_USE_UVM \
 	-d $TOOLS \
 	-sv \
 	-L UVM \
-	$(DUTB_SRC_PATH)/dutb_param_pkg.sv \
-	$(DUTB_SRC_PATH)/dutb_typedef_pkg.sv \
 	$(DUTB_SRC_PATH)/dutb_util_pkg.sv \
 	$(DUTB_SRC_PATH)/dutb_pkg.sv
 	@echo "..Finished"
@@ -43,10 +48,10 @@ endif
 
 clean:
 	@echo "Cleanup.."
-	@rm -rf xsim.dir
-	@rm -rf *.log
-	@rm -rf *.pb
-	@rm -rf *.log
+	@rm -rf $(DUTB_RUN_DIR)/xsim.dir
+	@rm -rf $(DUTB_RUN_DIR)/*.log
+	@rm -rf $(DUTB_RUN_DIR)/*.pb
+	@rm -rf $(DUTB_RUN_DIR)/*.log
 	@echo "..Finished"
 	@echo ""
 

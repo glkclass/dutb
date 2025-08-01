@@ -7,19 +7,63 @@
 
 
 // ****************************************************************************************************************************
-// `timescale 1ps/1ps
 
 
 package dutb_util_pkg;
-    `ifdef USE_UVM    
-        `include "uvm_macros.svh"
-        import uvm_pkg::*;
+`ifdef DUTB_USE_UVM
+    `include "uvm_macros.svh"
+    import uvm_pkg::*;
 
-        `include "dutb_macros.svh"
-    `endif
-    
-    import dutb_param_pkg::*;
-    import dutb_typedef_pkg::*;
+    `include "dutb_macros.svh"
+`endif
+
+// Params******************************************************
+    // General param
+    parameter
+        TRUE                                =   1'b1,
+        FALSE                               =   1'b0,
+        X                                   =   1'bx,
+
+        //dutb params
+        P_TCO                               =   1,    // 'update gap' (to avoid race conditions)
+        P_MAX_FAIL_NUM                      =   16,   // max number of failed transactions after which TB will be stopped
+        P_DISPLAY_LINE_SIZE                 =   16;   // max size of line when vector is being displayed. '0' value - display as single line
+
+
+// Types*******************************************************
+`ifdef DUTB_USE_UVM
+    typedef     uvm_sequence #(uvm_sequence_item)   uvm_virtual_sequence;
+`endif
+
+    typedef     int                                 vector_t [];
+    typedef     byte                                byte_vector_t [];
+    typedef     real                                map_flt_t [string];
+    typedef     int                                 map_int_t [string];
+
+    typedef     enum    {
+                            IDLE = 0,
+                            READ = 1,
+                            WRITE = 2
+                        }                           db_mode_t;
+
+db_mode_t foo;
+
+// Funcs*******************************************************
+
+
+    function reg [32*8 - 1 : 0] string2bytes(input string str);
+        int i;
+        automatic int len = str.len();
+
+        string2bytes = '0; // All null characters
+
+        // Copy characters
+        assert(len <= 32);
+        for (i = 0; i < len; i++)
+            begin
+                string2bytes[8*(len - i - 1) +: 8] = str.getc(i);
+            end
+    endfunction
 
 
     // convert int to string
@@ -29,7 +73,7 @@ package dutb_util_pkg;
 
 
     // convert vector of int to string using given format
-    function string vector2str(vector vec, string frmt = "0x%8H ", prefix = "");
+    function string vector2str(vector_t vec, string frmt = "0x%8H ", prefix = "");
         string s;
         s = prefix;
         foreach (vec[i])
@@ -40,8 +84,8 @@ package dutb_util_pkg;
     endfunction
 
     // extrcat slice of given length
-    function byte_vector get_byte_slice(byte_vector vec, int vec_size);
-        byte_vector foo;
+    function byte_vector_t get_byte_slice(byte_vector_t vec, int vec_size);
+        byte_vector_t foo;
 
         assert(vec.size() >= vec_size);
         
@@ -55,7 +99,7 @@ package dutb_util_pkg;
 
 
     // convert byte_vector to string using given format
-    function string byte_vector2str(byte_vector vec, string frmt = "%2Hh ", prefix = "");
+    function string byte_vector2str(byte_vector_t vec, string frmt = "%2Hh ", prefix = "");
         string s;
         s = prefix;
         foreach (vec[i])
@@ -66,7 +110,7 @@ package dutb_util_pkg;
     endfunction
 
     // convert list of map int values to string
-    function string map_int2str(map_int map);
+    function string map_int2str(map_int_t map);
         int i, arr[];
         arr = new[map.num()];
         i = 0;
@@ -80,7 +124,7 @@ package dutb_util_pkg;
 
 
     // convert list of map key/values pairs to string
-    function string map_int_display(map_int map);
+    function string map_int_display(map_int_t map);
         string s;
         s = "";
         foreach (map[key])
@@ -182,8 +226,9 @@ package dutb_util_pkg;
 
 
     // Terminate simulation after given time period (to resolve potential 'freeze' issue)
-    `ifdef USE_UVM    
-        task automatic timeout_sim(input time tme, int milestones=0);
+    `ifdef DUTB_USE_UVM
+        task automatic timeout_sim(input realtime tme, int milestones=0);
+            `uvm_warning("UTL", $sformatf("Sim timeout: %t", tme))
             if (milestones == 0)
                 begin
                     #(tme);
@@ -193,7 +238,7 @@ package dutb_util_pkg;
                     for (int i = 0; i < milestones; i++)
                         #(tme/milestones) `uvm_debug_m($sformatf("*-*-*-*-*-*-*milestone #%0d of %0d*-*-*-*-*-*-*", i, milestones))
                 end
-            `uvm_warning("UTIL", "Time out. Simulation terminated!")
+            `uvm_warning("UTL", "Time out. Simulation terminated!")
             $finish();
         endtask
     `else
@@ -351,11 +396,16 @@ endpackage
 // ****************************************************************************************************************************
 
 
-
-
-
 // ****************************************************************************************************************************
 // Module to provide 'clock' and 'rst' signals
+
+`ifdef DUTB_USE_UVM
+    `include "uvm_macros.svh"
+    import uvm_pkg::*;
+
+    `include "dutb_macros.svh"
+`endif
+
 module clk_gen (output logic clk);
     parameter time T_CLK_PERIOD = 10ns;
     localparam time T_CLK_HALF_PERIOD = T_CLK_PERIOD / 2;
@@ -363,12 +413,13 @@ module clk_gen (output logic clk);
     always      #(T_CLK_HALF_PERIOD) clk = ~clk;
 endmodule
 
-module rst_gen (output logic rst_n);
-    parameter time T_RST_LENGTH = 1ns;
+module rst_gen  (output logic rst_n);
+    parameter time T_RST_LENGTH = 22ns;
     initial
         begin
             rst_n = 1'b0;
             #T_RST_LENGTH rst_n = 1'b1;
+            `uvm_debug($sformatf("Reset off at %t", $time));
         end
 endmodule
 // ****************************************************************************************************************************

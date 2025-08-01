@@ -7,16 +7,11 @@
 
 
 // ****************************************************************************************************************************
-// `timescale 1ps/1ps
-
-
 package dutb_pkg;
     `include "uvm_macros.svh"
     import uvm_pkg::*;
 
     `include "dutb_macros.svh"
-    import dutb_typedef_pkg::*;
-    import dutb_param_pkg::*;
     import dutb_util_pkg::*;
 
     `include "dutb_util/dutb_db.svh"

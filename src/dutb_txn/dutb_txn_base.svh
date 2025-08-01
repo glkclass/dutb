@@ -28,15 +28,15 @@ class dutb_txn_base extends uvm_sequence_item;
     extern virtual  function void           do_print                    (uvm_printer printer);                      // print transaction content
     extern virtual  function string         convert2string              ();                                         // represent 'txn content' as string
     extern virtual  function string         convert2string_pair         (dutb_txn_base txn);                        // represent content of pair of txn as string
-    extern virtual  function vector         pack2vector                 ();                                         // pack 'txn content' to 'vector of int'
-    extern virtual  function void           unpack4vector               (vector packed_txn);                        // unpack 'txn content' from 'vector of int'
+    extern virtual  function vector_t         pack2vector                 ();                                         // pack 'txn content' to 'vector_t of int'
+    extern virtual  function void           unpack4vector               (vector_t packed_txn);                        // unpack 'txn content' from 'vector_t of int'
     extern virtual  function void           sample_coverage             ();                                         // sample covergroups
     extern virtual  function void           analyze_coverage_results    ();                                         // store coverage data (to hashmap), report results
     extern virtual  function dutb_txn_base  gold                        ();                                         // generate and return 'gold' output txn
     extern virtual  task                    drive                       (input dutb_if_proxy_base dutb_if);         // drive 'txn content' to interface lines
     extern virtual  task                    drive_x                     (input dutb_if_proxy_base dutb_if);         // drive 'x' values to interface lines
     extern virtual  task                    monitor                     (input dutb_if_proxy_base dutb_if);         // monitor 'txn content' from interface lines
-    extern virtual  function int            size                        ();                                         // size of txn (in int-parrots). Actually size of txn packed to vector of int.
+    extern virtual  function int            size                        ();                                         // size of txn (in int-parrots). Actually size of txn packed to vector_t of int.
     extern          function void           load_txn_db                 (dutb_db txn_db);                           // load txn data from txn_db
     // extern virtual  function void           push                        ();                                         // store 'txn content' to the buffer
     // extern virtual  function void           pop                         ();                                         // extract 'txn content' from buffer (if 'fifo txn structure' used)
@@ -81,7 +81,7 @@ endfunction
 
 function bit dutb_txn_base::do_compare(uvm_object rhs, uvm_comparer comparer);
     dutb_txn_base _txn;
-    vector packed_txn_0, packed_txn_1;
+    vector_t packed_txn_0, packed_txn_1;
     bit eq;
 
     // If the cast fails, comparison has also failed
@@ -136,7 +136,7 @@ endfunction
 
 
 function int dutb_txn_base::size ();
-    vector packed_txn;
+    vector_t packed_txn;
     int size_int;
 
     packed_txn = pack2vector();
@@ -147,7 +147,7 @@ endfunction
 
 
 //  next methods should be overrided
-function vector dutb_txn_base::pack2vector ();
+function vector_t dutb_txn_base::pack2vector ();
     if ("dutb_txn_base" != get_type_name())
         `uvm_fatal("VFNOTOVRDN", "Override method")
     else 
@@ -156,7 +156,7 @@ function vector dutb_txn_base::pack2vector ();
 endfunction
 
 
-function void dutb_txn_base::unpack4vector (vector packed_txn);
+function void dutb_txn_base::unpack4vector (vector_t packed_txn);
     if ("dutb_txn_base" != get_type_name())
         `uvm_fatal("VFNOTOVRDN", "Override method")
     else 
@@ -209,7 +209,7 @@ endtask
 
 
 function void dutb_txn_base::load_txn_db (dutb_db txn_db);
-    vector foo;
+    vector_t foo;
     if ("READ" == txn_db.mode)
         begin
             foo = pack2vector();

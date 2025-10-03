@@ -2,22 +2,16 @@
     Project         :   dutb
     Creation Date   :   Dec 2015
     Class           :   dutb_test_base
-    Description     :   Interface   -   
-                        Task        -   
+    Description     :
 ******************************************************************************************************************************/
 
 
 // ****************************************************************************************************************************
-class dutb_test_base     #(type T_DIN_TXN   = dutb_txn_base,
-                                T_DOUT_TXN  = dutb_txn_base)
-extends uvm_test;
-    `uvm_component_param_utils (dutb_test_base #(T_DIN_TXN, T_DOUT_TXN))
+class dutb_test_base     #(parameter integer N_AGNT = 2, N_SCB = 1) extends uvm_test;
+    `uvm_component_param_utils (dutb_test_base)
 
-    dutb_report_server dutb_report_server_h;
-
-    dutb_if_proxy_base                                      dutb_if_h;
-    dutb_env_base_cfg                                       env_cfg_h;
-    dutb_env_base #( T_DIN_TXN, T_DOUT_TXN)                 env_h;
+    dutb_report_server                                      dutb_report_server_h;
+    dutb_env #(N_AGNT, N_SCB)                               env_h;
     dutb_handler                                            dutb_handler_h;
     // uvm_tr_database                                         dutb_db;
 
@@ -46,18 +40,9 @@ function void dutb_test_base::build_phase(uvm_phase phase);
     uvm_config_db #(dutb_handler)::set(this, "*", "dutb_handler_h", dutb_handler_h);
     uvm_config_db #(dutb_db)::set(this, "*", "txn_db_h", dutb_handler_h.txn_db_h);
 
-
-    env_cfg_h = dutb_env_base_cfg::type_id::create("env_cfg_h", this);
-
-    // create dut_if_proxy and pass it to env config
-    dutb_if_h = dutb_if_proxy_base::type_id::create("dutb_if_h", this);
-    env_cfg_h.dutb_if_h = dutb_if_h;
-
-    // pass env config to env
-    uvm_config_db #(dutb_env_base_cfg)::set(this, "env_h", "cfg_h", env_cfg_h);
-
     // create env
-    env_h = dutb_env_base #(T_DIN_TXN, T_DOUT_TXN)::type_id::create("env_h", this);
+    env_h = dutb_env #(N_AGNT, N_SCB)::type_id::create("env_h", this);
+
     // uvm_config_db #(int)::dump();
 endfunction
 

@@ -10,7 +10,7 @@
 class dutb_txn_base extends uvm_sequence_item;
     `uvm_object_utils (dutb_txn_base)
 
-    static dutb_covergroup_base  covergroup_wrapper;
+    // static dutb_covergroup_base  covergroup_wrapper;
 
     bit content_valid; // validates transaction content
     string str;
@@ -28,8 +28,8 @@ class dutb_txn_base extends uvm_sequence_item;
     extern virtual  function void           do_print                    (uvm_printer printer);                      // print transaction content
     extern virtual  function string         convert2string              ();                                         // represent 'txn content' as string
     extern virtual  function string         convert2string_pair         (dutb_txn_base txn);                        // represent content of pair of txn as string
-    extern virtual  function vector_t         pack2vector                 ();                                         // pack 'txn content' to 'vector_t of int'
-    extern virtual  function void           unpack4vector               (vector_t packed_txn);                        // unpack 'txn content' from 'vector_t of int'
+    extern virtual  function vector_t       pack2vector                 ();                                         // pack 'txn content' to 'vector_t of int'
+    extern virtual  function void           unpack4vector               (vector_t packed_txn);                      // unpack 'txn content' from 'vector_t of int'
     extern virtual  function void           sample_coverage             ();                                         // sample covergroups
     extern virtual  function void           analyze_coverage_results    ();                                         // store coverage data (to hashmap), report results
     extern virtual  function dutb_txn_base  gold                        ();                                         // generate and return 'gold' output txn
@@ -166,12 +166,12 @@ endfunction
 
 
 function void dutb_txn_base::sample_coverage();
-    covergroup_wrapper.sample (this);
+    // covergroup_wrapper.sample (this);
 endfunction
 
 
 function void dutb_txn_base::analyze_coverage_results();
-    covergroup_wrapper.analyze_coverage_results ();
+    // covergroup_wrapper.analyze_coverage_results ();
 endfunction
 
 

@@ -6,8 +6,8 @@
 
 
 // ****************************************************************************************************************************
-`ifndef DUTB_MACROS_SVH
-`define DUTB_MACROS_SVH
+`ifndef DUTB_MACRO_SVH
+`define DUTB_MACRO_SVH
 
     `define GET_MASK(offs)                                      (1 << (offs))
     `define GET_BIT(bus, offs)                                  ((bus >> offs) & 1)
@@ -50,6 +50,9 @@
         wait(in)\
             assert(FALSE)\
                 else `uvm_fatal("ASSRT", msg)
+
+    //
+    `define log_debug(msg) $display("INFO: %s %s(%0d)", msg, `__FILE__, `__LINE__);
 
     // briefer form of separate debug report macro
     `define uvm_debug(a) `uvm_info("DBG", a, UVM_HIGH)

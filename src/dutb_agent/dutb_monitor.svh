@@ -1,50 +1,57 @@
 /******************************************************************************************************************************
     Project         :   dutb
     Creation Date   :   Dec 2015
-    Class           :   dutb_driver_base
-    Description     :   Interface   -   
-                        Task        -   
+    Class           :   dutb_monitor
+    Description     :
 ******************************************************************************************************************************/
 
 
 // ****************************************************************************************************************************
-class dutb_driver_base #(type T_DUT_TXN = dutb_txn_base) extends uvm_driver #(T_DUT_TXN);
-    `uvm_component_param_utils (dutb_driver_base #(T_DUT_TXN))
+class dutb_monitor extends uvm_monitor;
+    `uvm_component_utils (dutb_monitor)
 
-    dutb_if_proxy_base              dutb_if_h;
+    uvm_analysis_port #(dutb_txn_base)  aport;
+    dutb_if_proxy_base                  dutb_if_h;
 
     extern function                 new(string name, uvm_component parent=null);
     extern function void            build_phase(uvm_phase phase);
     extern task                     run_phase(uvm_phase phase);
-
 endclass
 // ****************************************************************************************************************************
 
 
 // ****************************************************************************************************************************
-function dutb_driver_base::new(string name, uvm_component parent=null);
+function dutb_monitor::new(string name, uvm_component parent=null);
     super.new(name, parent);
 endfunction
 
 
-function void dutb_driver_base::build_phase(uvm_phase phase);
+function void dutb_monitor::build_phase(uvm_phase phase);
+    aport = new("aport", this);
     // get dutb_if_proxy
     if (!uvm_config_db #(dutb_if_proxy_base)::get(this, "", "dutb_if_h", dutb_if_h))
-        `uvm_fatal(get_type_name(), "Unable to get 'dutb_if_proxy_base' from config db}")
+        `uvm_fatal("dutb_monitor", "Unable to get 'dutb_if_proxy_base' from config db}")
+
 endfunction
 
 
-task dutb_driver_base::run_phase(uvm_phase phase);
+task dutb_monitor::run_phase(uvm_phase phase);
+    dutb_txn_base txn = dutb_txn_base::type_id::create("txn", this);
+    // `uvm_debug ($sformatf ("%s", txn.get_type_name()))
     forever
         begin
-            T_DUT_TXN txn;
-            seq_item_port.get_next_item(txn);  // check whether we have txn to transmitt
-            if (null != txn)
+            if ("dutb_txn_base" != txn.get_type_name())
                 begin
-                    // real 'drive' procedure should be defined in txn class
-                    txn.drive(dutb_if_h);
-                    // `uvm_debug({"Content driven:\n", txn.convert2string()})
-                    seq_item_port.item_done();
+                    // `uvm_debug ($sformatf ("%s", txn.get_type_name()))
+                    // 'monitor txn' procedure should be defined in txn class
+                    txn.monitor(dutb_if_h);
+                    // `uvm_debug({"Content monitored:\n", txn.convert2string()})
+                    aport.write(txn);
+                end
+            else
+                begin
+                    `uvm_info("MNTR", "Monitoring of 'abstract' 'dutb_txn_base' doesn't make any sense!", UVM_HIGH)
+                    wait(0);
                 end
         end
 endtask

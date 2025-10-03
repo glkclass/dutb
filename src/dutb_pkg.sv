@@ -23,18 +23,15 @@ package dutb_pkg;
     `include "dutb_covergroup/dutb_covergroup_base.svh"
 
     `include "dutb_txn/dutb_txn_base.svh"
-    `include "dutb_txn/dutb_txn_seq_base.svh"
-    `include "dutb_txn/dutb_v_sqncr.svh"
+    `include "dutb_txn/dutb_txn_seq.svh"
 
-    `include "dutb_agent/dutb_driver_base.svh"
-    `include "dutb_agent/dutb_monitor_base.svh"
-    `include "dutb_agent/dutb_agent_base_cfg.svh"
-    `include "dutb_agent/dutb_agent_base.svh"
+    `include "dutb_agent/dutb_driver.svh"
+    `include "dutb_agent/dutb_monitor.svh"
+    `include "dutb_agent/dutb_agent.svh"
 
-    `include "dutb_scb/dutb_scb_base.svh"
+    `include "dutb_scb/dutb_scb.svh"
 
-    `include "dutb_env/dutb_env_base_cfg.svh"
-    `include "dutb_env/dutb_env_base.svh"
+    `include "dutb_env/dutb_env.svh"
 
     `include "dutb_test/dutb_test_base.svh"
 endpackage

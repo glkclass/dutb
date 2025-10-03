@@ -35,6 +35,11 @@ package dutb_util_pkg;
     typedef     uvm_sequence #(uvm_sequence_item)   uvm_virtual_sequence;
 `endif
 
+    typedef     bit [32 -1 : 0]                     u_int;
+    typedef     bit [16 -1 : 0]                     u_shortint;
+    typedef     bit [8 - 1 : 0]                     u_byte;
+
+
     typedef     int                                 vector_t [];
     typedef     byte                                byte_vector_t [];
     typedef     real                                map_flt_t [string];
@@ -407,18 +412,34 @@ endpackage
 `endif
 
 module clk_gen (output logic clk);
-    parameter time T_CLK_PERIOD = 10ns;
-    localparam time T_CLK_HALF_PERIOD = T_CLK_PERIOD / 2;
-    initial     clk = 1'b0;
-    always      #(T_CLK_HALF_PERIOD) clk = ~clk;
+    parameter   time        T_CLK_PERIOD = 10ns;
+    parameter   integer     PHASE = 0;
+    localparam  realtime    T_CLK_HALF_PERIOD = T_CLK_PERIOD / 2;
+    localparam  realtime    T_PHASE_SHIFT = (T_CLK_PERIOD * PHASE) / 360;
+
+    initial
+        begin
+            #T_PHASE_SHIFT;
+            clk = 1'b1;
+            while (1)
+                #(T_CLK_HALF_PERIOD) clk = ~clk;
+        end
 endmodule
 
-module rst_gen  (output logic rst_n);
+
+module rst_gen  (input logic clk = 1'b0, output logic rst_n);
+    parameter string RST_TYPE = "ASYNC";
     parameter time T_RST_LENGTH = 22ns;
+
     initial
         begin
             rst_n = 1'b0;
-            #T_RST_LENGTH rst_n = 1'b1;
+            #T_RST_LENGTH;
+            if ("SYNC" == RST_TYPE)
+                begin
+                    @(posedge clk);
+                end
+            rst_n = 1'b1;
             `uvm_debug($sformatf("Reset off at %t", $time));
         end
 endmodule

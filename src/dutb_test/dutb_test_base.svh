@@ -8,7 +8,7 @@
 
 // ****************************************************************************************************************************
 class dutb_test_base     #(parameter integer N_AGNT = 2, N_SCB = 1) extends uvm_test;
-    `uvm_component_param_utils (dutb_test_base)
+    `uvm_component_param_utils (dutb_test_base #(N_AGNT, N_SCB))
 
     dutb_report_server                                      dutb_report_server_h;
     dutb_env #(N_AGNT, N_SCB)                               env_h;

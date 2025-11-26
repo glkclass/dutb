@@ -7,8 +7,8 @@
 
 
 // ****************************************************************************************************************************
-class dutb_env#(parameter integer N_AGNT = 2, N_SCB = 1) extends uvm_env;
-    `uvm_component_param_utils(dutb_env)
+class dutb_env #(parameter integer N_AGNT = 2, N_SCB = 1) extends uvm_env;
+    `uvm_component_param_utils(dutb_env #(N_AGNT, N_SCB))
 
     dutb_if_proxy_base                                          dutb_if_h;
     dutb_agent                                                  agent_h[N_AGNT];

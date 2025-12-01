@@ -241,7 +241,7 @@ db_mode_t foo;
             else
                 begin
                     for (int i = 0; i < milestones; i++)
-                        #(tme/milestones) `uvm_debug_m($sformatf("*-*-*-*-*-*-*milestone #%0d of %0d*-*-*-*-*-*-*", i, milestones))
+                        #(tme/milestones) `uvm_debug_m($sformatf("******* milestone %0d%% *******", ((i + 1) * 100) / milestones))
                 end
             `uvm_warning("UTL", "Time out. Simulation terminated!")
             $finish();
@@ -255,7 +255,7 @@ db_mode_t foo;
             else
                 begin
                     for (int i = 0; i < milestones; i++)
-                        #(tme/milestones) log_info($sformatf("*-*-*-*-*-*-*milestone #%0d of %0d*-*-*-*-*-*-*", i, milestones), .print_sys_time(1'b1));
+                        #(tme/milestones) log_info($sformatf("******* milestone %0d%% *******", ((i + 1) * 100) / milestones)), .print_sys_time(1'b1));
                 end
             log_warning("Time out. Simulation terminated!");
             $finish();
@@ -402,7 +402,7 @@ endpackage
 
 
 // ****************************************************************************************************************************
-// Module to provide 'clock' and 'rst' signals
+// Modules to generate 'clock' and 'rst' signals
 
 `ifdef DUTB_USE_UVM
     `include "uvm_macros.svh"
@@ -427,15 +427,15 @@ module clk_gen (output logic clk);
 endmodule
 
 
-module rst_gen  (input logic clk = 1'b0, output logic rst_n);
-    parameter string RST_TYPE = "ASYNC";
-    parameter time T_RST_LENGTH = 22ns;
+module rst_n_gen  (input logic clk = 1'b0, output logic rst_n);
+    parameter string RST_N_TYPE = "ASYNC";
+    parameter time T_RST_N_LENGTH = 22ns;
 
     initial
         begin
             rst_n = 1'b0;
-            #T_RST_LENGTH;
-            if ("SYNC" == RST_TYPE)
+            #T_RST_N_LENGTH;
+            if ("SYNC" == RST_N_TYPE)
                 begin
                     @(posedge clk);
                 end

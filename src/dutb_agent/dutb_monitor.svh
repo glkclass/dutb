@@ -37,6 +37,7 @@ endfunction
 
 task dutb_monitor::run_phase(uvm_phase phase);
     dutb_txn_base txn = dutb_txn_base::type_id::create("txn", this);
+    txn.set_verbosity_level(get_report_verbosity_level());
     // `uvm_debug ($sformatf ("%s", txn.get_type_name()))
     forever
         begin

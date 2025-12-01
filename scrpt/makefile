@@ -3,9 +3,9 @@ SHELL=/bin/bash
 
 TOOLS=VIVADO_TOOLS
 VIVADO_PATH=/tools/Xilinx/2025.1/Vivado
-TOOLS_USED="$(TOOLS) [$(VIVADO_PATH)]"
+TOOLS_USED="tools: $(VIVADO_PATH)"
 
-ECHO_HEADER=@echo -e "[INFO] Make $@\n$(TOOLS_USED)"
+ECHO_HEADER=@echo -e "[INFO] Make $@\t\t$(TOOLS_USED)\t\tstart: $$(date +'%H:%M:%S')"
 ECHO_FOOTER=@echo -e "[INFO] ..Finished\n"
 SETUP_TOOLS=@source $(VIVADO_PATH)/settings64.sh
 

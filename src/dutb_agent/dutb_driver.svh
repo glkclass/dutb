@@ -43,7 +43,6 @@ endfunction
 
 
 task dutb_driver::run_phase(uvm_phase phase);
-
     forever
         begin
             // dutb_txn_base txn = dutb_txn_base::type_id::create("txn", this);
@@ -54,6 +53,7 @@ task dutb_driver::run_phase(uvm_phase phase);
                 begin
                     // `uvm_debug ($sformatf ("%s", txn.get_type_name()))
                     // real 'drive' procedure should be defined in txn class
+                    txn.set_verbosity_level(get_report_verbosity_level());
                     txn.drive(dutb_if_h);
                     // `uvm_debug({"Content driven:\n", txn.convert2string()})
                     seq_item_port.item_done();

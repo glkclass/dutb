@@ -54,6 +54,13 @@
     //
     `define log_debug(msg) $display("INFO: %s %s(%0d)", msg, `__FILE__, `__LINE__);
 
+    // conditional txn log message
+    `define uvm_debug_txn(a)\
+        if (verbosity_level <= UVM_HIGH)\
+            begin\
+                `uvm_info("DBG", a, UVM_HIGH)\
+            end
+
     // briefer form of separate debug report macro
     `define uvm_debug(a) `uvm_info("DBG", a, UVM_HIGH)
 

@@ -1,0 +1,18 @@
+# setup path to Xilins Vivado tools (may be redefined in .user_env)
+VIVADO_TOOLS=/tools/Xilinx/2025.1/Vivado
+
+TOOLS_USED="Tools: $(VIVADO_TOOLS)"
+SETUP_TOOLS=@source $(VIVADO_TOOLS)/settings64.sh
+INFO_PREFIX="$$(date +'%H:%M:%S') INFO"
+ECHO_HEADER=@echo -e "$(INFO_PREFIX) | Make $@"
+ECHO_TOOLS_HEADER=@echo -e "$(INFO_PREFIX) | Make $@ | $(TOOLS_USED)"
+ECHO_FOOTER=@echo -e "$(INFO_PREFIX) | Make finished\n"
+
+DUTB_SRC_PATH=../src
+BUILD_FOLDER=build
+LIB_NAME=dutb
+LIB_FOLDER=../dutb_lib
+
+VLOG_BIN_TOOL=xvlog
+
+TOOLS=VIVADO_TOOLS

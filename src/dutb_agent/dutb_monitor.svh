@@ -1,6 +1,5 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Creation Date   :   Dec 2015
     Class           :   dutb_monitor
     Description     :
 ******************************************************************************************************************************/
@@ -10,8 +9,8 @@
 class dutb_monitor extends uvm_monitor;
     `uvm_component_utils (dutb_monitor)
 
-    uvm_analysis_port #(dutb_txn_base)  aport;
     dutb_if_proxy_base                  dutb_if_h;
+    uvm_analysis_port #(dutb_txn_base)  aport;
 
     extern function                 new(string name, uvm_component parent=null);
     extern function void            build_phase(uvm_phase phase);

@@ -1,6 +1,5 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Creation Date   :   Dec 2015
     Class           :   dutb_agent
     Description     :
 ******************************************************************************************************************************/
@@ -11,7 +10,7 @@ class dutb_agent extends uvm_agent;
     `uvm_component_utils(dutb_agent)
 
     bit                                     has_driver, has_monitor;
-    uvm_analysis_port #(dutb_txn_base)      monitor_aport;
+    // uvm_analysis_port #(dutb_txn_base)      monitor_aport;
     dutb_driver                             driver_h;
     dutb_monitor                            monitor_h;
     // uvm_sequencer #(dutb_txn_base)          sqncr_h;

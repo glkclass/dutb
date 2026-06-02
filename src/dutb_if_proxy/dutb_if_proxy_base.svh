@@ -1,8 +1,7 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Creation Date   :   Dec 2015
     Class           :   dutb_if_proxy_base
-    Description     :   Just a container for virtual interface which is shared by whole verification system
+    Description     :   Just a container for virtual interface which is shared by all verification system units
 ******************************************************************************************************************************/
 
 

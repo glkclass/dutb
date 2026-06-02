@@ -1,6 +1,5 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Creation Date   :   Dec 2015
     Class           :   dut_scb.
     Description     :   Interface   -   Two 'analysss exports' to accept DUT 'input', 'output' txn.
                         Task        -   Implement: predictor, checker, coverage collector.
@@ -11,7 +10,7 @@
 class dut_scb extends uvm_scoreboard;
     `uvm_component_utils(dut_scb)
 
-    dutb_handler                                dutb_handler_h;
+    // dutb_handler                                dutb_handler_h;
 
     uvm_analysis_export #(dutb_txn_base)        in_port[2];
 
@@ -37,7 +36,6 @@ endfunction
 
 
 function void dut_scb::build_phase(uvm_phase phase);
-
     // ports to recieve DUT input & output txn
     in_port[0]                   = new("in_port[0]", this);
     in_port[1]                   = new("in_port[1]", this);
@@ -45,9 +43,8 @@ function void dut_scb::build_phase(uvm_phase phase);
     in_port_fifo[0]              = new ("in_port_fifo[0]", this);
     in_port_fifo[1]              = new ("in_port_fifo[1]", this);
 
-    if (!uvm_config_db #(dutb_handler)::get(this, "", "dutb_handler_h", dutb_handler_h))
-        `uvm_fatal("CFG_DB_ERROR", "Unable to get \"dutb_handler_h\" from config db")
-
+    // if (!uvm_config_db #(dutb_handler)::get(this, "", "dutb_handler_h", dutb_handler_h))
+    //     `uvm_fatal("CFG_DB_ERROR", "Unable to get \"dutb_handler_h\" from config db")
 endfunction
 
 

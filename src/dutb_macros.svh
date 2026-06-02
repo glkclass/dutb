@@ -1,6 +1,5 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Creation Date   :   Dec 2015
     Description     :   Contain dutb macros used.
 ******************************************************************************************************************************/
 
@@ -114,6 +113,28 @@
                     assign prefix``probe[ii] = unit``.probe[ii];\
                 end\
         endgenerate
+
+
+    `define     INIT_ARTEFACTS(waveform) \
+        initial \
+            begin \
+                $timeformat(-9, 3, "ns", 8); \
+                `STORE_WAVE(ttb, waveform) \
+            end
+
+
+    `define     START_TEST(if_h,test_len) \
+        initial \
+            begin \
+                // Provide DUT interfaces to UVM infra \
+                uvm_config_db #(virtual dut_if)::set(null, "uvm_test_top", "dut_vif", if_h); \
+                fork \
+                    run_test(); \
+                    timeout_sim(test_len, 10); \
+               join_any \
+            end
+
+
 `endif
 // ****************************************************************************************************************************
 

@@ -1,6 +1,5 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Creation Date   :   Dec 2015
     Class           :   dutb_test_base
     Description     :
 ******************************************************************************************************************************/
@@ -12,7 +11,7 @@ class dutb_test_base     #(parameter integer N_AGNT = 2, N_SCB = 1) extends uvm_
 
     dutb_report_server                                      dutb_report_server_h;
     dutb_env #(N_AGNT, N_SCB)                               env_h;
-    dutb_handler                                            dutb_handler_h;
+    // dutb_handler                                            dutb_handler_h;
     // uvm_tr_database                                         dutb_db;
 
     extern function                                         new(string name, uvm_component parent = null);
@@ -36,9 +35,9 @@ function void dutb_test_base::build_phase(uvm_phase phase);
     uvm_report_server::set_server( dutb_report_server_h );//substitute default report server
 
     //create utils stack
-    dutb_handler_h          = dutb_handler::type_id::create ("dutb_handler_h", this);
-    uvm_config_db #(dutb_handler)::set(this, "*", "dutb_handler_h", dutb_handler_h);
-    uvm_config_db #(dutb_db)::set(this, "*", "txn_db_h", dutb_handler_h.txn_db_h);
+    // dutb_handler_h          = dutb_handler::type_id::create ("dutb_handler_h", this);
+    // uvm_config_db #(dutb_handler)::set(this, "*", "dutb_handler_h", dutb_handler_h);
+    // uvm_config_db #(dutb_db)::set(this, "*", "txn_db_h", dutb_handler_h.txn_db_h);
 
     // create env
     env_h = dutb_env #(N_AGNT, N_SCB)::type_id::create("env_h", this);

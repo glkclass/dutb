@@ -1,6 +1,5 @@
 /******************************************************************************************************************************
     Project         :   dutb
-    Creation Date   :   Dec 2015
     Class           :   dutb_env
     Description     :
 ******************************************************************************************************************************/
@@ -27,12 +26,12 @@ endclass
 // ****************************************************************************************************************************
 function dutb_env::new(string name, uvm_component parent = null);
     super.new(name, parent);
-    synch_seq_br_h = new ("synch_seq_br_h", 2);
+    // synch_seq_br_h = new ("synch_seq_br_h", 2);
 endfunction
 
 
 function void dutb_env::build_phase(uvm_phase phase);
-    // create dut_if_proxy and provide env members with it
+    // create dut_if_proxy and provide it to env members
     dutb_if_h = dutb_if_proxy_base::type_id::create("dutb_if_h", this);
     uvm_config_db #(dutb_if_proxy_base)::set(this, "*", "dutb_if_h", dutb_if_h);
 
@@ -65,6 +64,8 @@ function void dutb_env::connect_phase(uvm_phase phase);
 
             agent_idx[0] = 0;
             agent_idx[1] = 0;
+
+            // extract agents this scoreboard is subscribed to
             scb_configured =    (uvm_config_db #(int)::get(this, "", $sformatf("scb_h[%0d]_in_port[0]", i), agent_idx[0])) &
                                 (uvm_config_db #(int)::get(this, "", $sformatf("scb_h[%0d]_in_port[1]", i), agent_idx[1]));
 

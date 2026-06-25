@@ -7,6 +7,9 @@
 // ****************************************************************************************************************************
 `ifndef DUTB_MACRO_SVH
 `define DUTB_MACRO_SVH
+    `define DUTB_AGNT(idx)                                      $sfomatf("uvm_test_top.env_h.agent_h[%d]*",idx)
+    `define DUTB_AGNT_HAS_DRIVER(idx)                           $sfomatf("agent_h[%d]_has_driver",idx)
+    `define DUTB_AGNT_HAS_MONITOR(idx)                          $sfomatf("agent_h[%d]_has_monitor",idx)
 
     `define GET_MASK(offs)                                      (1 << (offs))
     `define GET_BIT(bus, offs)                                  ((bus >> offs) & 1)

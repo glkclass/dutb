@@ -7,9 +7,11 @@
 // ****************************************************************************************************************************
 `ifndef DUTB_MACRO_SVH
 `define DUTB_MACRO_SVH
-    `define DUTB_AGNT(idx)                                      $sfomatf("uvm_test_top.env_h.agent_h[%d]*",idx)
-    `define DUTB_AGNT_HAS_DRIVER(idx)                           $sfomatf("agent_h[%d]_has_driver",idx)
-    `define DUTB_AGNT_HAS_MONITOR(idx)                          $sfomatf("agent_h[%d]_has_monitor",idx)
+    `define DUTB_AGNT(idx)                                      $sformatf("uvm_test_top.env_h.agent_h[%0d]*",idx)
+    `define DUTB_AGNT_HAS_DRIVER(idx)                           $sformatf("agent_h[%0d]_has_driver",idx)
+    `define DUTB_AGNT_HAS_MONITOR(idx)                          $sformatf("agent_h[%0d]_has_monitor",idx)
+
+    `define STR(x) `"x`"
 
     `define GET_MASK(offs)                                      (1 << (offs))
     `define GET_BIT(bus, offs)                                  ((bus >> offs) & 1)
@@ -64,7 +66,7 @@
             end
 
     // briefer form of separate debug report macro
-    `define uvm_debug(a) `uvm_info("DBG", a, UVM_HIGH)
+    `define uvm_debug(msg, id="DBG") `uvm_info(id, msg, UVM_HIGH)
 
     // briefer form of separate debug report macro
     `define uvm_debug_m(a) `uvm_info("DBG", a, UVM_MEDIUM)
@@ -119,23 +121,30 @@
 
 
     `define     INIT_ARTEFACTS(waveform) \
-        initial \
-            begin \
-                $timeformat(-9, 3, "ns", 8); \
-                `STORE_WAVE(ttb, waveform) \
-            end
+        initial begin \
+            $timeformat(-9, 3, " ns", 13); \
+            `STORE_WAVE(ttb, waveform) \
+        end
 
 
     `define     START_TEST(if_h,test_len) \
-        initial \
-            begin \
-                // Provide DUT interfaces to UVM infra \
-                uvm_config_db #(virtual dut_if)::set(null, "uvm_test_top", "dut_vif", if_h); \
-                fork \
-                    run_test(); \
-                    timeout_sim(test_len, 10); \
-               join_any \
-            end
+        initial begin \
+            // Provide DUT interfaces to UVM infra \
+            uvm_config_db #(virtual dut_if)::set(null, "uvm_test_top", "dut_vif", if_h); \
+            fork \
+                run_test(); \
+                timeout_sim(test_len, 10); \
+           join_any \
+        end
+
+
+    `define     PROVIDE_FUNC_PROXY(top_func_proxy) \
+        initial begin \
+            // Provide ttb static funcs to UVM infra \
+            static top_func_proxy foo = new(); \
+            uvm_config_db #(base_func_proxy)::set(null, "*", "top_func_proxy", foo); \
+        end
+
 
 
 `endif

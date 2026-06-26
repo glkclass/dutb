@@ -73,12 +73,13 @@ function string dutb_report_server::compose_report_message(uvm_report_message re
         {
             $sformatf("%s ", report_message.get_severity().name()),
             $sformatf("[%s] ", report_message.get_id()),
-            $sformatf("@ %t ", $time),
-            $sformatf("%s ", msg_body_str),
-            $sformatf("%s ", remove_hier_path(filename_line_str, '{"/", "\\"}, 0))
+            $sformatf("%t ", $time),
+            $sformatf("| %s ", msg_body_str),
+            $sformatf("| %s ", remove_hier_path(filename_line_str, '{"/", "\\"}, 0))
             // $sformatf(%s, remove_hier_path(report_object_name, '{"."}, 0)),
             // context_str,
         };
+
 endfunction
 
 

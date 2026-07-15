@@ -75,7 +75,7 @@
                                     $display(c);
 
     // store waves if "+STORE_WAVE" arg defined
-    `define STORE_WAVE(top, waveform_file)\
+    `define store_wave(top, waveform_file)\
         begin\
             if ($test$plusargs("STORE_WAVE"))\
                 begin\
@@ -120,14 +120,14 @@
         endgenerate
 
 
-    `define     INIT_ARTEFACTS(waveform) \
+    `define     init_artefacts(waveform) \
         initial begin \
             $timeformat(-9, 3, " ns", 13); \
-            `STORE_WAVE(ttb, waveform) \
+            `store_wave(ttb, waveform) \
         end
 
 
-    `define     START_TEST(if_h,test_len) \
+    `define     start_test(if_h,test_len) \
         initial begin \
             // Provide DUT interfaces to UVM infra \
             uvm_config_db #(virtual dut_if)::set(null, "uvm_test_top", "dut_vif", if_h); \
@@ -138,7 +138,7 @@
         end
 
 
-    `define     PROVIDE_FUNC_PROXY(top_func_proxy) \
+    `define     provide_func_proxy(top_func_proxy) \
         initial begin \
             // Provide ttb static funcs to UVM infra \
             static top_func_proxy foo = new(); \
@@ -146,6 +146,7 @@
         end
 
 
+    `define     get_arg_value(arg_frmt, container, default_value) (($value$plusargs(arg_frmt, container)) ? container : default_value)
 
 `endif
 // ****************************************************************************************************************************

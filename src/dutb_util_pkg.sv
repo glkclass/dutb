@@ -240,7 +240,7 @@ db_mode_t foo;
             else
                 begin
                     for (int i = 0; i < milestones; i++)
-                        #(tme/milestones) `uvm_debug_m($sformatf("******* milestone %0d%% *******", ((i + 1) * 100) / milestones))
+                        #(tme/milestones) `uvm_info_n($sformatf("******* milestone %0d%% *******", ((i + 1) * 100) / milestones))
                 end
             `uvm_warning("UTL", "Time out. Simulation terminated!")
             $finish();
@@ -347,7 +347,7 @@ db_mode_t foo;
                 bar = nextCRC16_D1(foo, bar);
                 foo >>= 1;
             end
-        // `uvm_debug(int2str(bar))
+        // `uvm_info_d(int2str(bar))
         return bar;
     endfunction : word_crc
 
@@ -360,7 +360,7 @@ db_mode_t foo;
             begin
                 bar = nextCRC16_D1(word_arr[i], bar);
             end
-        // `uvm_debug(int2str(bar))
+        // `uvm_info_d(int2str(bar))
         return bar;
     endfunction : word_arr_crc
 
@@ -380,7 +380,7 @@ db_mode_t foo;
                         foo >>= 1;
                     end
             end
-        // `uvm_debug(int2str(bar[7:0]))
+        // `uvm_info_d(int2str(bar[7:0]))
         return bar [7:0];
     endfunction : byte_arr_crc
 
@@ -439,7 +439,7 @@ module rst_n_gen  (input logic clk = 1'b0, output logic rst_n);
                     @(posedge clk);
                 end
             rst_n = 1'b1;
-            `uvm_debug($sformatf("Reset off at %t", $time));
+            `uvm_info_d($sformatf("Reset off at %t", $time));
         end
 endmodule
 // ****************************************************************************************************************************

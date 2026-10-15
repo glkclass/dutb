@@ -61,6 +61,6 @@ endfunction
 
 task dutb_agent::run_phase(uvm_phase phase);
     // dutb_txn_base txn = dutb_txn_base::type_id::create("txn", this);
-    // `uvm_debug ($sformatf ("%s", txn.get_type_name()))
+    // `uvm_info_d ($sformatf ("%s", txn.get_type_name()))
 endtask
 // ****************************************************************************************************************************

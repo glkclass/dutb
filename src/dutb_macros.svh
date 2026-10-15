@@ -58,18 +58,27 @@
     //
     `define log_debug(msg) $display("INFO: %s %s(%0d)", msg, `__FILE__, `__LINE__);
 
-    // conditional txn log message
-    `define uvm_debug_txn(a)\
-        if (verbosity_level <= UVM_HIGH)\
-            begin\
-                `uvm_info("DBG", a, UVM_HIGH)\
-            end
+    // briefer form of separate info/debug report macro
+    `define uvm_info_d(msg)     `uvm_info("DBG", msg, UVM_DEBUG)
+    `define uvm_info_f(msg)     `uvm_info("DBG", msg, UVM_FULL)
+    `define uvm_info_h(msg)     `uvm_info("DBG", msg, UVM_HIGH)
+    `define uvm_info_m(msg)     `uvm_info("DBG", msg, UVM_MEDIUM)
+    `define uvm_info_l(msg)     `uvm_info("DBG", msg, UVM_LOW)
+    `define uvm_info_n(msg)     `uvm_info("DBG", msg, UVM_NONE)
 
-    // briefer form of separate debug report macro
-    `define uvm_debug(msg, id="DBG") `uvm_info(id, msg, UVM_HIGH)
+    `define uvm_txn_info(msg, verbosity, id="TXN") \
+        if (this.parent != null) begin \
+            if (this.parent.uvm_report_enabled(verbosity,UVM_INFO,id)) \
+                this.parent.uvm_report_info (id, msg, verbosity, `uvm_file, `uvm_line, "", 1);\
+        end else \
+            `uvm_error("TXN", "No txn parent was defined !")
 
-    // briefer form of separate debug report macro
-    `define uvm_debug_m(a) `uvm_info("DBG", a, UVM_MEDIUM)
+    `define uvm_txn_info_d(msg, id="TXN")   `uvm_txn_info(msg, UVM_DEBUG, id)
+    `define uvm_txn_info_f(msg, id="TXN")   `uvm_txn_info(msg, UVM_FULL, id)
+    `define uvm_txn_info_h(msg, id="TXN")   `uvm_txn_info(msg, UVM_HIGH, id)
+    `define uvm_txn_info_m(msg, id="TXN")   `uvm_txn_info(msg, UVM_MEDIUM, id)
+    `define uvm_txn_info_l(msg, id="TXN")   `uvm_txn_info(msg, UVM_LOW, id)
+    `define uvm_txn_info_n(msg, id="TXN")   `uvm_txn_info(msg, UVM_NONE, id)
 
     `define uvm_info_2(a,b,c,d)     `uvm_info(a, b, d) \
                                     $display(c);

@@ -35,7 +35,7 @@ task dutb_txn_seq::body();
     //     `uvm_fatal("CFG_DB_ERROR", "Unable to get 'txn_db_h' from config db")
 
     txn = new("txn");
-    `uvm_debug($sformatf("Run sequence of <%s>", txn.get_type_name()));
+    `uvm_info_d($sformatf("Run sequence of <%s>", txn.get_type_name()));
 
     forever
         begin
@@ -43,7 +43,7 @@ task dutb_txn_seq::body();
             start_item(txn);
             assert (txn.randomize());
             // txn.load_txn_db(txn_db_h);
-            // `uvm_debug("Txn sent")
+            // `uvm_info_d("Txn sent")
             finish_item (txn);
             // synch_seq_br_h.wait_for();
         end

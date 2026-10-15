@@ -18,11 +18,11 @@ class dutb_txn_base extends uvm_sequence_item;
 
     string check_str;
     int check_idx;
+    uvm_component parent;
 
-    integer verbosity_level;
 
-    extern          function                new                         (string name = "dutb_txn_base");
-    extern          function                set_verbosity_level         (integer verbosity_level);
+    extern          function                new                         (string name = "dutb_txn_base", uvm_component parent = null);
+    extern          function                set_parent                  (uvm_component parent=null);
     // extern static   function string         get_class_name              ();
     extern virtual  function void           display_check               (bit reset, bit eq);
     extern virtual  function void           do_copy                     (uvm_object rhs);                           // make a deep copy
@@ -47,18 +47,19 @@ endclass
 
 
 // ****************************************************************************************************************************
-function dutb_txn_base::new (string name = "dutb_txn_base");
+function dutb_txn_base::new (string name = "dutb_txn_base", uvm_component parent = null);
     super.new(name);
+    set_parent(parent);
     empty = 1'b0;
     check_str = "";
     check_idx = 0;
-    this.verbosity_level = UVM_HIGH;
 endfunction
 
-function dutb_txn_base::set_verbosity_level (integer verbosity_level);
-    this.verbosity_level = verbosity_level;
-    // `uvm_debug($sformatf("verbosity_level %d", this.verbosity_level))
+
+function dutb_txn_base::set_parent(uvm_component parent = null);
+    this.parent = parent;
 endfunction
+
 
 // function string dutb_txn_base::get_class_name();
 //     return "dutb_txn_base";
@@ -157,7 +158,7 @@ endfunction
 //  next methods should be overrided
 function vector_t dutb_txn_base::pack2vector ();
     if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override method")
+        `uvm_warning("VFNOTOVRDN", "Override method")
     else 
         `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
     return ({});

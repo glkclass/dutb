@@ -46,15 +46,14 @@ task dutb_driver::run_phase(uvm_phase phase);
         begin
             // dutb_txn_base txn = dutb_txn_base::type_id::create("txn", this);
             dutb_txn_base txn;
-            // `uvm_debug ($sformatf ("%s", txn.get_type_name()))
             seq_item_port.get_next_item(txn);  // check whether we have txn to transmitt
             if (null != txn)
                 begin
-                    // `uvm_debug ($sformatf ("%s", txn.get_type_name()))
+                    `uvm_info_d ($sformatf ("%s", txn.get_type_name()))
+                    txn.set_parent(this);
                     // real 'drive' procedure should be defined in txn class
-                    txn.set_verbosity_level(get_report_verbosity_level());
                     txn.drive(dutb_if_h);
-                    // `uvm_debug({"Content driven:\n", txn.convert2string()})
+                    `uvm_info_d({"Content driven:\n", txn.convert2string()})
                     seq_item_port.item_done();
                 end
         end

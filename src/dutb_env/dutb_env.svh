@@ -77,14 +77,14 @@ function void dutb_env::connect_phase(uvm_phase phase);
                 agent_h[agent_idx[1]].has_monitor
                 )
                 begin
-                    // `uvm_debug($sformatf("%0d %0d", agent_idx[0], agent_idx[1]))
+                    // `uvm_info_d($sformatf("%0d %0d", agent_idx[0], agent_idx[1]))
                     agent_h[agent_idx[0]].monitor_h.aport.connect(scb_h[i].in_port[0]);
                     agent_h[agent_idx[1]].monitor_h.aport.connect(scb_h[i].in_port[1]);
                 end
             else
                 begin
                     `uvm_error("ENV", $sformatf("Scb #%0d is not fully connected!", i))
-                    `uvm_debug($sformatf("%0d %0d %0d", scb_configured, agent_idx[0], agent_idx[1]))
+                    `uvm_info_d($sformatf("%0d %0d %0d", scb_configured, agent_idx[0], agent_idx[1]))
                 end
         end
 endfunction

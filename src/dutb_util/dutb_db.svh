@@ -121,7 +121,7 @@ function int dutb_db::read(ref vector_t content);
                             return 0;  // error
                         end
                 end
-            // `uvm_debug({"Read\n", vector2str(content)})
+            // `uvm_info_d({"Read\n", vector2str(content)})
             return 1;  // success
         end
     else  // wrong 'mode'

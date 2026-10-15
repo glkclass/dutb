@@ -74,24 +74,24 @@ task dut_scb::do_check();
     in_port_fifo[0].get(txn[0]);
     in_port_fifo[1].get(txn[1]);
     `ASSERT_TYPE_CAST(txn_gold[0], txn[0].gold());
-    `uvm_debug($sformatf("%s / %s", txn[0].get_type_name(), txn[1].get_type_name()))
+    `uvm_info_d($sformatf("%s / %s", txn[0].get_type_name(), txn[1].get_type_name()))
 
 
 
 
     // eq["dout"] = dout_txn_h.compare(dout_gold_txn_h);  // compare DUT output txn
-    // `uvm_debug("Run check")
+    // `uvm_info_d("Run check")
 
     // if (eq["dout"])
     //     begin
-    //         `uvm_debug("Ok check")
+    //         `uvm_info_d("Ok check")
     //         do_coverage(din_txn_h, dout_txn_h);
-    //         // `uvm_debug({"DUT in:\n", din_txn_h.convert2string()})
-    //         // `uvm_debug({"'DUT' and 'gold' output txn don't match:\n", dout_txn_h.convert2string_pair(dout_gold_txn_h)})
+    //         // `uvm_info_d({"DUT in:\n", din_txn_h.convert2string()})
+    //         // `uvm_info_d({"'DUT' and 'gold' output txn don't match:\n", dout_txn_h.convert2string_pair(dout_gold_txn_h)})
     //     end
     // else
     //     begin
-    //         // `uvm_debug({"DUT in:\n", din_txn_h.convert2string()})
+    //         // `uvm_info_d({"DUT in:\n", din_txn_h.convert2string()})
     //         `uvm_error("COMPARE", {"'DUT' and 'gold' output txn don't match:\n", dout_txn_h.convert2string_pair(dout_gold_txn_h)})
     //         dutb_handler_h.fail(din_txn_h);
     //     end

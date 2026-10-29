@@ -9,7 +9,7 @@
 class dutb_monitor extends uvm_monitor;
     `uvm_component_utils (dutb_monitor)
 
-    dutb_if_proxy_base                  dutb_if_h;
+    dutb_if_proxy_base                  dut_if_proxy_h;
     uvm_analysis_port #(dutb_txn_base)  aport;
 
     extern function                 new(string name, uvm_component parent=null);
@@ -28,31 +28,30 @@ endfunction
 function void dutb_monitor::build_phase(uvm_phase phase);
     aport = new("aport", this);
     // get dutb_if_proxy
-    if (!uvm_config_db #(dutb_if_proxy_base)::get(this, "", "dutb_if_h", dutb_if_h))
-        `uvm_fatal("dutb_monitor", "Unable to get 'dutb_if_proxy_base' from config db}")
+    if (!uvm_config_db #(dutb_if_proxy_base)::get(this, "", "dut_if_proxy_h", dut_if_proxy_h))
+      `uvm_fatal("dutb_monitor", "Unable to get 'dutb_if_proxy_base' from config db}")
 
 endfunction
 
 
 task dutb_monitor::run_phase(uvm_phase phase);
+  `uvm_info_d ("INF", $sformatf ("Verbosity level: %d", get_report_verbosity_level()))
+
+  forever begin
     dutb_txn_base txn = dutb_txn_base::type_id::create("txn", this);
     txn.set_parent(this);
-    `uvm_info_d ($sformatf ("Verbosity level: %d", get_report_verbosity_level()))
 
-    if ("dutb_txn_base" != txn.get_type_name())
-        forever
-            begin
-                `uvm_info_d ($sformatf ("Txn type: %s", txn.get_type_name()))
-                // 'monitor txn' procedure should be defined in txn class
-                txn.monitor(dutb_if_h);
-                `uvm_info_d({"Content monitored:\n", txn.convert2string()})
-                aport.write(txn);
-            end
-    else
-        begin
-            `uvm_warning("MNTR", "Monitoring of 'abstract' 'dutb_txn_base' doesn't make any sense!")
-            wait(0);
-        end
+    if ("dutb_txn_base" != txn.get_type_name()) begin
+        `uvm_info_d ("INF", $sformatf ("Txn type: %s", txn.get_type_name()))
+        // 'monitor txn' procedure should be defined in txn class
+        txn.monitor(dut_if_proxy_h);
+        `uvm_info_d("INF", { "<", txn.get_type_name(), ">", " content monitored:\n", txn.convert2string()})
+        aport.write(txn);
+    end else begin
+      `uvm_warning("MNTR", "Monitoring of 'abstract' 'dutb_txn_base' doesn't make any sense!")
+      wait(0);
+    end
 
+  end
 endtask
 // *************************************************************************************************

@@ -10,23 +10,29 @@
 
 package dutb_util_pkg;
 `ifdef DUTB_USE_UVM
-    `include "uvm_macros.svh"
+`include "uvm_macros.svh"
     import uvm_pkg::*;
 
-    `include "dutb_macros.svh"
+`include "dutb_macros.svh"
 `endif
 
 // Params******************************************************
     // General param
     parameter
-        TRUE                                =   1'b1,
-        FALSE                               =   1'b0,
-        X                                   =   1'bx,
+      TRUE                                =   1'b1,
+      FALSE                               =   1'b0,
+      X                                   =   1'bx,
 
-        //dutb params
-        P_TCO                               =   1,    // 'update gap' (to avoid race conditions)
-        P_MAX_FAIL_NUM                      =   16,   // max number of failed transactions after which TB will be stopped
-        P_DISPLAY_LINE_SIZE                 =   16;   // max size of line when vector is being displayed. '0' value - display as single line
+      //dutb params
+
+      /* 'update gap' (to avoid race conditions) */
+      P_TCO                               =   1,
+
+      /* max number of failed transactions after which TB will be stopped */
+      P_MAX_FAIL_NUM                      =   16,
+
+      /* max size of line when vector is being displayed. '0' value - display as single line */
+      P_DISPLAY_LINE_SIZE                 =   16;
 
 
 // Types*******************************************************
@@ -41,6 +47,7 @@ package dutb_util_pkg;
 
     typedef     int                                 vector_t [];
     typedef     byte                                byte_vector_t [];
+    typedef     bit                                 bit_vector_t [];
     typedef     real                                map_flt_t [string];
     typedef     int                                 map_int_t [string];
 
@@ -72,19 +79,18 @@ db_mode_t foo;
 
     // convert int to string
     function string int2str(int n, string frmt="%0d");
-        return $sformatf(frmt, n);
+      return $sformatf(frmt, n);
     endfunction
 
 
     // convert vector of int to string using given format
     function string vector2str(vector_t vec, string frmt = "0x%8H ", prefix = "");
-        string s;
-        s = prefix;
-        foreach (vec[i])
-            begin
-                s = {s, $sformatf(frmt, vec[i]), eol(i)};
-            end
-        return s;
+      string s;
+      s = prefix;
+      foreach (vec[i]) begin
+        s = {s, $sformatf(frmt, vec[i]), eol(i)};
+      end
+      return s;
     endfunction
 
     // extrcat slice of given length
@@ -92,11 +98,11 @@ db_mode_t foo;
         byte_vector_t foo;
 
         assert(vec.size() >= vec_size);
-        
+
         foo = new[vec_size];
         for (int i = 0; i < vec_size; i = i + 1)
             begin
-                foo[i] = vec[i];  
+                foo[i] = vec[i];
             end
         return foo;
     endfunction
@@ -166,7 +172,7 @@ db_mode_t foo;
     endfunction
 
 
-    // return '\n' at the end of line '' otherwise 
+    // return '\n' at the end of line '' otherwise
     function string eol(int i);
         return ( ( (0 != P_DISPLAY_LINE_SIZE) && ( (P_DISPLAY_LINE_SIZE-1) == (i % P_DISPLAY_LINE_SIZE) ) ) ? "\n" : " " );
     endfunction
@@ -183,7 +189,7 @@ db_mode_t foo;
         //close the file
         $fclose(file_pointer);
         void'($system("rm sys_time"));
-    endfunction    
+    endfunction
 
     // Print Debug msg to stdout
     function void log_debug(string msg="", logic en = 1'b1);
@@ -225,7 +231,7 @@ db_mode_t foo;
     // Print Error msg to stdout and terminate
     function void log_fatal(string msg="", string location="");
         $display("[FATAL] %s\t\t%s @ %0t", msg, location, $realtime);
-        $finish();        
+        $finish();
     endfunction : log_fatal
 
 
@@ -240,7 +246,7 @@ db_mode_t foo;
             else
                 begin
                     for (int i = 0; i < milestones; i++)
-                        #(tme/milestones) `uvm_info_n($sformatf("******* milestone %0d%% *******", ((i + 1) * 100) / milestones))
+                        #(tme/milestones) `uvm_info_n("INF", $sformatf("******* milestone %0d%% *******", ((i + 1) * 100) / milestones))
                 end
             `uvm_warning("UTL", "Time out. Simulation terminated!")
             $finish();
@@ -260,7 +266,7 @@ db_mode_t foo;
             $finish();
         endtask
     `endif
-    
+
     function byte get_hash(byte value, key = 0);
         automatic byte    base_key = 8'hAB;
         base_key = (0 != key) ? (base_key ^ key) : base_key;
@@ -334,15 +340,15 @@ db_mode_t foo;
     endfunction
 
 
-    // calculate 16-bit(word) crc of word array of arbitrary size 
+    // calculate 16-bit(word) crc of word array of arbitrary size
     function [15:0] word_crc([15:0] word, crc_init);
-        logic   [15 : 0]    
+        logic   [15 : 0]
             foo,
             bar;
-        
+
         bar = crc_init;
         foo = word;
-        for (int j = 0; j < 16; j++) 
+        for (int j = 0; j < 16; j++)
             begin
                 bar = nextCRC16_D1(foo, bar);
                 foo >>= 1;
@@ -352,11 +358,11 @@ db_mode_t foo;
     endfunction : word_crc
 
 
-    // calculate 16-bit(word) crc of word array of arbitrary size 
+    // calculate 16-bit(word) crc of word array of arbitrary size
     function [15:0] word_arr_crc([15:0] word_arr[], crc_init);
         logic   [15 : 0]    bar;
         bar = crc_init;
-        foreach (word_arr[i]) 
+        foreach (word_arr[i])
             begin
                 bar = nextCRC16_D1(word_arr[i], bar);
             end
@@ -365,7 +371,7 @@ db_mode_t foo;
     endfunction : word_arr_crc
 
 
-    // calculate 8-bit crc of byte array of arbitrary size using 12-bit crc algorithm. 
+    // calculate 8-bit crc of byte array of arbitrary size using 12-bit crc algorithm.
     function [7:0] byte_arr_crc([7:0] crc_init, byte_arr[]);
         logic       [7:0]       foo;
         logic       [11 : 0]    bar;
@@ -439,7 +445,7 @@ module rst_n_gen  (input logic clk = 1'b0, output logic rst_n);
                     @(posedge clk);
                 end
             rst_n = 1'b1;
-            `uvm_info_d($sformatf("Reset off at %t", $time));
+            `uvm_info_d("INF", $sformatf("Reset off at %t", $time));
         end
 endmodule
 // ****************************************************************************************************************************

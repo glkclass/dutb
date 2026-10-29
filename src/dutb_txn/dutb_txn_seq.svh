@@ -35,7 +35,7 @@ task dutb_txn_seq::body();
     //     `uvm_fatal("CFG_DB_ERROR", "Unable to get 'txn_db_h' from config db")
 
     txn = new("txn");
-    `uvm_info_d($sformatf("Run sequence of <%s>", txn.get_type_name()));
+    `uvm_info_d("INF", $sformatf("Run sequence of <%s>", txn.get_type_name()));
 
     forever
         begin

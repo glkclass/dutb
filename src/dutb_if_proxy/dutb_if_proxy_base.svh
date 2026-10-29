@@ -1,7 +1,7 @@
 /******************************************************************************************************************************
     Project         :   dutb
     Class           :   dutb_if_proxy_base
-    Description     :   Just a container for virtual interface which is shared by all verification system units
+    Description     :   Just a container for virtual interfaces which are shared by all verification system units
 ******************************************************************************************************************************/
 
 

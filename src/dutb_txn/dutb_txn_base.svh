@@ -1,234 +1,219 @@
-/******************************************************************************************************************************
+/***************************************************************************************************
     Project         :   dutb
     Class           :   dutb_txn_base
     Description     :
-******************************************************************************************************************************/
+***************************************************************************************************/
 
 
-// ****************************************************************************************************************************
+// *************************************************************************************************
 class dutb_txn_base extends uvm_sequence_item;
-    `uvm_object_utils (dutb_txn_base)
+  `uvm_object_utils (dutb_txn_base)
 
-    // static dutb_covergroup_base  covergroup_wrapper;
+  // static dutb_covergroup_base  covergroup_wrapper;
 
-    bit content_valid; // validates transaction content
-    string str;
-    int i;
-    bit ans, empty;
+  uvm_component parent;
+  bit_vector_t  txn_diff;
+  dutb_txn_base txn_rival;
 
-    string check_str;
-    int check_idx;
-    uvm_component parent;
-
-
-    extern          function                new                         (string name = "dutb_txn_base", uvm_component parent = null);
-    extern          function                set_parent                  (uvm_component parent=null);
-    // extern static   function string         get_class_name              ();
-    extern virtual  function void           display_check               (bit reset, bit eq);
-    extern virtual  function void           do_copy                     (uvm_object rhs);                           // make a deep copy
-    extern virtual  function bit            do_compare                  (uvm_object rhs, uvm_comparer comparer);
-    extern virtual  function void           do_print                    (uvm_printer printer);                      // print transaction content
-    extern virtual  function string         convert2string              ();                                         // represent 'txn content' as string
-    extern virtual  function string         convert2string_pair         (dutb_txn_base txn);                        // represent content of pair of txn as string
-    extern virtual  function vector_t       pack2vector                 ();                                         // pack 'txn content' to 'vector_t of int'
-    extern virtual  function void           unpack4vector               (vector_t packed_txn);                      // unpack 'txn content' from 'vector_t of int'
-    extern virtual  function void           sample_coverage             ();                                         // sample covergroups
-    extern virtual  function void           analyze_coverage_results    ();                                         // store coverage data (to hashmap), report results
-    extern virtual  function dutb_txn_base  gold                        ();                                         // generate and return 'gold' output txn
-    extern virtual  task                    drive                       (input dutb_if_proxy_base dutb_if);         // drive 'txn content' to interface lines
-    extern virtual  task                    drive_x                     (input dutb_if_proxy_base dutb_if);         // drive 'x' values to interface lines
-    extern virtual  task                    monitor                     (input dutb_if_proxy_base dutb_if);         // monitor 'txn content' from interface lines
-    extern virtual  function int            size                        ();                                         // size of txn (in int-parrots). Actually size of txn packed to vector_t of int.
-    extern          function void           load_txn_db                 (dutb_db txn_db);                           // load txn data from txn_db
-    // extern virtual  function void           push                        ();                                         // store 'txn content' to the buffer
-    // extern virtual  function void           pop                         ();                                         // extract 'txn content' from buffer (if 'fifo txn structure' used)
+  extern          function                new                         (string name = "dutb_txn_base", uvm_component parent = null);
+  extern          function                set_parent                  (uvm_component parent=null);
+  extern virtual  function string         txn_diff_convert2string     ();
+  extern virtual  function void           process_compare_fail        ();
+  extern virtual  function void           do_copy                     (uvm_object rhs);                           // make a deep copy
+  extern virtual  function bit            do_compare                  (uvm_object rhs, uvm_comparer comparer);
+  extern virtual  function void           do_print                    (uvm_printer printer);                      // print transaction content
+  extern virtual  function string         convert2string              ();                                         // represent 'txn content' as string
+  extern virtual  function vector_t       pack2vector                 ();                                         // pack 'txn content' to 'vector_t of int'
+  extern virtual  function void           unpack4vector               (vector_t txn_packed);                      // unpack 'txn content' from 'vector_t of int'
+  extern virtual  function void           sample_coverage             ();                                         // sample covergroups
+  extern virtual  function void           analyze_coverage_results    ();                                         // store coverage data (to hashmap), report results
+  extern virtual  function dutb_txn_base  gold                        ();                                         // generate and return 'gold' output txn
+  extern virtual  task                    drive                       (input dutb_if_proxy_base dutb_if_proxy_h);         // drive 'txn content' to interface lines
+  extern virtual  task                    drive_x                     (input dutb_if_proxy_base dutb_if_proxy_h);         // drive 'x' values to interface lines
+  extern virtual  task                    monitor                     (input dutb_if_proxy_base dutb_if_proxy_h);         // monitor 'txn content' from interface lines
+  extern virtual  function int            size                        ();                                         // size of txn (in int-parrots). Actually size of txn packed to vector_t of int.
+  extern          function void           load_txn_db                 (dutb_db txn_db);                           // load txn data from txn_db
+  // extern virtual  function void           push                        ();                                         // store 'txn content' to the buffer
+  // extern virtual  function void           pop                         ();                                         // extract 'txn content' from buffer (if 'fifo txn structure' used)
 endclass    
-// ****************************************************************************************************************************
+// *************************************************************************************************
 
 
-// ****************************************************************************************************************************
+// *************************************************************************************************
 function dutb_txn_base::new (string name = "dutb_txn_base", uvm_component parent = null);
-    super.new(name);
-    set_parent(parent);
-    empty = 1'b0;
-    check_str = "";
-    check_idx = 0;
+  super.new(name);
+  set_parent(parent);
 endfunction
 
 
 function dutb_txn_base::set_parent(uvm_component parent = null);
-    this.parent = parent;
+  this.parent = parent;
 endfunction
 
 
-// function string dutb_txn_base::get_class_name();
-//     return "dutb_txn_base";
-// endfunction
-
-// base methods
-
-function void dutb_txn_base::display_check(bit reset, bit eq);
-    check_str = (reset) ? "" : check_str;
-    check_idx = (reset) ? 0 : check_idx;
-    check_str = {check_str, (eq) ? "__________ " : "XXXXXXXXXX ", eol(check_idx)};
-    check_idx++;
+/* base methods */
+function string dutb_txn_base::txn_diff_convert2string();
+    string txn_diff_str = "";
+    foreach (this.txn_diff[i]) begin
+        txn_diff_str = $sformatf(
+          "%s%s%s", txn_diff_str, (this.txn_diff[i]) ? "__________ " : "XXXXXXXXXX ", eol(i));
+    end
+    return txn_diff_str;
 endfunction
+
 
 function void dutb_txn_base::do_copy (uvm_object rhs);
-    dutb_txn_base _txn;
+  dutb_txn_base _txn;
+  // add check for real txns type consistency
+  if(!$cast(_txn, rhs)) begin
+    `uvm_error("TXN_DO_COPY", "Txn cast was failed")
+    return;
+  end
+  super.do_copy(_txn); // chain the copy with parent classes
+  unpack4vector (_txn.pack2vector());
+endfunction
 
-    if(!$cast(_txn, rhs))
-        begin
-            `uvm_error("TXN_DO_COPY", "Txn cast was failed")
-            return;
-        end
-    super.do_copy(_txn); // chain the copy with parent classes
-
-    unpack4vector (_txn.pack2vector());
+/*  Override if need to analyze txn fails    */
+function void dutb_txn_base::process_compare_fail();
+  /*  Print content of two txn being compared and their diff map  */
+  `uvm_txn_info_f("TXN_CMP", $sformatf("Get \n%s\n", this.convert2string()))
+  `uvm_txn_info_f("TXN_CMP", $sformatf("Gold \n%s\n", txn_rival.convert2string()))
+  `uvm_txn_info_f("TXN_CMP", $sformatf("Diff \n%s\n", this.txn_diff_convert2string()))
 endfunction
 
 
 function bit dutb_txn_base::do_compare(uvm_object rhs, uvm_comparer comparer);
-    dutb_txn_base _txn;
-    vector_t packed_txn_0, packed_txn_1;
-    bit eq;
+  dutb_txn_base _txn;
+  vector_t txn_packed_0, txn_packed_1;
+  bit eq, ans;
 
-    // If the cast fails, comparison has also failed
-    // A check for null is not needed because that is done in the compare() function which calls do_compare()
-    if(!$cast(_txn, rhs))
-        begin
-            `uvm_error("TXN_DO_COMPARE", "Txn cast was failed")
-            return 1'b0;
-        end
+  `ASSERT_TYPE_CAST(txn_rival, rhs)
+  `uvm_txn_info_d("TXN_CMP", "Compare using base method")
 
-    `uvm_warning("BSE", "Compare using base method")
-    print();
-    _txn.print();
+  // Check txn size
+  if (size() != txn_rival.size()) begin
+    `uvm_error ( "TXN_CMP", $sformatf ("Compare size failed: <%s %0d> vs <%s %0d>",
+      this.get_type_name(), this.size(), txn_rival.get_type_name(), txn_rival.size() ) )
+    return 1'b0;
+  end
 
-    if (size() != _txn.size())
-        begin
-            `uvm_error ( "TXN_DO_COMPARE", $sformatf ( "Txn size mismatch: %0d vs %0d", size(), _txn.size() ) )
-            return (1'b0);
-        end
+  // this.print();
+  // _txn.print();
 
-    packed_txn_0 = pack2vector();
-    packed_txn_1 = _txn.pack2vector();
+  // Check txn content
+  txn_packed_0 = this.pack2vector();
+  txn_packed_1 = txn_rival.pack2vector();
+  this.txn_diff = new[size()];
 
-    ans = super.do_compare (_txn, comparer);
-    foreach (packed_txn_0[i])
-        begin
-            eq = (packed_txn_0[i] == packed_txn_1[i]);
-            display_check((i == 0), eq);
-            ans = ans & eq;
-        end
+  ans = super.do_compare (txn_rival, comparer);
+  foreach (txn_packed_0[i]) begin
+    eq = (txn_packed_0[i] == txn_packed_1[i]);
+    this.txn_diff[i] = eq;
+    ans = ans & eq;
+  end
 
-    return (ans);
+  if (1'b0 == ans) begin
+    `uvm_error("TXN_CMP", $sformatf("Compare content <%s>: Fail", this.get_type_name()))
+    process_compare_fail();
+  end else begin
+    `uvm_txn_info_f("TXN_CMP", $sformatf("Compare content <%s>: OK", this.get_type_name()))
+  end
+
+  return ans;
 endfunction
 
 
 function void dutb_txn_base::do_print (uvm_printer printer);
-    super.do_print (printer);
-    str = "\n-------------------\n";
-    printer.m_string = {get_type_name(), " ",  get_name(), str, convert2string(), "\n"};
+  string foo;
+  super.do_print (printer);
+  foo = "\n-------------------\n";
+  printer.m_string = $sformatf("\n%s %s%s%s\n\n", get_type_name(),  get_name(), foo, convert2string());
 endfunction
 
 
 function string dutb_txn_base::convert2string ();
-    return ( vector2str(pack2vector()) );
-endfunction
-
-
-function string dutb_txn_base::convert2string_pair (dutb_txn_base txn);
-    str = {convert2string(), "\n", txn.convert2string(), "\n", check_str};
-    return str;
+  return ( vector2str(pack2vector()) );
 endfunction
 
 
 function int dutb_txn_base::size ();
-    vector_t packed_txn;
-    int size_int;
-
-    packed_txn = pack2vector();
-    size_int = packed_txn.size();
-
-    return size_int;
+  vector_t txn_packed;
+  int txn_size;
+  txn_packed = pack2vector();
+  txn_size = txn_packed.size();
+  return txn_size;
 endfunction
 
 
 //  next methods should be overrided
 function vector_t dutb_txn_base::pack2vector ();
-    if ("dutb_txn_base" != get_type_name())
-        `uvm_warning("VFNOTOVRDN", "Override method")
-    else 
-        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
-    return ({});
+  if ("dutb_txn_base" != get_type_name())
+    `uvm_warning("VFNOTOVRDN", "Override method")
+  else
+    `uvm_txn_info_d("VFNOTOVRDN", "'dutb_txn_base' method used")
+  return ({});
 endfunction
 
 
-function void dutb_txn_base::unpack4vector (vector_t packed_txn);
-    if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override method")
-    else 
-        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
-
+function void dutb_txn_base::unpack4vector (vector_t txn_packed);
+  if ("dutb_txn_base" != get_type_name())
+    `uvm_fatal("VFNOTOVRDN", "Override method")
+  else
+    `uvm_txn_info_d("VFNOTOVRDN", "'dutb_txn_base' method used")
 endfunction
 
 
 function void dutb_txn_base::sample_coverage();
-    // covergroup_wrapper.sample (this);
+  // covergroup_wrapper.sample (this);
 endfunction
 
 
 function void dutb_txn_base::analyze_coverage_results();
-    // covergroup_wrapper.analyze_coverage_results ();
+  // covergroup_wrapper.analyze_coverage_results ();
 endfunction
 
 
 function dutb_txn_base dutb_txn_base::gold ();
-    if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override method")
-    else
-        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
-
+  if ("dutb_txn_base" != get_type_name())
+    `uvm_fatal("VFNOTOVRDN", "Override method")
+  else
+    `uvm_txn_info_d("VFNOTOVRDN", "'dutb_txn_base' method used")
 endfunction
 
 
-task dutb_txn_base::drive (input dutb_if_proxy_base dutb_if);
-    if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override method")
-    else
-        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
+task dutb_txn_base::drive (input dutb_if_proxy_base dutb_if_proxy_h);
+  if ("dutb_txn_base" != get_type_name())
+    `uvm_fatal("VFNOTOVRDN", "Override method")
+  else
+    `uvm_txn_info_d("VFNOTOVRDN", "'dutb_txn_base' method used")
 endtask
 
 
-task dutb_txn_base::drive_x (input dutb_if_proxy_base dutb_if);
-    if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override method")
-    else
-        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
+task dutb_txn_base::drive_x (input dutb_if_proxy_base dutb_if_proxy_h);
+  if ("dutb_txn_base" != get_type_name())
+    `uvm_fatal("VFNOTOVRDN", "Override method")
+  else
+    `uvm_txn_info_d("VFNOTOVRDN", "'dutb_txn_base' method used")
 endtask
 
 
-task dutb_txn_base::monitor (input dutb_if_proxy_base dutb_if);
-    if ("dutb_txn_base" != get_type_name())
-        `uvm_fatal("VFNOTOVRDN", "Override method")
-    else
-        `uvm_info("VFNOTOVRDN", "'dutb_txn_base' method used", UVM_DEBUG)
+task dutb_txn_base::monitor (input dutb_if_proxy_base dutb_if_proxy_h);
+  if ("dutb_txn_base" != get_type_name())
+    `uvm_fatal("VFNOTOVRDN", "Override method")
+  else
+    `uvm_txn_info_d("VFNOTOVRDN", "'dutb_txn_base' method used")
 endtask
 
 
 function void dutb_txn_base::load_txn_db (dutb_db txn_db);
-    vector_t foo;
-    if ("READ" == txn_db.mode)
-        begin
-            foo = pack2vector();
-            void'(txn_db.read(foo));
-            unpack4vector(foo);
-        end
-    else
-        begin
-            `uvm_error("FILEIO", {"Wrong txn_db mode: '", txn_db.mode, "' instead of 'READ'!!"})
-        end
+  vector_t foo;
+  if ("READ" == txn_db.mode) begin
+    foo = pack2vector();
+    void'(txn_db.read(foo));
+    unpack4vector(foo);
+  end else begin
+    `uvm_error("FILEIO", {"Wrong txn_db mode: '", txn_db.mode, "' instead of 'READ'!!"})
+  end
 endfunction
 
 

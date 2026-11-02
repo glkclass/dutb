@@ -21,7 +21,8 @@ package dutb_util_pkg;
     parameter
       TRUE                                =   1'b1,
       FALSE                               =   1'b0,
-      X                                   =   1'bx,
+      X                                   =   1'bX,
+      X32                                 =   32'dX,
 
       //dutb params
 
@@ -45,7 +46,7 @@ package dutb_util_pkg;
     typedef     bit [8 - 1 : 0]                     u_byte;
 
 
-    typedef     int                                 vector_t [];
+    typedef     integer                             vector_t [];
     typedef     byte                                byte_vector_t [];
     typedef     bit                                 bit_vector_t [];
     typedef     real                                map_flt_t [string];
@@ -121,7 +122,8 @@ db_mode_t foo;
 
     // convert list of map int values to string
     function string map_int2str(map_int_t map);
-        int i, arr[];
+        int i;
+        vector_t arr;
         arr = new[map.num()];
         i = 0;
         foreach (map[key])

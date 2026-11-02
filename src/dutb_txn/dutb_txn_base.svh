@@ -15,26 +15,27 @@ class dutb_txn_base extends uvm_sequence_item;
   bit_vector_t  txn_diff;
   dutb_txn_base txn_rival;
 
-  extern          function                new                         (string name = "dutb_txn_base", uvm_component parent = null);
-  extern          function                set_parent                  (uvm_component parent=null);
-  extern virtual  function string         txn_diff_convert2string     ();
-  extern virtual  function void           process_compare_fail        ();
-  extern virtual  function void           do_copy                     (uvm_object rhs);                           // make a deep copy
-  extern virtual  function bit            do_compare                  (uvm_object rhs, uvm_comparer comparer);
-  extern virtual  function void           do_print                    (uvm_printer printer);                      // print transaction content
-  extern virtual  function string         convert2string              ();                                         // represent 'txn content' as string
-  extern virtual  function vector_t       pack2vector                 ();                                         // pack 'txn content' to 'vector_t of int'
-  extern virtual  function void           unpack4vector               (vector_t txn_packed);                      // unpack 'txn content' from 'vector_t of int'
-  extern virtual  function void           sample_coverage             ();                                         // sample covergroups
-  extern virtual  function void           analyze_coverage_results    ();                                         // store coverage data (to hashmap), report results
-  extern virtual  function dutb_txn_base  gold                        ();                                         // generate and return 'gold' output txn
-  extern virtual  task                    drive                       (input dutb_if_proxy_base dutb_if_proxy_h);         // drive 'txn content' to interface lines
-  extern virtual  task                    drive_x                     (input dutb_if_proxy_base dutb_if_proxy_h);         // drive 'x' values to interface lines
-  extern virtual  task                    monitor                     (input dutb_if_proxy_base dutb_if_proxy_h);         // monitor 'txn content' from interface lines
-  extern virtual  function int            size                        ();                                         // size of txn (in int-parrots). Actually size of txn packed to vector_t of int.
-  extern          function void           load_txn_db                 (dutb_db txn_db);                           // load txn data from txn_db
-  // extern virtual  function void           push                        ();                                         // store 'txn content' to the buffer
-  // extern virtual  function void           pop                         ();                                         // extract 'txn content' from buffer (if 'fifo txn structure' used)
+  extern          function        new (string name = "dutb_txn_base", uvm_component parent = null);
+  extern virtual  function void   init_vif (input dutb_if_proxy_base dutb_if_proxy_h);;
+  extern          function void   set_parent (uvm_component parent=null);
+  extern virtual  function string txn_diff_convert2string();
+  extern virtual  function void process_compare_fail();
+  extern virtual  function void do_copy (uvm_object rhs);
+  extern virtual  function bit do_compare (uvm_object rhs, uvm_comparer comparer);
+  extern virtual  function void do_print (uvm_printer printer);
+  extern virtual  function string convert2string();
+  extern virtual  function vector_t pack2vector();
+  extern virtual  function void   unpack4vector (vector_t txn_packed);
+  extern virtual  function void   sample_coverage();
+  extern virtual  function void   analyze_coverage_results();
+  extern virtual  function dutb_txn_base  gold();
+  extern virtual  task                    drive (input dutb_if_proxy_base dutb_if_proxy_h);
+  extern virtual  task                    drive_x (input dutb_if_proxy_base dutb_if_proxy_h);
+  extern virtual  task                    monitor (input dutb_if_proxy_base dutb_if_proxy_h);
+  extern virtual  function int            size();
+  extern          function void           load_txn_db (dutb_db txn_db);
+  // extern virtual  function void           push();
+  // extern virtual  function void           pop();
 endclass    
 // *************************************************************************************************
 
@@ -43,6 +44,13 @@ endclass
 function dutb_txn_base::new (string name = "dutb_txn_base", uvm_component parent = null);
   super.new(name);
   set_parent(parent);
+endfunction
+
+/*  Initialize txn virtual if handlers  */
+function void dutb_txn_base::init_vif(input dutb_if_proxy_base dutb_if_proxy_h);;
+  if ("dutb_txn_base" != get_type_name())
+    `uvm_warning("VFNOTOVRDN", "Override method")
+  return;
 endfunction
 
 

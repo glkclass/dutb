@@ -18,8 +18,8 @@ class dutb_db extends uvm_object;
     extern function int         open ();
     extern function void        close ();
 
-    extern function void        write (vector_t content);
-    extern function int         read (ref vector_t content);
+    extern function void        write (int_vector_t content);
+    extern function int         read (ref int_vector_t content);
     extern function void        final_phase(uvm_phase phase);
 
 endclass
@@ -78,7 +78,7 @@ function void dutb_db::close();
 endfunction
 
 
-function void dutb_db::write(vector_t content);
+function void dutb_db::write(int_vector_t content);
     if ("WRITE" == mode)
         begin
             if (0 == _fid)
@@ -102,7 +102,7 @@ function void dutb_db::write(vector_t content);
 endfunction
 
 
-function int dutb_db::read(ref vector_t content);
+function int dutb_db::read(ref int_vector_t content);
     int ans = 0;
     if ("READ" == mode)  // 'dutb_db' is opened for reading
         begin

@@ -7,6 +7,7 @@
 // *************************************************************************************************
 `ifndef DUTB_MACRO_SVH
 `define DUTB_MACRO_SVH
+
 `define DUTB_AGNT(idx)                          $sformatf("uvm_test_top.env_h.agent_h[%0d]*",idx)
 `define DUTB_SCB(scb_idx,port_idx)              $sformatf("scb_h[%0d]_in_port[%0d]",scb_idx,port_idx)
 `define DUTB_AGNT_HAS_DRIVER(idx)               $sformatf("agent_h[%0d]_has_driver",idx)
@@ -156,7 +157,7 @@
     end
 
 
-`define     get_arg_value(arg_frmt, container, default_value) (($value$plusargs(arg_frmt, container)) ? container : default_value)
+`define     get_plusarg_value(arg_frmt, container, default_value) (($value$plusargs(arg_frmt, container)) ? container : default_value)
 
 `endif
 // *************************************************************************************************

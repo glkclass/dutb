@@ -24,8 +24,8 @@ class dutb_txn_base extends uvm_sequence_item;
   extern virtual  function bit do_compare (uvm_object rhs, uvm_comparer comparer);
   extern virtual  function void do_print (uvm_printer printer);
   extern virtual  function string convert2string();
-  extern virtual  function vector_t pack2vector();
-  extern virtual  function void   unpack4vector (vector_t txn_packed);
+  extern virtual  function int_vector_t pack2vector();
+  extern virtual  function void   unpack4vector (int_vector_t txn_packed);
   extern virtual  function void   sample_coverage();
   extern virtual  function void   analyze_coverage_results();
   extern virtual  function dutb_txn_base  gold();
@@ -92,7 +92,7 @@ endfunction
 
 function bit dutb_txn_base::do_compare(uvm_object rhs, uvm_comparer comparer);
   dutb_txn_base _txn;
-  vector_t txn_packed_0, txn_packed_1;
+  int_vector_t txn_packed_0, txn_packed_1;
   bit eq, ans;
 
   `ASSERT_TYPE_CAST(txn_rival, rhs)
@@ -145,7 +145,7 @@ endfunction
 
 
 function int dutb_txn_base::size ();
-  vector_t txn_packed;
+  int_vector_t txn_packed;
   int txn_size;
   txn_packed = pack2vector();
   txn_size = txn_packed.size();
@@ -154,7 +154,7 @@ endfunction
 
 
 //  next methods should be overrided
-function vector_t dutb_txn_base::pack2vector ();
+function int_vector_t dutb_txn_base::pack2vector ();
   if ("dutb_txn_base" != get_type_name())
     `uvm_warning("VFNOTOVRDN", "Override method")
   else
@@ -163,7 +163,7 @@ function vector_t dutb_txn_base::pack2vector ();
 endfunction
 
 
-function void dutb_txn_base::unpack4vector (vector_t txn_packed);
+function void dutb_txn_base::unpack4vector (int_vector_t txn_packed);
   if ("dutb_txn_base" != get_type_name())
     `uvm_fatal("VFNOTOVRDN", "Override method")
   else
@@ -214,7 +214,7 @@ endtask
 
 
 function void dutb_txn_base::load_txn_db (dutb_db txn_db);
-  vector_t foo;
+  int_vector_t foo;
   if ("READ" == txn_db.mode) begin
     foo = pack2vector();
     void'(txn_db.read(foo));
